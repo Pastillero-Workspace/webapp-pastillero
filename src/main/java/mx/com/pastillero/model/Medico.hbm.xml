@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.Medico" table="Medico">
+      <meta attribute="class-description">
+         This class contains the employee detail. 
+      </meta>
+      <id name="idMedico" type="int" column="idMedico">
+         <generator class="native"/>
+      </id>
+      <property name="cedula" column="cedula" type="string"/>
+      <property name="nombre" column="nombre" type="string"/>
+      <property name="telFijo" column="tel_fijo" type="string"/>
+      <property name="telMovil" column="tel_movil" type="string"/>
+      <property name="email" column="email" type="string"/>
+      <property name="idDireccion" column="idDireccion" type="int"/>
+      </class>
+</hibernate-mapping>

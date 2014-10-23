@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.Productos" table="Productos">
+      <meta attribute="class-description">
+         This class contains the employee detail. 
+      </meta>
+      <id name="idProducto" type="int" column="idProducto">
+         <generator class="native"/>
+      </id>
+      <property name="proveedor" column="proveedor" type="string"/>
+      <property name="clave" column="clave" type="string"/>
+      <property name="codBar" column="cod_bar" type="string"/>
+      <property name="descripcion" column="descripcion" type="string"/>
+      <property name="idFamilia" column="idFamilia" type="int"/>
+      <property name="precioPub" column="precio_pub" type="float"/>
+      <property name="precioDesc" column="precio_desc" type="float"/>
+      <property name="precioFarmacia" column="precio_farmacia" type="float"/>
+      <property name="iva" column="IVA" type="int"/>
+      <property name="linea" column="linea" type="string"/>
+      <property name="referencia" column="referencia" type="string"/>
+      <property name="SSA" column="SSA" type="string"/>
+      <property name="laboratorio" column="laboratorio" type="string"/>
+      <property name="departamento" column="departamento" type="string"/>
+      <property name="categoria" column="categoria" type="string"/>
+      <property name="actualizable" column="actualizable" type="int"/>
+      <property name="descuento" column="descuento" type="int"/>
+      <property name="costo" column="costo" type="float"/>
+      <property name="equivalencia" column="equivalencia" type="string"/>
+      <property name="superfamilia" column="superfamilia" type="string"/>
+      <property name="cls" column="CLS" type="string"/>
+      <property name="zona" column="zona" type="string"/>
+      <property name="pareto" column="pareto" type="string"/>    
+      <property name="ieps" column="IEPS" type="int"/>
+      <property name="ieps2" column="IEPS2" type="int"/>
+      <property name="limitado" column="limitado" type="float"/>
+      <property name="kit" column="kit" type="string"/>
+      <property name="comision" column="comision" type="int"/>
+      <property name="maxdescuento" column="maxdescuento" type="float"/>
+      <property name="grupo" column="grupo" type="string"/>
+      <property name="aplicadescbase" column="aplicadescbase" type="int"/>
+      <property name="aplicapo" column="aplicapo" type="int"/>
+      <property name="antibiotico" column="antibiotico" type="int"/>
+      <property name="existencias" column="existencias" type="int"/>
+      <property name="ultimoproveedor" column="ultimoproveedor" type="string"/>
+      <property name="ultimocosto" column="ultimocosto" type="float"/>
+      <property name="costopromedio" column="costopromedio" type="float"/>
+      <property name="costoreal" column="costoreal" type="float"/>     
+       </class>
+</hibernate-mapping>

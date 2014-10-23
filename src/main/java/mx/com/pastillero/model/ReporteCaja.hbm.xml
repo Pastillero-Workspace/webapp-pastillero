@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.ReporteCaja" table="Reporte_caja">
+      <meta attribute="class-description">
+         This class contains the report sale detail. 
+      </meta>
+      <id name="idReporte" type="int" column="idReporte">
+         <generator class="native"/>
+      </id>
+      <property name="idUsuario" column="idUsuario" type="int"/>
+      <property name="fecha" column="fecha" type="string"/>
+      <property name="horaInicial" column="hora_inicial" type="string"/>
+      <property name="horaCorte" column="hora_corte" type="string"/>
+      <property name="disponible" column="disponible" type="float"/>
+      <property name="retiro" column="retiro" type="float"/>
+      <property name="deposito" column="deposito" type="float"/>
+
+      </class>
+</hibernate-mapping>

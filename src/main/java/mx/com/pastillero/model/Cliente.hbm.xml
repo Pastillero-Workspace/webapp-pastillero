@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.Cliente" table="Cliente">
+      <meta attribute="class-description">
+         This class contains the employee detail. 
+      </meta>
+      <id name="idCliente" type="int" column="idCliente">
+         <generator class="native"/>
+      </id>
+      <property name="clave" column="clave" type="string"/>
+      <property name="nombre" column="nombre" type="string"/>
+      <property name="email" column="email" type="string"/>
+      <property name="rfc" column="RFC" type="string"/>
+      <property name="idDireccion" column="idDireccion" type="int"/>
+      <property name="credito" column="credito" type="int"/>
+      <property name="diasCredito" column="dias_credito" type="int"/>
+      <property name="limiteCredito" column="limite_credito" type="float"/>
+      <property name="ventaAnual" column="venta_anual" type="float"/>
+      <property name="saldo" column="saldo" type="float"/>
+      <property name="descuentoExtra" column="descuento_extra" type="float"/>
+      <property name="ventaMensual" column="venta_mensual" type="float"/>
+      <property name="insen" column="insen" type="float"/>
+       </class>
+</hibernate-mapping>

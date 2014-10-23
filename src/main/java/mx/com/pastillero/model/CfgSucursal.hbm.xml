@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.CfgSucursal" table="Configuracion">
+      <meta attribute="class-description">
+         This class contains the employee detail. 
+      </meta>
+      <id name="idSistema" type="int" column="idSistema">
+         <generator class="native"/>
+      </id>
+      <property name="razonSocial" column="razon_social" type="string"/>
+      <property name="rfc" column="rfc" type="string"/>
+      <property name="sucursal" column="sucursal" type="string" />
+      <property name="calle" column="calle" type="string"/>
+      <property name="colonia" column="colonia" type="string"/>
+      <property name="numeroInt" column="numero_int" type="string"/>
+      <property name="numeroExt" column="numero_ext" type="string"/>
+      <property name="municipio" column="municipio" type="string"/>
+      <property name="estado" column="estado" type="string"/>
+      <property name="cp" column="cp" type="string" />
+      <property name="telefono" column="telefono" type="string" />
+      <property name="email" column="email" type="string" />
+      <property name="web" column="web" type="string" />
+       </class>
+</hibernate-mapping>

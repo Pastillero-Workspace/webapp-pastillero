@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.Proveedor" table="Proveedor">
+      <meta attribute="class-description">
+         This class contains the employee detail. 
+      </meta>
+      <id name="idProveedor" type="int" column="idProveedor">
+         <generator class="native"/>
+      </id>
+      <property name="nombre" column="nombre" type="string"/>
+      <property name="email" column="email" type="string"/>
+      <property name="fax" column="fax" type="string"/>
+      <property name="rfc" column="RFC" type="string"/>
+      <property name="diasCredito" column="dias_credito" type="int"/>
+      <property name="idDireccion" column="idDireccion" type="int"/>
+      <property name="descGeneral" column="desc_general" type="int"/>
+      <property name="desc2" column="desc_2" type="int"/>
+      <property name="desc3" column="desc_3" type="int"/>
+      </class>
+</hibernate-mapping>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.Salida" table="Salida">
+      <meta attribute="class-description">
+         This class contains the employee detail. 
+      </meta>
+      <id name="idSalida" type="int" column="idSalida">
+         <generator class="native"/>
+      </id>
+      
+      <property name="fecha" column="fecha" type="string"/>
+      <property name="hora" column="hora" type="string"/>
+      <property name="merma" column="merma" type="string"/>
+      <property name="numFactura" column="num_factura" type="string"/>
+      <property name="folioElectronico" column="folio_electronico" type="int"/>
+      <property name="subtotal" column="subtotal" type="float"/>
+      <property name="idUsuario" column="idUsuario" type="int"/>
+   </class>
+</hibernate-mapping>

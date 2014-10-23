@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping >
+   <class name="mx.com.pastillero.model.formBeans.LoginForm" table="Loginform">
+      <meta attribute="class-description">
+         This class contains the employee detail. 
+      </meta>
+      <id name="id" type="int" column="id">
+         <generator class="native"/>
+      </id>
+      <property name="userName" column="userName" type="string"/>
+      <property name="userPassword" column="userPassword" type="string"/>
+      <property name="fechaIni" column="fechaIni" type="string"/>
+      <property name="horaIni" column="horaIni" type="string"/>
+       </class>
+</hibernate-mapping>

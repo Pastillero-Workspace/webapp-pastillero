@@ -1,0 +1,251 @@
+html
+{
+	background-color:#8F9593;
+}
+body{
+			background-color: #C0C0C0;
+			font-family: "Open Sans",Calibri,Candara,Arial,sans-serif;
+			font-size: 14px;
+			 position:relative;
+		}
+		
+		div#logo{
+			background: red;
+			width: 960px;
+			height: 570px;
+		}
+		#nav{
+			
+			float: left;
+			height: 20px;
+			width: 60%;
+			/*background: #66aed9;
+			border-radius: 10px;*/
+			padding: 8px;
+			list-style: none;
+			margin: auto -10px;
+			background: linear-gradient(to bottom, #4C4C4C 0%, #595959 12%, #666 25%, #474747 39%, #2C2C2C 50%, #000 51%, #111 60%, #2B2B2B 76%, #1C1C1C 91%, #131313 100%) repeat scroll 0% 0% transparent;
+			
+
+		}
+		#nav li{
+			float: left;
+			margin-right: 15px;
+		}
+
+		#nav li a{
+			padding: 9px 15px;
+			text-decoration: none;
+			color:white;
+			/*color: rgba(255,255,255,0.7);
+			text-shadow: 1px 1px 1px rgba(0,0,0,0.7);
+			
+   			-webkit-transition:all 1s ease;
+ 			-moz-transition:all 1s ease;
+ 			-o-transition: all 1s ease;
+ 			transition: all 1s ease;*/
+		}
+		#nav li a:hover{
+			color: black;
+			background: #15a9ed;
+			text-shadow: none;
+		}
+
+
+		#nav-right{
+			
+			float: right;
+			/*background: #66aed9;
+			border-radius: 10px;*/
+			padding: 8px;
+			list-style: none;
+			margin: auto -10px;
+			background: linear-gradient(to bottom, #4C4C4C 0%, #595959 12%, #666 25%, #474747 39%, #2C2C2C 50%, #000 51%, #111 60%, #2B2B2B 76%, #1C1C1C 91%, #131313 100%) repeat scroll 0% 0% transparent;
+			width: 40%;
+			height: 20px;
+
+		}
+		#nav-right li{
+			margin-top: auto;
+			float: right;
+			margin-right: auto;
+			
+		}
+
+		#nav-right #close{
+			background: url(../img/close.png) no-repeat scroll 5% center transparent;
+			padding: 9px 15px;
+			text-decoration: none;
+			color:white;
+			/*color: rgba(255,255,255,0.7);
+			text-shadow: 1px 1px 1px rgba(0,0,0,0.7);
+			
+   			-webkit-transition:all 1s ease;
+ 			-moz-transition:all 1s ease;
+ 			-o-transition: all 1s ease;
+ 			transition: all 1s ease;*/
+		}
+		#nav-right #close:hover{
+			color: white;
+			background: red;
+			text-shadow: none;
+		}
+
+
+
+
+		div#header{
+			
+			background: url(../img/log.png)
+			repeat-x scroll 0px -17px transparent;
+			margin-left: -10px;
+			margin-top: -10px;
+    		padding-top: 10px;
+    		padding-left: 10px;
+    		height: 70px;
+    		width: 75%;
+    		float: left;
+
+		}
+
+		
+		span#menu{
+			    background: url(../img/u1.png) no-repeat scroll 95% center transparent;
+			    color: #000;
+			    cursor: default;
+			    display: block;
+			    /*padding: 3px 14px 4px 3px;*/
+			    position: relative;
+			    padding: 9px 15px;
+				text-decoration: none;
+				color:white;
+				margin: -10px auto;
+		}
+		span#menu:hover{
+			color: black;
+			background: #15a9ed;
+			text-shadow: none;
+			cursor: pointer;
+		}
+		}
+
+		#logo {
+	    	background: url(../img/logo_sif.jpg) no-repeat scroll 0% 0% transparent;
+		    width: 300px;
+		    height: 90px;
+		    cursor: pointer;
+		}
+		#right{
+			float: right;
+		}
+		
+		
+		div#dialog input{
+			margin-left: 35%;
+		}
+
+		div#sucursal{
+			background: url(../img/log2.png)
+			repeat-x scroll 0px -17px transparent;
+			font-size:113%;
+			float: right;
+			margin-left: -10px;
+			margin-top: -10px;
+    		padding-left: 10px;
+    		height: 80px;
+    		width: 25%;
+    		
+		}
+		div#background{
+
+			background: #C0C0C0;
+		  	width: 100%;
+		  	height: 100%;
+		  	/*position: relative;*/
+		}
+		.centrado{
+			display: block;
+			margin-top: 17%;
+			position: absolute;
+			margin-left: 20%;
+			width: 60%;
+		}
+
+		h4{
+			margin-top: 5px;
+			padding-top: 5px;
+		}
+		span#signo{
+			text-align: center;
+			padding-left: 10px;
+			float: left;
+
+		}
+		ol{
+			list-style: none;
+		}
+		.text-message{
+			font-family: "Open Sans",Calibri,Candara,Arial,sans-serif;
+			font-size: 17px;
+			text-align: center;
+		}
+		.text-form{
+			font-family: "Open Sans", Calibri, Candara, Arial, sans-serif;
+			font-size: 14px;
+		}
+		form ol{
+			margin: 5px 0px;
+		}
+		form fieldset{
+			margin-top: 10px;
+		}
+		form label{
+			display: inline-block;
+			padding: -5px -5px;
+			margin-left: 5px;
+		}
+		form li{
+			margin-left: -40px;
+		}
+		form li label{
+			width: 13%;
+
+		}
+		form#formAltaMedico input{
+			font-size: 10px;
+		}
+		
+		
+.infobox
+{
+	        float: right;
+	        background-color:yellow;
+			margin-left: -10px;
+			margin-right: 10px;
+			margin-top: 10px;
+    		padding-left: 10px;
+    		height: 250px;
+    		width: 350px;
+	
+	
+}
+#newPage
+{
+	background-color:#8F9593;
+}
+
+#form_action  
+{
+
+	 font-size:110%;
+     display: block;
+	 margin-top: 10%;
+	 position: absolute;
+	 margin-left: 15%;	
+}
+
+#form_action input[type="text"]   
+{
+   width: 300px;	
+}
+

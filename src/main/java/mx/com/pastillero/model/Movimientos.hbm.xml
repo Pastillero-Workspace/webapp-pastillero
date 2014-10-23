@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.Movimientos" table="Movimientos">
+      <meta attribute="class-description">
+         This class contains the employee detail. 
+      </meta>
+      <id name="idMovimiento" type="int" column="idMovimiento">
+         <generator class="native"/>
+      </id>
+      <property name="movimiento" column="Movimiento" type="string"/>
+      <property name="folio" column="Folio" type="int"/>
+      <property name="documento" column="Documento" type="int"/>
+      <property name="clave" column="Clave" type="int"/>
+      <property name="descripcion" column="Descripcion" type="string"/>
+      <property name="adquiridos" column="Adquiridos" type="int"/>
+      <property name="vendidos" column="Vendidos" type="int"/>
+      <property name="valor" column="Valor" type="int"/>
+      <property name="habian" column="Habian" type="int"/>
+      <property name="quedan" column="Quedan" type="int"/>
+      <property name="fecha" column="Fecha" type="string"/>
+      <property name="hora" column="Hora" type="string"/>
+      
+      </class>
+</hibernate-mapping>

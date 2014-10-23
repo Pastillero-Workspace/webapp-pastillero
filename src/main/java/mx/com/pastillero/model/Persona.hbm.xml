@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.Persona" table="Persona">
+      <meta attribute="class-description">
+         This class contains the employee detail. 
+      </meta>
+      <id name="idPersona" type="int" column="idPersona">
+         <generator class="native"/>
+      </id>
+      <property name="nombre" column="nombre" type="string"/>
+      <property name="apellidoPat" column="apellido_pat" type="string"/>
+      <property name="apellidoMat" column="apellido_mat" type="string"/>
+      <property name="fechaIngreso" column="fecha_ingreso" type="string"/>
+      <property name="rfc" column="RFC" type="string"/>
+      <property name="curp" column="CURP" type="string"/>
+      <property name="turno" column="turno" type="string"/>
+      <property name="email" column="email" type="string"/>
+      <property name="telFijo" column="tel_fijo" type="string"/>
+      <property name="telMovil" column="tel_movil" type="string"/>
+      <property name="idDireccion" column="idDireccion" type="int"/>
+      </class>
+</hibernate-mapping>

@@ -1,0 +1,79 @@
+ body 
+ {	        
+	margin: 0px;
+}
+table{
+    margin:0;
+    border-spacing: 2px;
+    border-collapse: collapse;
+
+}
+
+.detail{
+	color: #050505;
+	
+}
+.centerdiv
+{
+	text-align:center;
+	font-family:Verdana;
+    font-size:9px; 
+}
+.rightdiv
+{
+	text-align:right;
+	font-family:Verdana;
+    font-size:9px; 
+}
+.leftdiv
+{
+	text-align:left;
+	font-family:Verdana;
+    font-size:9px; 
+}
+
+.mGrid {    
+	width:250px; 
+    border-collapse:collapse;	  
+    margin:0;        
+   
+}   
+.mGrid td {    
+    padding: 3px;   
+	width:50px;	   
+    font-size: 10px;   
+    font-family:Verdana;
+}   
+.mGrid th {    
+    padding: 4px 2px;
+    width:50px;	
+    font-size: 10px;
+    font-family:Verdana;
+}
+
+.light-text
+{
+ font-weight:normal;	
+}
+.bold-text{
+  font-weight:bold;
+}
+
+.print-area
+{
+  height: 252px;
+  width:auto;
+}
+
+.divlogo
+{
+	background: url(../img/logoticket.jpg);
+	height: 50px;
+    width: 150;
+	display:
+}
+
+
+
+
+

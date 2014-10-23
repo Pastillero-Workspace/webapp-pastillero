@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration SYSTEM 
+"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<session-factory>
+		<property name="hibernate.dialect">org.hibernate.dialect.SQLServer2008Dialect</property>
+		<property name="hibernate.connection.driver_class">com.microsoft.sqlserver.jdbc.SQLServerDriver</property>		
+		<property name="hibernate.connection.url">jdbc:sqlserver://localhost:1433;databaseName=pastillero;</property>
+		<property name="hibernate.connection.username">sa</property>
+		<property name="hibernate.connection.password">123456</property>
+		<property name="hibernate.current_session_context_class">thread</property>
+		<property name="hibernate.hbm2ddl.auto">update</property> 
+		<property name="hibernate.show_sql">false</property>
+		<!-- property name="hibernate.cache.provider_class">org.hibernate.cache.infinispan.InfinispanRegionFactory</property -->
+		<mapping resource="mx/com/pastillero/model/Login.hbm.xml"/>
+		<mapping resource="mx/com/pastillero/model/Producto.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Productos.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Familia.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Usuario.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Proveedor.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Movimientos.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Recepcion.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/MovimientoRecepcion.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Direccion.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Nota.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Cliente.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/MovimientoVenta.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Persona.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Sesion.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/ReporteCaja.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Medico.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/CfgSucursal.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Antibioticos.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Salida.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/DevolucionCompra.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/MovimientoDevolucionCompra.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/DevolucionVenta.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/MovimientoDevolucionVenta.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/MovimientoSalida.hbm.xml" />
+
+	</session-factory>
+
+</hibernate-configuration>

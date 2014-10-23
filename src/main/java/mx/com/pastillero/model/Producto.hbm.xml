@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.Producto" table="Producto">
+      <meta attribute="class-description">
+         This class contains the employee detail. 
+      </meta>
+      <id name="idProducto" type="int" column="idProducto">
+         <generator class="native"/>
+      </id>
+      <property name="codBar" column="cod_bar" type="string"/>
+      <property name="existencias" column="existencias" type="int"/>
+      <property name="descripcion" column="descripcion" type="string"/>
+      <property name="laboratorio" column="laboratorio" type="string"/>
+      <property name="cls" column="CLS" type="string"/>
+      <property name="ssa" column="SSA" type="string"/>
+      <property name="iva" column="IVA" type="int"/>
+      <property name="ieps" column="IEPS" type="int"/>
+      <property name="categoria" column="categoria" type="string"/>
+      <property name="pareto" column="pareto" type="string"/>
+      <property name="precioPub" type="float" >
+     	 <column name="precio_pub" length="8" sql-type="money"/>
+      </property>
+      <property name="precioDesc" column="precio_desc" type="float"/>
+      <property name="idFamilia" column="idFamilia" type="int"/>
+       </class>
+</hibernate-mapping>

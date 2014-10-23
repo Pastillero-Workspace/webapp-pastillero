@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.Nota" table="Nota">
+      <meta attribute="class-description">
+         This class contains the Nota detail. 
+      </meta>
+      <id name="idNota" type="int" column="idNota">
+         <generator class="native"/>
+      </id>
+      <property name="fecha" column="fecha" type="string"/>
+      <property name="hora" column="hora" type="string"/>
+      <property name="estado" column="estado" type="string"/>
+      <property name="precio" column="precio" type="float"/>
+      <property name="descuento" column="descuento" type="float"/>
+      <property name="iva" column="iva" type="float"/>
+      <property name="subtotal" column="subtotal" type="float"/>
+      <property name="total" column="total" type="float"/>
+      <property name="idCliente" column="idCliente" type="int"/>
+      <property name="idUsuario" column="idUsuario" type="int"/>
+      </class>
+</hibernate-mapping>

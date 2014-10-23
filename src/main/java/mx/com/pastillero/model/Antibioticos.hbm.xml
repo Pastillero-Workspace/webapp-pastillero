@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="mx.com.pastillero.model.formBeans.Antibioticos"
+		table="Antibioticos">
+		<meta attribute="class-description">
+			This class contains the employee detail.
+		</meta>
+		<id name="idAntibiotico" type="int" column="idAntibiotico">
+			<generator class="native" />
+		</id>
+		<property name="idProducto" column="idProducto" type="int" />
+		<property name="fecha" column="fecha" type="string" />
+		<property name="documento" column="documento" type="string" />
+		<property name="receta" column="receta" type="int" />
+		<property name="sello" column="sello" type="int" />
+		<property name="adquiridos" column="adquiridos" type="int" />
+		<property name="vendidos" column="vendidos" type="int" />
+		<property name="quedan" column="quedan" type="int" />
+		<property name="idMedico" column="idMedico" type="int" />
+	</class>
+</hibernate-mapping>

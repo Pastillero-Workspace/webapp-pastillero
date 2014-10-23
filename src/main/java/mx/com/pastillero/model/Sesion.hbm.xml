@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.Sesion" table="Sesion">
+      <meta attribute="class-description">
+         This class contains the session detail. 
+      </meta>
+      <id name="idSesion" type="int" column="idSesion">
+         <generator class="native"/>
+      </id>
+      <property name="idUsuario" column="idUsuario" type="int"/>
+      <property name="usuario" column="usuario" type="string"/>
+      <property name="fechaIngreso" column="fechaIngreso" type="string"/>
+      <property name="horaIngreso" column="horaIngreso" type="string"/>
+      <property name="fechaSalida" column="fechaSalida" type="string"/>
+       <property name="horaSalida" column="horaSalida" type="string"/>
+      </class>
+</hibernate-mapping>
