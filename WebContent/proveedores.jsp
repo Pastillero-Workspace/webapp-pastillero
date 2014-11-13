@@ -33,6 +33,7 @@
 	
 	<script type="text/javascript" language="javascript" class="init">
 	var op = false;
+	var nombreRespaldo = "";
 	<% HttpSession sesion = request.getSession(false);
 	  String usuario = (String)sesion.getAttribute("usuario");
 	   String nombre = (String)sesion.getAttribute("nombre");
@@ -180,6 +181,7 @@
 					});
 					window.open("reporte.jsp", "Impresion", "height=600,width=400");
 				});
+				
 				$("#btnEditar").button().click(function(e){
 					index = table.row('.selected').index();
 					var registro = table.row('.selected').data();
@@ -188,6 +190,7 @@
 						$.each(registro, function(date,value){
 							if(date==0){
 								$("#txtNombre").val(value);
+								nombreRespaldo = value;
 							}
 							if(date==1){
 								$("#txtEmail").val(value);
@@ -238,6 +241,7 @@
 					}
 				});
 			});
+			
 			$("#formProveedor").dialog({
 				modal:true,
 				autoOpen: false,
@@ -254,6 +258,7 @@
 									$('#txtDesc2').val().trim()!=""&&$('#txtDesc3').val().trim()!=""){
 									$.post('proveedor.jr',{
 										tarea: 'actualizar',
+										nombreRespaldo: nombreRespaldo,
 										txtNombre: $('#txtNombre').val(),
 										txtEmail: $('#txtEmail').val(),
 										txtFax: $('#txtFax').val(),

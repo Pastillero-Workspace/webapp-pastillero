@@ -58,7 +58,7 @@
 							
 							$( "#txtFecha" ).datepicker({ dateFormat: "dd-mm-yy"});
 							
-							
+							console.log(localStorage.getItem('recepcion'));
 							if(localStorage.getItem('recepcion')){
 								console.log("si hay datos");
 								var storage2 = JSON.parse(localStorage.getItem('recepcion'));

@@ -219,6 +219,7 @@ function EnviarFormulario() {
 		workout : 'insertdbp'
 	}, function(data) {
 		if (data == "OK") {
+			alert("Ok");
 			var popPrinter;
 			// delete storage
 			table = null;

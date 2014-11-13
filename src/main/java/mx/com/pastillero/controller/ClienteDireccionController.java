@@ -68,7 +68,7 @@ public class ClienteDireccionController extends HttpServlet{
 		}
 		
 		if(request.getParameter("tarea").equals("actualizar")){
-			List<Object[]> idCliente = clienteDireccion.getIdCliente(request.getParameter("txtClave").trim());
+			List<Object[]> idCliente = clienteDireccion.getIdCliente(request.getParameter("claveRespaldo").trim());
 			
 			c.setClave(request.getParameter("txtClave").trim());
 			c.setNombre(request.getParameter("txtNombre").trim());
