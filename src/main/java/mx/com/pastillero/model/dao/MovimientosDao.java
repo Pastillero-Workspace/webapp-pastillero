@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,7 +23,7 @@ public class MovimientosDao extends GenericoDAO{
 					+ "select movimientos, folio, documento, clave, descripcion, adquiridos, vendidos,valor,habian,quedan,fecha,hora from Movimientos").list();
 		}catch(HibernateException e){
 			list = null;
-			logger.error("ERROR: No se pudo guardar en la tabla Antibioticos.");
+			logger.error("ERROR: No se pudieron mostrar los movimientos.");
 			e.printStackTrace();
 		}finally{
 			if (session != null && session.isOpen()) {

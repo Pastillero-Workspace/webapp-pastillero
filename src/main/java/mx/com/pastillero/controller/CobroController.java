@@ -6,16 +6,19 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import mx.com.pastillero.model.dao.AntibioticoDao;
 import mx.com.pastillero.model.dao.ClienteDao;
 import mx.com.pastillero.model.dao.FamiliaDao;
@@ -53,7 +56,6 @@ public class CobroController extends HttpServlet {
 	DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 	private String hora;
 	private String fecha;
-	private final int codebar_lenght = 16;
 	private FamiliaDao familia;
 	private ProductosDao psd;
 	private MedicoDireccionDao mdd;
@@ -66,28 +68,26 @@ public class CobroController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,HttpServletResponse response) throws ServletException, IOException {
 		
 		/* Devuelve el producto consultado de acuerdo al codigo ingresado */
-		String varCodigo = request.getParameter("varCodigo");
+		//String varCodigo = request.getParameter("varCodigo").trim();
 		
 		psd = new ProductosDao();
 		familia = new FamiliaDao();
 		
 		/* logica para evaluar si el producto tiene 16 digitos o no */
-		String complement_data;
-		complement_data = "";
-		if (varCodigo.length() < 16) {
-			int diference = codebar_lenght - varCodigo.length();
-			for (int i = 0; i < diference; i++) {
-				complement_data = complement_data.concat("0");
-			}
-			complement_data = complement_data.concat(varCodigo);
-		} else {
-			complement_data = varCodigo;
-		}
-		logger.info("codigo nuevo: " + complement_data);
+		StringBuilder codigo = new StringBuilder(request.getParameter("varCodigo").trim());
+    	int tamaño = codigo.length();
+    	if(tamaño < 16){
+    		int falta = 16 - tamaño;
+    		for(int i = 0; i < falta; i++){
+    			codigo.insert(0,'0');
+    		}
+    	}
+		
+		
+		logger.info("Buscando producto...: " + codigo.toString());
 		String sData = "";
-		if (complement_data != null && !complement_data.isEmpty()) {
-			List<Productos> mapsProducts = psd.productoPorCodigo(complement_data);
-			logger.info("entra a implementacion de codigo nuevo");
+		if (codigo != null && codigo.length() > 0) {
+			List<Productos> mapsProducts = psd.productoPorCodigo(codigo.toString());
 			
 			// Se revisa si la lista no tiene ningun producto
 			if (!mapsProducts.isEmpty()) {
@@ -96,13 +96,17 @@ public class CobroController extends HttpServlet {
 				}
 				mapFamilia = familia.getFamilia(mapsProducts.get(0).getIdFamilia());
 				sData = sData + mapFamilia.get(0).toSetFormat();
-				System.out.println("Dato retornado: " + sData);
+				logger.info("Producto encontrado! " + sData);
+			}
+			else{
+				logger.info("El producto no Existe.");
 			}
 		}
 		
 		response.setContentType("text/plain");
 		response.setCharacterEncoding("UTF-8");
 		response.getWriter().write(sData);
+		sData = null;
 	}
 
 	/**
@@ -111,11 +115,10 @@ public class CobroController extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		logger.info("Entrada a post con exito");
 		/* Get id last id nota inserted and insert nota default */
 		date = new Date();
 		if (request.getParameter("workout").equals("getNota")) {
-			
+			logger.info("Obteniendo nota...");
 			logger.info(request.getParameter("varUsuario"));
 			String Usuario = request.getParameter("varUsuario");
 			sessionid = Integer.parseInt(request.getParameter("context"));
@@ -172,14 +175,19 @@ public class CobroController extends HttpServlet {
 			} catch (IndexOutOfBoundsException ex) {
 				out = "NFC";
 			}
-			
+			logger.info("Tipo de Cliente obtenido!");
 			response.setContentType("text/plain");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(out);
+			claveCliente = null;
+			getClientes = null;
+			out = null;
+			
 		}
 		
 		/* Insert items list and update product in database */
 		else if (request.getParameter("workout").equals("insertdbp")) {
+			logger.info("Guardando Nota...");
 			List<ItemVenta> liv = new ArrayList<ItemVenta>();
 			JSONParser parser = new JSONParser();
 			JSONObject objnota = null, objtotal = null;
@@ -213,10 +221,12 @@ public class CobroController extends HttpServlet {
 			}
 			try {
 				// data ticket
+				logger.info("data_1 (nota): "+data_1);
 				obj_1 = parser.parse(data_1);
 				objnota = (JSONObject) obj_1;
 			
 				// total ticket
+				logger.info("data_2 (totales): "+data_2);
 				obj_2 = parser.parse(data_2);
 				objtotal = (JSONObject) obj_2;
 				
@@ -230,22 +240,19 @@ public class CobroController extends HttpServlet {
 					ItemVenta iv = new ItemVenta();
 				
 					/* Se obtiene la comparacion a 16 digitos */
-					String complement_data;
-					complement_data = "";
-					if (objitem.get("Código").toString().length() < 16) {
-						int diference = codebar_lenght	- objitem.get("Código").toString().length();
-						for (int j = 0; j < diference; j++) {
-							complement_data = complement_data.concat("0");
-						}
-						complement_data = complement_data.concat(objitem.get("Código").toString());
-					} else {
-						complement_data = objitem.get("Código").toString();
-					}
+					StringBuilder codigo = new StringBuilder(objitem.get("Código").toString());
+					int tamaño = codigo.length();
+			    	if(tamaño < 16){
+			    		int falta = 16 - tamaño;
+			    		for(int j = 0; j < falta; j++){
+			    			codigo.insert(0,'0');
+			    		}
+			    	}
 					
-					logger.info("codigo nuevo: " + complement_data);
+					logger.info("codigo nuevo: " + codigo);
 					
 					/* ------------------------------------------ */
-					iv.setCodigo(complement_data);
+					iv.setCodigo(codigo.toString());
 					iv.setDescripcion(objitem.get("Descripcion").toString());
 					iv.setCantidad(Integer.parseInt(objitem.get("Cantidad").toString()));
 					iv.setPreciodesc(Float.parseFloat(objitem.get("PrecioDes").toString()));
@@ -258,7 +265,7 @@ public class CobroController extends HttpServlet {
 						iv.setHabian(mapProducts.get(0).getExistencias());
 						iv.setUltimocosto(mapProducts.get(0).getUltimocosto());
 						
-						System.out.println(" id producto y codigo : "+ iv.getIdproducto() + "|" + iv.getCodigo());
+						logger.info("Id producto y codigo : "+ iv.getIdproducto() + "|" + iv.getCodigo());
 						
 						if (nombreMedico.compareTo("null") != 0	&& antibDao.isAntibiotico(iv.getCodigo())) {
 							Antibioticos antibiotico = new Antibioticos();
@@ -277,9 +284,10 @@ public class CobroController extends HttpServlet {
 							antibiotico.setSello(Integer.parseInt(sello));
 							antibiotico.setVendidos(iv.getCantidad());
 							
-							System.out.println(antibiotico.toString());
-							
 							antibDao.guardarAntibiotico(antibiotico);
+							logger.info("Antibiotico guardado: "+antibiotico.getIdProducto());
+							antibiotico = null;
+							
 						}
 					}
 
@@ -287,7 +295,7 @@ public class CobroController extends HttpServlet {
 					liv.add(iv);
 				}
 			} catch (ParseException e) {
-				System.out.println("Error al procesar la venta: Intente de nuevo");
+				logger.info("Error al procesar la venta, Intente de nuevo: "+e);
 				e.printStackTrace();
 			}
 			
@@ -329,7 +337,7 @@ public class CobroController extends HttpServlet {
 			n.setSubtotal(Float.parseFloat(objtotal.get("sbt").toString()));
 			n.setTotal(Float.parseFloat(objtotal.get("tt").toString()));
 			nd.updateNota(n);
-			
+			logger.info("Nota guardada!: "+n.getIdNota());
 			// Create instance movimiento nota , fill data and insert
 			List<MovimientoVenta> mv = new ArrayList<MovimientoVenta>();
 			ProductosDao pdao = new ProductosDao();
@@ -346,23 +354,29 @@ public class CobroController extends HttpServlet {
 				itemNota.setVendidos(pr.getCantidad());
 				float valor = (itemNota.getVendidos() * pr.getPreciopub());
 				itemNota.setValor(valor);
-				itemNota.setHabian(pr.getHabian());
-				int quedan = (pr.getHabian() - itemNota.getVendidos());
+				List<Productos> producto = psd.productoPorCodigo(itemNota.getClave());
+				int quedan = (producto.get(0).getExistencias() - itemNota.getVendidos());
+				itemNota.setHabian(producto.get(0).getExistencias());
 				itemNota.setQuedan(quedan);
 				itemNota.setHora(hora);
 				itemNota.setFecha(fecha);
 				itemNota.setUtilidad((pr.getPreciopub() - pr.getUltimocosto()) * pr.getCantidad());
 				p.setExistencias(itemNota.getQuedan());
 				p.setIdProducto(pr.getIdproducto());
-				
-				System.out.println(p.toString());
-				
 				pdao.actualizarTotales(p);
 				mv.add(itemNota);
+				logger.info("Producto actualizado (codigo, existencias): "+itemNota.getClave()+" "+p.getExistencias());
+				
+				mnd.insertMovimientoNota(itemNota);
+				logger.info("Movimiento Guardado!");
+				producto = null;
+				p = null;
+				itemNota = null;
 			}
-			for (MovimientoVenta mvn : mv) {
+			
+			/*for (MovimientoVenta mvn : mv) {
 				mnd.insertMovimientoNota(mvn);
-			}
+			}*/
 			
 			TicketServiceCobro tsc = new TicketServiceCobro();
 			tsc.setIdNota(n.getIdNota());
@@ -379,6 +393,9 @@ public class CobroController extends HttpServlet {
 			tsc.setTotalpago(TotalPago);
 			tsc.setCambio(Cambio);
 			tsc.setSubtotal(objtotal.get("sbt").toString());
+			logger.info("Nota guardada e impresion de ticket con exito! " + tsc.getIdNota());
+			n = null;
+			
 			
 			/* Set the response text */
 			response.setContentType("text/plain");

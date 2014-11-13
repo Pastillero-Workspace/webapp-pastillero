@@ -1,10 +1,8 @@
+<%@page import="java.util.List"%>
+<%@page import="mx.com.pastillero.model.dao.RecepcionDao"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="java.text.DateFormat"%>
 <%@page import="java.util.Date"%>
-<%@page import="mx.com.pastillero.model.dao.ProductoDao"%>
-<%@page import="java.util.List"%>
-<%@page import="mx.com.pastillero.model.dao.RecepcionDao"%>
-<%@page import="org.hibernate.SessionFactory"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -58,8 +56,8 @@
 							
 							$( "#txtFecha" ).datepicker({ dateFormat: "dd-mm-yy"});
 							
-							
-							if(localStorage.getItem('recepcion')){
+							console.log(localStorage.getItem('recepcion'));
+							if(localStorage.getItem('recepcion') != null){
 								console.log("si hay datos");
 								var storage2 = JSON.parse(localStorage.getItem('recepcion'));
 								productos2 = JSON.parse(localStorage.getItem('productos'));
@@ -87,41 +85,45 @@
 								var subtotalT = 0;
 								var totalT = 0;
 								var folio = 0;
-								for(var i=0;i<productos2.length;i++){
-									t.row.add([
-									            productos2[i].cantidad,
-									            productos2[i].codigo,
-									            productos2[i].descripcion,						
-									            productos2[i].desc1,
-									            productos2[i].desc2,
-									            productos2[i].iva,
-									            productos2[i].ieps1,
-									            productos2[i].ieps2,
-												0,
-												productos2[i].costo,
-												productos2[i].importe,
-												'',
-												//'<button type="button" class="myButton" id="Mod'+counter+'" onclick="editar()">Editar</button>',
-												'<button type="button" class="myButton" id="Del'+i+'" onclick="eliminar()">X</button>'
-												 ])
-												.draw();
-												console.log(productos2[i]);
-												
-												ivaT += productos2[i].ivaImporte;
-												ieps1T += productos2[i].ieps1Importe;
-												ieps2T += productos2[i].ieps2Importe;
-												
-												subtotalT += productos2[i].importe*1;										        
-												totalT += productos2[i].importe*1+productos2[i].ivaImporte+productos2[i].ieps1Importe+productos2[i].ieps2Importe;
-												
-												
-												console.log(ieps1T);
-												console.log(ieps2T);
-												console.log(ivaT);
-												console.log(subtotalT);
-												console.log(totalT);
-												
+								
+								if(productos2 != null){
+									for(var i=0;i<productos2.length;i++){
+										t.row.add([
+										            productos2[i].cantidad,
+										            productos2[i].codigo,
+										            productos2[i].descripcion,						
+										            productos2[i].desc1,
+										            productos2[i].desc2,
+										            productos2[i].iva,
+										            productos2[i].ieps1,
+										            productos2[i].ieps2,
+													0,
+													productos2[i].costo,
+													productos2[i].importe,
+													'',
+													//'<button type="button" class="myButton" id="Mod'+counter+'" onclick="editar()">Editar</button>',
+													'<button type="button" class="myButton" id="Del'+i+'" onclick="eliminar()">X</button>'
+													 ])
+													.draw();
+													console.log(productos2[i]);
+													
+													ivaT += productos2[i].ivaImporte;
+													ieps1T += productos2[i].ieps1Importe;
+													ieps2T += productos2[i].ieps2Importe;
+													
+													subtotalT += productos2[i].importe*1;										        
+													totalT += productos2[i].importe*1+productos2[i].ivaImporte+productos2[i].ieps1Importe+productos2[i].ieps2Importe;
+													
+													
+													console.log(ieps1T);
+													console.log(ieps2T);
+													console.log(ivaT);
+													console.log(subtotalT);
+													console.log(totalT);
+													
+									}	
 								}
+								
 								$('#lblDesc1').val(0.00);
 								$('#lblDesc2').val(0.00);
 								$('#lblIeps1').val(ieps1T.toFixed(2));
@@ -320,6 +322,7 @@
 						 		
 							  	$('#example tbody').on('click','button',function(){
 								  	var obj = t.row( $(this).parents('tr') ).data();
+								  	var index = t.row( $(this).parents('tr') ).index();
 								  	var isIva=0;
 							 		var isIeps1=0;
 							 		var isIeps2=0;
@@ -442,28 +445,10 @@
 							 						 								  						  
 									t.row( $(this).parents('tr') ).remove().draw( false );
 									
-									if(localStorage.getItem('productos')){
-										//productos2.
-										
-										var producto1 = {'cantidad':cantidadP,
-						        	 			'codigo':codigoP,
-						        	 			'descripcion':descripcionP,
-						        	 			'desc1':desc1P,
-						        	 			'desc2':desc2P,
-						        	 			'iva':ivaP,
-						        	 			'ieps1':ieps1P,
-						        	 			'ieps2':ieps2P,
-						        	 			'costo':costoP,
-						        	 			'importe':importeP,
-						        	 			'ivaImporte':ivaImporteP,
-						        	 			'ieps1Importe':ieps1ImporteP,
-						        	 			'ieps2Importe':ieps1ImporteP
-						        	 			};
-										
-										console.log(producto1);
-						         	var productosT = productos2.slice(producto1);
-						         	console.log(productosT);
-									}
+									var productos = JSON.parse(localStorage.getItem('productos'));
+									productos.splice(index,1);
+									console.log("Productos: "+productos);
+									localStorage.setItem('productos', JSON.stringify(productos));
 									
 							  	});
 							    												        

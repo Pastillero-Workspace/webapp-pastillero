@@ -7,9 +7,7 @@ import mx.com.pastillero.model.formBeans.Direccion;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,8 +21,8 @@ public class ClienteDireccionDao extends GenericoDAO{
 		try{
 			session = factory.openSession();
 			clientes = session.createQuery("select c.clave, c.nombre, c.email, c.rfc, c.idDireccion, c.credito, c.diasCredito, c.limiteCredito, "
-						+ "c.ventaAnual, c.saldo, c.insen, c.descuentoExtra, c.ventaMensual, d.calle, d.noExt, d.noInt,d.colonia,d.estado,d.cp"
-						+ " from Cliente as c, Direccion as d where c.idDireccion=d.idDireccion").list();
+						+ "c.ventaAnual, c.saldo, c.insen, c.descuentoExtra, c.ventaMensual, d.calle, d.noExt, d.noInt,d.colonia,d.ciudad, "
+						+ "d.estado,d.cp from Cliente as c, Direccion as d where c.idDireccion=d.idDireccion").list();
 		}catch(HibernateException e){
 			session = null;clientes=null;
 			logger.error("ERROR: No se puede recuperar la informacion del los clientes.");
@@ -127,6 +125,7 @@ public class ClienteDireccionDao extends GenericoDAO{
 			direccion.setNoInt(d.getNoInt());
 			direccion.setNoExt(d.getNoExt());
 			direccion.setColonia(d.getColonia());
+			direccion.setCiudad(d.getCiudad());
 			direccion.setEstado(d.getEstado());
 			direccion.setCp(d.getCp());
 			

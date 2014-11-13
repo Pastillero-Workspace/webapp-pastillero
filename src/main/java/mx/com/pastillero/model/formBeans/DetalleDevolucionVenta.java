@@ -1,7 +1,5 @@
 package mx.com.pastillero.model.formBeans;
 
-import java.util.List;
-
 public class DetalleDevolucionVenta {
 	private String fecha;
 	private String nota;

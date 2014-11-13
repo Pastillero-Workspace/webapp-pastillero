@@ -16,6 +16,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import mx.com.pastillero.types.Types;
 import mx.com.pastillero.model.dao.SesionDao;
 import mx.com.pastillero.model.dao.UsuarioDao;
@@ -29,6 +32,8 @@ public class LogoutController extends HttpServlet{
 	 * 
 	 */
 	private static final long serialVersionUID = 2110621566329197780L;
+	private static final Logger logger = LoggerFactory.getLogger(LogoutController.class);
+
 
 	/**
 	 * 
@@ -61,7 +66,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 				Integer iduser    = (Integer)sesion.getAttribute("iduser");
 				
 				int idLocalSesion = Integer.parseInt(request.getParameter("idLocalSesion"));
-				System.out.println("sesion id: "+idLocalSesion);
+				logger.info("sesion id: "+idLocalSesion);
 				Usuario u = new Usuario();
 				UsuarioDao ud = new UsuarioDao();
 				
@@ -72,7 +77,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 					u.setActivo(0);
 					boolean res = ud.updateUsuario(u);
 					if(res)
-						System.out.println("Update user status successfull");
+						logger.info("Estado de usuario actualizado!");
 				}
 				
 				// setiing time and date				
@@ -102,6 +107,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 						response.setContentType("text/plain");          
 					  	response.setCharacterEncoding("UTF-8"); 
 					 	response.getWriter().write("Exit");
+					 	logger.info("Sesion de usuario cerrada con exito! "+usuario);
 					}
 
 				}
@@ -109,13 +115,13 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 				// Update data in database				
 			}
 			
-			if(request.getParameter("workout").equals("exitws"))
+			else if(request.getParameter("workout").equals("exitws"))
 			{
 				
 				int idLocalSesion = Integer.parseInt(request.getParameter("idLocalSesion"));
 				String usuario = (String)request.getParameter("user");
 				String password = (String)request.getParameter("password");
-				System.out.println("sesion id: "+idLocalSesion);
+				logger.info("sesion cerrada de manera forzada id: "+idLocalSesion);
 				
 				// create new user
 				Usuario u = new Usuario();
@@ -125,13 +131,13 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 				u = ud.getUniqueUsuario(usuario, password);
 				if(u.getIdUsuario() > 0 && u != null)
 				{
-					System.out.println("perfil :"+u.getPerfil());
+					logger.info("perfil :"+u.getPerfil());
 					if(u.getPerfil().compareTo(Types.C.getStatusCode())== 0)
 					{
 						u.setActivo(0);
 						boolean res = ud.updateUsuario(u);
 						if(res)
-							System.out.println("Update user status successfull");
+							logger.info("Estado de usuario actualizado! "+usuario);
 					}					
 					// setiing time and date				
 					   Date date = new Date();

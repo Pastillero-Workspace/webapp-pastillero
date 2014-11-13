@@ -2,7 +2,6 @@
 <%@page import="mx.com.pastillero.utils.DevolucionVentaDet"%>
 <%@page import="mx.com.pastillero.model.dao.DevolucionesDao"%>
 <%@page import="java.util.List"%>
-<%@page import="org.hibernate.SessionFactory"%>
 <%@page import="mx.com.pastillero.types.Types"%>
 
 

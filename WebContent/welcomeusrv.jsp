@@ -1,13 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page session="true" %>
-<%@page import="mx.com.pastillero.model.dao.NotaDao"%>
-<%@page import="mx.com.pastillero.model.dao.UsuarioDao"%>
-<%@page import="mx.com.pastillero.model.formBeans.Nota"%>
-<%@page import="mx.com.pastillero.model.formBeans.Usuario"%>
 <%@page import="mx.com.pastillero.types.Types"%>
-<%@page import="org.hibernate.SessionFactory"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import="java.util.List"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 

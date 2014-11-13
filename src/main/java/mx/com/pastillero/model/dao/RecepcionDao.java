@@ -6,9 +6,7 @@ import mx.com.pastillero.model.formBeans.Recepcion;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,11 +19,7 @@ public class RecepcionDao extends GenericoDAO{
 		List<Object> vendedores = null;
 		try{
 			session = factory.openSession();
-			vendedores = session.createQuery("select p.nombre from Usuario as u, Persona as p where u.idPersona=p.idPersona")
-									.list();
-			for(Object vendedor:vendedores){
-				System.out.println(vendedor);
-			}
+			vendedores = session.createQuery("select p.nombre from Usuario as u, Persona as p where u.idPersona=p.idPersona").list();
 		}catch(HibernateException e){
 			vendedores = null;
 			logger.error("ERROR: No se pude obtener la informacion de los vendedores.");
@@ -152,7 +146,7 @@ public class RecepcionDao extends GenericoDAO{
 			tx.commit(); 
 		}catch(Exception e1){
 			idRecepcion = 0;
-			System.out.println("Error funcion guardarUsuario de UsuarioFormDao ");
+			logger.info("Error al guardar recepcion ");
 			e1.printStackTrace();
 		}
 		finally{ 
@@ -191,12 +185,11 @@ public class RecepcionDao extends GenericoDAO{
 				
 			tx.commit(); 
 			resultado=true;
-			System.out.println("commit");
 			//for(LoginForm usuario: usuarios){
 				//System.out.println(usuario);}
 		}catch(HibernateException e1){
 			resultado=false;
-			logger.error("Error funcion actualizarRecepciom de RecepcionDao ");
+			logger.error("Error al actualizar recepcion");
 			e1.printStackTrace();
 		}
 		finally{ 
@@ -224,7 +217,7 @@ public class RecepcionDao extends GenericoDAO{
 			resultado=true;
 		}catch(HibernateException e){
 			resultado = false;
-			logger.error("Error en metodo Eliminar de RecepcionDao");
+			logger.error("Error al eliminar recepcion");
 			e.printStackTrace();
 		}
 		finally{

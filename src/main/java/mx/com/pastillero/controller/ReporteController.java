@@ -2,20 +2,12 @@ package mx.com.pastillero.controller;
 
 import java.io.IOException;
 
-
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import mx.com.pastillero.utils.ReporteExcel;
-
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
-
 
 //
 public class ReporteController extends HttpServlet{
@@ -24,20 +16,9 @@ public class ReporteController extends HttpServlet{
 	 */
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * 
-	 */
-	
-
-	/**
-	 * 
-	 */
-	
 	public ReporteController(){
 		
 	}
-	
-	
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doPost(request, response);
@@ -62,7 +43,7 @@ public class ReporteController extends HttpServlet{
 			ReporteExcel.setDatos(table);
 		
 		}
-		if(request.getParameter("reporte").equals("clientes")){
+		else if(request.getParameter("reporte").equals("clientes")){
 			String titulo = request.getParameter("txtTitulo");
 			String table = request.getParameter("tblClientes");
 			
@@ -72,7 +53,7 @@ public class ReporteController extends HttpServlet{
 			ReporteExcel.setReporte(titulo);
 			ReporteExcel.setDatos(table);
 		}
-		if(request.getParameter("reporte").equals("proveedores")){
+		else if(request.getParameter("reporte").equals("proveedores")){
 			String titulo = request.getParameter("txtTitulo");
 			String table = request.getParameter("tblProveedores");
 			
@@ -82,7 +63,7 @@ public class ReporteController extends HttpServlet{
 			ReporteExcel.setReporte(titulo);
 			ReporteExcel.setDatos(table);
 		}
-		if(request.getParameter("reporte").equals("movimientos")){
+		else if(request.getParameter("reporte").equals("movimientos")){
 			String titulo = request.getParameter("txtTitulo");
 			String table = request.getParameter("tblMovimientos");
 			
@@ -92,7 +73,7 @@ public class ReporteController extends HttpServlet{
 			ReporteExcel.setReporte(titulo);
 			ReporteExcel.setDatos(table);
 		}
-		if(request.getParameter("reporte").equals("usuarios")){
+		else if(request.getParameter("reporte").equals("usuarios")){
 			String titulo = request.getParameter("txtTitulo");
 			String table = request.getParameter("tblUsuarios");
 			
@@ -102,7 +83,7 @@ public class ReporteController extends HttpServlet{
 			ReporteExcel.setReporte(titulo);
 			ReporteExcel.setDatos(table);
 		}
-		if(request.getParameter("reporte").equals("medicos")){
+		else if(request.getParameter("reporte").equals("medicos")){
 			String titulo = request.getParameter("txtTitulo");
 			String table = request.getParameter("tblMedicos");
 			
@@ -112,7 +93,7 @@ public class ReporteController extends HttpServlet{
 			ReporteExcel.setReporte(titulo);
 			ReporteExcel.setDatos(table);
 		}
-		if(request.getParameter("reporte").equals("productos")){
+		else if(request.getParameter("reporte").equals("productos")){
 			String titulo = request.getParameter("txtTitulo");
 			String table = request.getParameter("tblProductos");
 			

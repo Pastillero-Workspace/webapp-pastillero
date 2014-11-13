@@ -30,9 +30,10 @@ public class ClienteDireccionController extends HttpServlet{
 		
 		if(request.getParameter("tarea").equals("agregar")){
 			d.setCalle(request.getParameter("txtCalle").trim());
-			d.setNoInt(Integer.parseInt(request.getParameter("txtNoInt").trim()));
-			d.setNoExt(Integer.parseInt(request.getParameter("txtNoExt").trim()));
+			d.setNoInt(request.getParameter("txtNoInt").trim());
+			d.setNoExt(request.getParameter("txtNoExt").trim());
 			d.setColonia(request.getParameter("txtColonia").trim());
+			d.setCiudad(request.getParameter("txtCiudad").trim());
 			d.setEstado(request.getParameter("txtEstado").trim());
 			d.setCp(Integer.parseInt(request.getParameter("txtCp").trim()));
 			
@@ -96,9 +97,10 @@ public class ClienteDireccionController extends HttpServlet{
 			
 			d.setIdDireccion(Integer.parseInt(idCliente.get(0)[1].toString()));
 			d.setCalle(request.getParameter("txtCalle"));
-			d.setNoExt(Integer.parseInt(request.getParameter("txtNoExt")));
-			d.setNoInt(Integer.parseInt(request.getParameter("txtNoInt")));
+			d.setNoExt(request.getParameter("txtNoExt"));
+			d.setNoInt(request.getParameter("txtNoInt"));
 			d.setColonia(request.getParameter("txtColonia"));
+			d.setCiudad(request.getParameter("txtCiudad").trim());
 			d.setEstado(request.getParameter("txtEstado"));
 			d.setCp(Integer.parseInt(request.getParameter("txtCp")));
 			

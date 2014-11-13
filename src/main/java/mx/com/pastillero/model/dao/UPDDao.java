@@ -4,22 +4,11 @@ import java.util.List;
 
 import mx.com.pastillero.model.formBeans.Direccion;
 import mx.com.pastillero.model.formBeans.Persona;
-import mx.com.pastillero.model.formBeans.Proveedor;
 import mx.com.pastillero.model.formBeans.Usuario;
-
-
-
-
-
-
-
-
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,11 +23,11 @@ public class UPDDao extends GenericoDAO{
 				session = factory.openSession();
 				usuarios = session.createQuery("select u.usuario,u.contrasena,u.perfil,u.activo,u.sucursal"+
 						" ,p.nombre,p.apellidoPat,p.apellidoMat,p.fechaIngreso,p.rfc,p.curp,p.turno,p.email,p.telFijo,p.telMovil,"
-					    +" d.calle,d.noInt,d.noExt,d.colonia,d.estado,d.cp"
+					    +" d.calle,d.noInt,d.noExt,d.colonia,d.ciudad,d.estado,d.cp"
 						+" from Usuario as u,Persona as p,Direccion as d where u.idPersona = p.idPersona and p.idDireccion = d.idDireccion").list();
 			}catch(HibernateException e){
 				usuarios = null;
-				logger.error("ERROR: No se pudo guardar en la tabla Antibioticos.");
+				logger.error("ERROR: No se puede mostrar usuarios.");
 				e.printStackTrace();
 			}finally{
 				if (session != null && session.isOpen()) {

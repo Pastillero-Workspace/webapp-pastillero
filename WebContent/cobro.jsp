@@ -1,11 +1,8 @@
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@page import="org.hibernate.SessionFactory"%>
-<%@page import="java.util.List"%>
-<%@page import="mx.com.pastillero.model.dao.ProductoFamiliaDao"%>
-<%@page import="java.io.*,java.util.*"%>
 <%@page import="mx.com.pastillero.types.Types"%>
-<%@page import="java.text.*"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -13,12 +10,9 @@
 <meta charset="utf-8">
 <title>Pastillero 4.0 | Panel de Venta</title>
 <meta name="description" content="venta">
-<link href="<c:url value="/resources/css/cobrostyle.css" />"
-	rel="stylesheet">
-<link href="<c:url value="/resources/css/jquery-ui-1.10.4.custom.css"/>"
-	rel="stylesheet" type="text/css">
-<link href="<c:url value="/resources/css/jquery.dataTables.css" />"
-	rel="stylesheet">
+<link href="<c:url value="/resources/css/cobrostyle.css" />" rel="stylesheet">
+<link href="<c:url value="/resources/css/jquery-ui-1.10.4.custom.css"/>" rel="stylesheet" type="text/css">
+<link href="<c:url value="/resources/css/jquery.dataTables.css" />"	rel="stylesheet">
 <link href="<c:url value="/resources/css/demo.css" />" rel="stylesheet">
 <!-- Javascript functions-->
 <script src="<c:url value="/resources/js/jquery-1.10.2.js" />"></script>

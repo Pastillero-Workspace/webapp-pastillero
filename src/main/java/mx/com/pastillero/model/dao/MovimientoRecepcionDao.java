@@ -5,44 +5,25 @@ import java.util.List;
 import mx.com.pastillero.model.formBeans.MovimientoRecepcion;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class MovimientoRecepcionDao extends GenericoDAO {
 	private static final Logger logger = LoggerFactory.getLogger(MovimientoRecepcionDao.class);	
-	/*
-	@SuppressWarnings("unchecked")
-	public List<Object> muestraVendedores(){
-		Session session = factory.openSession();
-		List<Object> vendedores = session.createQuery("select p.nombre from Usuario as u, Persona as p where u.idPersona=p.idPersona").list();
-		
-		for(Object vendedor:vendedores){
-			System.out.println(vendedor);
-		}
-		return vendedores;
-	}
-	*/
 	
 	public boolean guardarMovimientoRecepcion(MovimientoRecepcion movimientoRecepcion) {
-		logger.info("entro a metodo guardarMovimientoRecepcion");
 		boolean resultado=true;
 		Session session = null;
 		Transaction tx=null;
-		logger.info("entra a try");
 		try{
 			session = factory.openSession();
-			logger.info("obtiene sesion "+session);
 			tx=session.beginTransaction(); 
-			logger.info("metodo saveorupdate");
 			session.save(movimientoRecepcion); 
 			tx.commit(); 
-			logger.info("commit");
 		}catch(Exception e1){
 			resultado=false;
-			logger.error("Error funcion guardarMovimientoRecepcion de MovimientoRecepcionDao ");
+			logger.error("Error al guardar Movimiento");
 			e1.printStackTrace();
 		}
 		finally{ 
@@ -71,7 +52,7 @@ public class MovimientoRecepcionDao extends GenericoDAO {
 		}catch(Exception e){
 			tx.rollback();
 			movimientos = null;
-			logger.error("ERROR: Error en mostraMovimientos de MovimientosRecepcionDao");
+			logger.error("ERROR: Error al mostrar movimientos");
 			e.printStackTrace();
 		}
 		finally{

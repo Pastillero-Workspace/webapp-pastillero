@@ -69,7 +69,6 @@ public class TicketController extends HttpServlet{
 	    	// Setting up user for ticket information
 	    	String varUser = request.getParameter("varUser");
 	    	String varCantidad = request.getParameter("varCantidad");
-	    	System.out.println("Welcome : Remember we are part of 300 spartans: " + varUser +"");
 	    	TicketServiceDeposito tsd = new TicketServiceDeposito();
 	    	
 	    	// cretae user data and person infromation.
@@ -119,8 +118,7 @@ public class TicketController extends HttpServlet{
 		    		tsd.setN_usuario(p.getNombre());
 		    		tsd.setN_apellidop(p.getApellidoPat());
 		    		tsd.setN_apellidom(p.getApellidoMat());
-					System.out.println("Session create succesfull");
-					
+										
 					// Create a simple JSON Output for save session an continue.
 					
 					  obj.put("iduser", u.getIdUsuario());

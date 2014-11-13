@@ -7,9 +7,7 @@ import mx.com.pastillero.model.formBeans.Proveedor;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,7 +22,7 @@ public class ProveedorDireccionDao extends GenericoDAO{
 			session = factory.openSession();
 			proveedor =  session.createQuery("select p.idProveedor, p.nombre, p.email, p.fax, p.rfc,"
 					+ " p.diasCredito, p.idDireccion, p.descGeneral, p.desc2, p.desc3, d.calle, d.noInt, d.noExt, d.colonia, "
-					+ "d.estado, d.cp from Proveedor as p, Direccion as d where p.idDireccion=d.idDireccion").list();
+					+ "d.ciudad, d.estado, d.cp from Proveedor as p, Direccion as d where p.idDireccion=d.idDireccion").list();
 		
 			for(Object[] p:proveedor){
 				System.out.println("idProveedor[0] "+p[0]+" nombre[1] "+p[1]+" email[2] "+p[2]+" fax[3] "+p[3]+" rfc[4] "+p[4]+" diasCred[5] "+p[5]+" idDireccion[6] "+p[6]+" desGeneral[7] "+p[7]+" desc2[8] "
@@ -124,6 +122,7 @@ public class ProveedorDireccionDao extends GenericoDAO{
 			direccion.setNoInt(d.getNoInt());
 			direccion.setNoExt(d.getNoExt());
 			direccion.setColonia(d.getColonia());
+			direccion.setCiudad(d.getCiudad());
 			direccion.setEstado(d.getEstado());
 			direccion.setCp(d.getCp());
 			

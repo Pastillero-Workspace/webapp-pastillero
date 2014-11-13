@@ -41,9 +41,10 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 		if(request.getParameter("tarea").equals("agregar")){
 
 			d.setCalle(request.getParameter("txtCalle").trim());
-			d.setNoInt(Integer.parseInt(request.getParameter("txtNoInt").trim()));
-			d.setNoExt(Integer.parseInt(request.getParameter("txtNoExt").trim()));
+			d.setNoInt(request.getParameter("txtNoInt").trim());
+			d.setNoExt(request.getParameter("txtNoExt").trim());
 			d.setColonia(request.getParameter("txtColonia").trim());
+			d.setCiudad(request.getParameter("txtCiudad").trim());
 			d.setEstado(request.getParameter("txtEstado").trim());
 			d.setCp(Integer.parseInt(request.getParameter("txtCp").trim()));
 			
@@ -81,9 +82,10 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 			
 			d.setIdDireccion(p.getIdDireccion());
 			d.setCalle(request.getParameter("txtCalle").trim());
-			d.setNoInt(Integer.parseInt(request.getParameter("txtNoInt").trim()));
-			d.setNoExt(Integer.parseInt(request.getParameter("txtNoExt").trim()));
+			d.setNoInt(request.getParameter("txtNoInt").trim());
+			d.setNoExt(request.getParameter("txtNoExt").trim());
 			d.setColonia(request.getParameter("txtColonia").trim());
+			d.setCiudad(request.getParameter("txtCiudad").trim());
 			d.setEstado(request.getParameter("txtEstado").trim());
 			d.setCp(Integer.parseInt(request.getParameter("txtCp").trim()));
 			
@@ -117,9 +119,10 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 			
 			d.setIdDireccion(p.getIdDireccion());
 			d.setCalle(request.getParameter("txtCalle").trim());
-			d.setNoInt(Integer.parseInt(request.getParameter("txtNoInt").trim()));
-			d.setNoExt(Integer.parseInt(request.getParameter("txtNoExt").trim()));
+			d.setNoInt(request.getParameter("txtNoInt").trim());
+			d.setNoExt(request.getParameter("txtNoExt").trim());
 			d.setColonia(request.getParameter("txtColonia").trim());
+			d.setCiudad(request.getParameter("txtCiudad").trim());
 			d.setEstado(request.getParameter("txtEstado").trim());
 			d.setCp(Integer.parseInt(request.getParameter("txtCp").trim()));
 			

@@ -1,6 +1,5 @@
 package mx.com.pastillero.model.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import mx.com.pastillero.model.formBeans.Persona;
@@ -9,8 +8,6 @@ import mx.com.pastillero.model.formBeans.Usuario;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,8 +26,7 @@ public class PersonaDao extends GenericoDAO{
 		    	Criteria criteria = session.createCriteria(Persona.class);
 			  	criteria.add(Restrictions.eq("idPersona", id));
 				list = criteria.list();
-				System.out.println("Nombre Persona: "+list.get(0).getNombre());
-		    }catch(HibernateException e){
+			}catch(HibernateException e){
 		    	logger.error("ERROR: No se pude obtener el id de la persona.");
 				e.printStackTrace();
 		    }finally{

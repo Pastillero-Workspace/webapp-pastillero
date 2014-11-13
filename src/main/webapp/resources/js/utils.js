@@ -7,6 +7,8 @@ $(document).ready(function() {
 					var DescuentoTotal = 0;
 					var IvaUnitario = 0;
 					var counter = 0;
+					var productos = [];
+					var productos2 = [];
 					var t = $('#example').DataTable({
 						dom : "rtiS",
 						"bSort" : false,
@@ -15,13 +17,17 @@ $(document).ready(function() {
 					});
 					/* Event to get ID when the page is loaded */
 					$(window).load(function() {
+										
 										var datacontextload = localStorage.getItem("idcontrolventa");
-										if (datacontextload != null && datacontextload == "0") {
+										console.log("dataContext: "+datacontextload);
+										//if (datacontextload != null && datacontextload == "0") {
+										if (datacontextload == null || datacontextload == "0") {
 											$.post('cobroController.jr',{
 												varUsuario : $('#txtUsuario').val(),
 												context : 1,
 												workout : 'getNota'
 											},function(data) {
+												console.log("data: "+data);
 												if (data != 'Reload') {
 													$('#txtFolio').val(data);
 													$('#txtCaja').val("1");
@@ -51,6 +57,7 @@ $(document).ready(function() {
 											 * if not not load in cobro
 											 */
 											var arraynt = JSON.parse(localStorage.getItem("nota"));
+											console.log("arraynt: "+arraynt);
 											if (arraynt != null) {
 												$('#txtFolio').val(arraynt.idnt);
 												$('#txtCaja').val(arraynt.caja);
@@ -64,24 +71,40 @@ $(document).ready(function() {
 											$('#lblPrcp').text("0.0");
 											$('#lblPrcd').text("0.0");
 											$('#lblImpTotal').text("0.0");
-											for (var i = 0; i <= localStorage.getItem("item"); i++) {
-												var arrayp = JSON.parse(localStorage.getItem("Producto"+i+""));
-												if (arrayp != null) {
+											//console.log("item "+localStorage.getItem("item"));
+											productos2 = JSON.parse(localStorage.getItem("productosVenta"));
+											//for (var i = 0; i <= localStorage.getItem("item"); i++) {
+											if(productos2 != null){
+												for(var i = 0; i < productos2.length; i++){
+													/*var arrayp = JSON.parse(localStorage.getItem("Producto"+i+""));
+													console.log("Productos arrayp: "+arrayp.descripcion);
+													if (arrayp != null) {
+														t.row.add(
+															[ 	arrayp.codigo,
+																arrayp.descripcion,
+																arrayp.cantidad,
+																arrayp.preciopub,
+																arrayp.preciodesc,
+																arrayp.subtotal,
+																'<button type="button" class="myButton" id="Producto'+i+'">X</button>'
+															]).draw();
+													}*/
 													t.row.add(
-														[ 	arrayp.codigo,
-															arrayp.descripcion,
-															arrayp.cantidad,
-															arrayp.preciopub,
-															arrayp.preciodesc,
-															arrayp.subtotal,
-															'<button type="button" class="myButton" id="Producto'+i+'">X</button>'
-														]).draw();
+															[
+															 productos2[i].codigo,
+															 productos2[i].descripcion,
+															 productos2[i].cantidad,
+															 productos2[i].preciopub,
+															 productos2[i].preciodesc,
+															 productos2[i].subtotal,
+															 '<button type="button" class="myButton" id="Producto'+i+'">X</button>'
+															]).draw();
 												}
 											}
 											
 											// load local values
 											var arrayt = JSON.parse(localStorage.getItem("totales"));
-											
+											console.log("totales arrayt: "+arrayt);
 											if (arrayt != null) {
 												$('#txtPrecT').val(arrayt.pt);
 												$('#txtDesT').val(arrayt.dt);
@@ -94,6 +117,7 @@ $(document).ready(function() {
 											// false);
 											// $('#openFormAltaCobro').prop("disabled",
 											// true);
+											console.log("Item: "+localStorage.getItem("item"));
 											if (localStorage.getItem("item") <= 0)
 												counter = 0;
 											else {
@@ -155,16 +179,30 @@ $(document).ready(function() {
 												console.log("nuevo item agregado: "	+ localStorage.getItem("item"));
 												
 												// add items for local storage products
-												var myObject = new Object();
+												/*var myObject = new Object();
 												myObject.codigo = codigo1.concat($("#txtCodigo").val().trim());
 												myObject.descripcion = $('#lblDscp').text();
 												myObject.cantidad = $('#txtCantidad').val();
 												myObject.preciopub = $('#lblPrcp').text();
 												myObject.preciodesc = $('#lblPrcd').text();
-												myObject.subtotal = $('#lblImpTotal').text();
+												myObject.subtotal = $('#lblImpTotal').text();*/
 												
-												localStorage.setItem("Producto" + counter + "", JSON.stringify(myObject));
-												console.log(JSON.parse(localStorage.getItem("Producto"+ counter+ "")));
+												
+												var producto = {
+														codigo: 	codigo1.concat($("#txtCodigo").val().trim()),
+														descripcion:$('#lblDscp').text(),
+														cantidad:	$('#txtCantidad').val(),
+														preciopub:	$('#lblPrcp').text(),
+														preciodesc:	$('#lblPrcd').text(),
+														subtotal:	$('#lblImpTotal').text()
+														
+												};
+												productos.push(producto);
+												localStorage.setItem("productosVenta", JSON.stringify(productos));
+												console.log("productosVenta: "+localStorage.getItem("productosVenta"));
+												
+												//localStorage.setItem("Producto" + counter + "", JSON.stringify(myObject));
+												//console.log("Producto"+counter+" "+JSON.parse(localStorage.getItem("Producto"+ counter+ "")));
 												counter++;
 												
 												// proceso de operaciones matematicas para el calculo total de los items
@@ -196,7 +234,7 @@ $(document).ready(function() {
 												myObject.tt = $('#txtTotal').val();
 												
 												localStorage.setItem("totales",JSON.stringify(myObject));
-												console.log(JSON.parse(localStorage.getItem("totales")));
+												console.log("totales: "+JSON.parse(localStorage.getItem("totales")));
 												
 												// limpiar campos y botones y poner el foco en txt codigo
 												$('#txtCodigo').val("");
@@ -345,10 +383,11 @@ $(document).ready(function() {
 							var index = table.row($(this).parents('tr')).index();
 							var description = table.cell(index,1).data();
 							var iddelete = $(this).attr('id').trim();
-							
+							console.log("idDelete: "+iddelete);
 							alert("Desea eliminar el item seleccionado: "+ description);
-							var arrayp = JSON.parse(localStorage.getItem(iddelete));
-							console.log("datos obtenidos del arreglo: "+ localStorage.getItem(iddelete));
+							//var arrayp = JSON.parse(localStorage.getItem(iddelete));
+							var arrayp = JSON.parse(localStorage.getItem("productosVenta"));
+							console.log("datos obtenidos del arreglo: "+ arrayp[index]);
 							
 							if (arrayp != null) {
 //								$.post('cobroController.jr',{
@@ -359,7 +398,7 @@ $(document).ready(function() {
 //									var producto = data.split('~');
 //									
 //									if (producto != null) {
-										var infoProductDesc = localStorage.getItem(""+arrayp.codigo).split("~");;
+										var infoProductDesc = localStorage.getItem(""+arrayp[index].codigo).split("~");;
 										var iva = 0;
 										var preciopublico = 0;
 										var preciodescuento = 0;
@@ -372,7 +411,7 @@ $(document).ready(function() {
 										preciopublico = parseFloat(infoProductDesc[0]);
 //										preciodescuento = (preciopublico * parseFloat(producto[15] / 100)).toFixed(2);
 										preciodescuento = (preciopublico * parseFloat(infoProductDesc[1] / 100)).toFixed(2);
-										cantidad = parseInt(arrayp.cantidad);
+										cantidad = parseInt(arrayp[index].cantidad);
 										
 										var descInsen = 0;
 										var descClteFrec = 0;
@@ -426,12 +465,16 @@ $(document).ready(function() {
 										localStorage.setItem("totales",JSON.stringify(myObject));
 										var item = parseInt(localStorage.getItem("item"));
 										item = item - 1;
-										console.log("indice: "	+ item);
+										console.log("indice item: "	+ item);
 
 										// localStorage.setItem("item",item);
 										
 										// remove row from datatable
-										localStorage.removeItem(iddelete);
+										//localStorage.removeItem(iddelete);
+										
+										arrayp.splice(index,1);
+										console.log("arrayp: "+arrayp);
+										localStorage.setItem('productosVenta', JSON.stringify(arrayp));
 										t.row($(this).parents('tr')).remove().draw(false);
 										
 										// check if table is empty

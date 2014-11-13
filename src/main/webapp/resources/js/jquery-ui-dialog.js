@@ -205,8 +205,16 @@ function EnviarFormulario() {
 	blockpage();
 	var table = $('#example').tableToJSON(); // Convert the table into a
 												// javascript object
+	var datosNota = {
+			idnt:	$('#txtFolio').val(),
+			caja:	$('#txtCaja').val(),
+			usuario:$('#txtUsuario').val(),
+			cliente:$('#txtCliente').val(),
+			dcliente:$('#txtDescripcion').val()
+			
+	};
 	$.post('cobroController.jr', {
-		data_1 : localStorage.getItem("nota"),
+		data_1 : JSON.stringify(datosNota),
 		data_2 : localStorage.getItem("totales"),
 		data_3 : JSON.stringify(table),
 		varTotalCobro : $('#txtTotalCobro').val(),
@@ -227,11 +235,16 @@ function EnviarFormulario() {
 			localStorage.setItem("idcontrolventa", "0"); // set control de venta 0 for leave cobro
 			localStorage.removeItem("descClteFrec");
 			localStorage.removeItem("descInsen");
-			for (var i = 1; i <= localStorage.getItem("item"); i++) {
+			/*for (var i = 1; i <= localStorage.getItem("item"); i++) {
 				var producto = JSON.parse(localStorage.getItem("Producto"+i+""));
 				localStorage.removeItem(""+producto.codigo);
 				localStorage.removeItem("Producto" + i + "");
+			}*/
+			var productos = JSON.parse(localStorage.getItem("productosVenta"));
+			for (var i = 1; i < productos.length; i++) {
+				localStorage.removeItem(""+productos[i].codigo);
 			}
+			localStorage.removeItem("productosVenta");
 			
 			localStorage.removeItem("item");
 			$.unblockUI();

@@ -2,7 +2,6 @@ package mx.com.pastillero.model.dao;
 
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import mx.com.pastillero.model.formBeans.Usuario;
@@ -10,9 +9,7 @@ import mx.com.pastillero.model.formBeans.Usuario;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.LogicalExpression;
 import org.hibernate.criterion.Restrictions;
@@ -132,6 +129,10 @@ public class UsuarioDao extends GenericoDAO
 			list = criteria.list();
 			if(!list.isEmpty())
 				u = list.get(0);
+			else{
+				u = null;
+			}
+				
 		}catch(HibernateException ex)
 		{
 			u = null;

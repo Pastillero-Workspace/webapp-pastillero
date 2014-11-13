@@ -1,7 +1,6 @@
 package mx.com.pastillero.model.dao;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import mx.com.pastillero.model.formBeans.Nota;
@@ -9,9 +8,7 @@ import mx.com.pastillero.model.formBeans.Nota;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

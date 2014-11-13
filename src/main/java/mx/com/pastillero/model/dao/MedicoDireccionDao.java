@@ -7,9 +7,7 @@ import mx.com.pastillero.model.formBeans.Medico;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,12 +20,9 @@ public class MedicoDireccionDao extends GenericoDAO{
 		List<Object[]> medico = null;
 		try{
 			session = factory.openSession();
-			medico = session
-					.createQuery(
-							"select m.idMedico, m.cedula, m.nombre, m.telFijo, m.telMovil, m.email,"
-									+ " m.idDireccion, d.calle, d.noExt, d.noInt, d.colonia, d.estado, d.cp "
-									+ "from Medico as m, Direccion as d where m.idDireccion=d.idDireccion")
-					.list();
+			medico = session.createQuery("select m.idMedico, m.cedula, m.nombre, m.telFijo, m.telMovil, m.email,"
+									+ " m.idDireccion, d.calle, d.noExt, d.noInt, d.colonia, d.ciudad, d.estado, d.cp "
+									+ "from Medico as m, Direccion as d where m.idDireccion=d.idDireccion").list();
 		}catch(HibernateException e){
 			medico = null;
 			logger.error("ERROR: No se obtener la informacion de los medicos");
@@ -117,6 +112,7 @@ public class MedicoDireccionDao extends GenericoDAO{
 			direccion.setNoInt(d.getNoInt());
 			direccion.setNoExt(d.getNoExt());
 			direccion.setColonia(d.getColonia());
+			direccion.setCiudad(d.getCiudad());
 			direccion.setEstado(d.getEstado());
 			direccion.setCp(d.getCp());
 			session.update(direccion);
@@ -144,8 +140,7 @@ public class MedicoDireccionDao extends GenericoDAO{
 		List<Object[]> medico = null;
 		try{
 			session = factory.openSession();
-			medico = session.createQuery(
-					"select idMedico,idDireccion from Medico where cedula ='"
+			medico = session.createQuery("select idMedico,idDireccion from Medico where cedula ='"
 							+ cedula + "'").list();
 		}catch(HibernateException e){
 			medico = null;

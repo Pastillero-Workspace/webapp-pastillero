@@ -1,6 +1,5 @@
 package mx.com.pastillero.model.dao;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import mx.com.pastillero.model.formBeans.Familia;
@@ -9,8 +8,6 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session; 
 import org.hibernate.Transaction;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -95,11 +92,9 @@ public class FamiliaDao extends GenericoDAO{
 			session = factory.openSession();
 			Criteria criteria = session.createCriteria(Familia.class);
 		    fam = criteria.list();  
-		    if(!fam.isEmpty())
-		    	logger.info("ID Cliente: "+fam.get(0).getIdFamilia());
 		}catch(HibernateException e){
 			fam = null;
-			logger.error("ERROR: No se pudo guardar en la tabla Antibioticos.");
+			logger.error("ERROR: No se pudo obtener familia.");
 			e.printStackTrace();
 		}finally{
 			if (session != null && session.isOpen()) {

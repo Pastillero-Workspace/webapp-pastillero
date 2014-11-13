@@ -5,9 +5,7 @@ import java.util.List;
 import mx.com.pastillero.model.formBeans.CfgSucursal;
 
 import org.hibernate.HibernateException;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.classic.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

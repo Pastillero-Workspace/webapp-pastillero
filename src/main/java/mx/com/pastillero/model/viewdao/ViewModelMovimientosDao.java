@@ -7,33 +7,23 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import mx.com.pastillero.model.dao.GenericoDAO;
 import mx.com.pastillero.model.formBeans.MovimientoGeneral;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.jdbc.Work;
 
 
-public class ViewModelMovimientosDao {
-	
-	 private static SessionFactory factory; 
-	 	 
-	  public SessionFactory getBuildSess()
-	  {
-		  try{
-		        factory = new Configuration().configure("mx/com/pastillero/model/hibernate.cfg.xml").buildSessionFactory();
-		     }catch (Throwable ex) { 
-		        System.err.println("Failed to create sessionFactory object." + ex);
-		        throw new ExceptionInInitializerError(ex); 
-		     }
-		  return factory;
-		  
-	  }
+public class ViewModelMovimientosDao extends GenericoDAO{
+	private static final Logger logger = LoggerFactory.getLogger(ViewModelMovimientosDao.class);
 
+	 
 	  public List<MovimientoGeneral> getViewStored() throws Exception
-	  {		
+	  {	
+		  logger.info("Entrada a movimientos con exito!");  
 		final List<MovimientoGeneral> datos = new ArrayList<MovimientoGeneral>();
 		  
 	  	Session session = factory.openSession();
@@ -60,7 +50,7 @@ public class ViewModelMovimientosDao {
 	                                 }
 	                                 while (rs.next()) {             
 
-	                                     System.out.println("Tipo: "+ rs.getString("tipo") + "Fecha: "+rs.getString("fecha")+"Hora: "+rs.getString("hora")+"Utilidad: "+rs.getString("utilidad"));
+	                                     //System.out.println("Tipo: "+ rs.getString("tipo") + "Fecha: "+rs.getString("fecha")+"Hora: "+rs.getString("hora")+"Utilidad: "+rs.getString("utilidad"));
 	                                     MovimientoGeneral mg = new MovimientoGeneral();
 	                                     //mg.setIdMovimiento(Integer.parseInt(rs.getString("idMovimiento")));
 	                                     mg.setTipo(rs.getString("tipo"));
@@ -92,6 +82,7 @@ public class ViewModelMovimientosDao {
 	      finally{
 	      	session.close();
 	      }
+	  	
 	  	return datos;
 	  } 
 }

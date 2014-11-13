@@ -1,15 +1,6 @@
 <%@page import="mx.com.pastillero.model.dao.ClienteDireccionDao"%>
 <%@page import="mx.com.pastillero.types.Types"%>
 <%@page import="java.util.List"%>
-<%@page import="org.hibernate.SessionFactory"%>
-
-<%@page import="mx.com.pastillero.model.dao.ProveedorDireccionDao"%>
-<%@page import="mx.com.pastillero.model.dao.MovimientosDao"%>
-<%@page import="mx.com.pastillero.model.formBeans.Movimientos"%>
-<%@page import="mx.com.pastillero.model.formBeans.MovimientoGeneral"%>
-<%@page import="mx.com.pastillero.model.viewdao.ViewModelMovimientosDao"%>
-<%@page import="mx.com.pastillero.model.formBeans.MovimientoRecepcion"%>
-<%@page import="mx.com.pastillero.model.dao.MovimientoRecepcionDao"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -93,7 +84,8 @@
 					        '<%=datos.get(i)[15]%>',
 					        '<%=datos.get(i)[16]%>',
 					        '<%=datos.get(i)[17]%>',
-					        '<%=datos.get(i)[18]%>'];
+					        '<%=datos.get(i)[18]%>',
+					        '<%=datos.get(i)[19]%>',];
 		<%}%>	
 	         
 			// Create a datatable for control entity data
@@ -105,7 +97,7 @@
 			dom : "rtiS",
 			"stateSave" : true,
 		    "bSort": false,
-			scrollY : 200,
+			scrollY : 800,
 			scrollCollapse : true
 			
 		} );
@@ -240,9 +232,12 @@
 								$("#txtColonia").val(value);
 							}
 							if(date==15){
-								$("#txtEstado").val(value);
+								$("#txtCiudad").val(value);
 							}
 							if(date==16){
+								$("#txtEstado").val(value);
+							}
+							if(date==17){
 								$("#txtCp").val(value);
 							}
 							
@@ -285,6 +280,7 @@
 									txtNoExt: $('#txtNoExt').val(),
 									txtNoInt: $('#txtNoInt').val(),
 									txtColonia: $('#txtColonia').val(),
+									txtCiudad: $('#txtCiudad').val(),
 									txtEstado: $('#txtEstado').val(),
 									txtCp: $('#txtCp').val(),
 									opcDesc: $("#opcDesc option:selected").val()
@@ -310,6 +306,7 @@
 										$('#txtNoExt').val(),
 										$('#txtNoInt').val(),
 										$('#txtColonia').val(),
+										$('#txtCiudad').val(),
 										$('#txtEstado').val(),
 										$('#txtCp').val()
 									]);
@@ -330,6 +327,7 @@
 									$('#txtNoExt').val('');
 									$('#txtNoInt').val('');
 									$('#txtColonia').val('');
+									$('#txtCiudad').val();
 									$('#txtEstado').val('');
 									$('#txtCp').val('');
 									$('#opcDesc option[value="0"]:selected');
@@ -372,6 +370,7 @@
 										txtNoExt: $('#txtNoExtNuevo').val(),
 										txtNoInt: $('#txtNoIntNuevo').val(),
 										txtColonia: $('#txtColoniaNuevo').val(),
+										txtCiudad: $('#txtCiudadNuevo').val(),
 										txtEstado: $('#txtEstadoNuevo').val(),
 										txtCp: $('#txtCpNuevo').val(),
 										opcDesc: $('#opcDescNuevo option:selected').val()
@@ -397,6 +396,7 @@
 										$('#txtNoExtNuevo').val(),
 										$('#txtNoIntNuevo').val(),
 										$('#txtColoniaNuevo').val(),
+										$('#txtCiudadNuevo').val(),
 										$('#txtEstadoNuevo').val(),
 										$('#txtCpNuevo').val()
 									]).draw();
@@ -417,6 +417,7 @@
 									$('#txtNoExtNuevo').val(),
 									$('#txtNoIntNuevo').val(),
 									$('#txtColoniaNuevo').val(),
+									$('#txtCiudadNuevo').val(),
 									$('#txtEstadoNuevo').val(),
 									$('#txtCpNuevo').val(),
 									$('#opcDescNuevo option[value="0"]:selected');
@@ -513,9 +514,14 @@
 			});
 			$("#txtColonia").keypress(function(e){
 					if(e.which == 13){
-						$("#txtEstado").select();
+						$("#txtCiudad").select();
 				}
 			});
+			$("#txtCiudad").keypress(function(e){
+				if(e.which == 13){
+					$("#txtEstado").select();
+			}
+		});
 			$("#txtEstado").keypress(function(e){
 				if(e.which == 13){
 					$("#txtCp").select();
@@ -605,9 +611,14 @@
 			});
 			$("#txtColoniaNuevo").keypress(function(e){
 					if(e.which == 13){
-						$("#txtEstadoNuevo").select();
+						$("#txtCiudadNuevo").select();
 				}
 			});
+			$("#txtCiudadNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtEstadoNuevo").select();
+			}
+		});
 			$("#txtEstadoNuevo").keypress(function(e){
 				if(e.which == 13){
 					$("#txtCpNuevo").select();
@@ -687,8 +698,8 @@
 		<legend>Direccion</legend>
 		<ol>
 			<li><label for="calle">*Calle: </label><input type="text" id="txtCalle" name="txtCalle" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExt" name="txtNoExt" size="5" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoInt" name="txtNoInt" size="5" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColonia" name="txtColonia" requiered><label for="estado">*Estado: </label><input type="text" id="txtEstado" name="txtEstado" size="23" requiered><li>
-			<li><label for="cp">*C.P: </label><input type="text" id="txtCp" name="txtCp" size="7" requiered></li>
+			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColonia" name="txtColonia" requiered><label for="ciudad">*Ciudad: </label><input type="text" id="txtCiudad" name="txtCiudad" size="30" requiered><li>
+			<li><label for="estado">*Estado: </label><input type="text" id="txtEstado" name="txtEstado" size="30" requiered><label for="cp">*C.P: </label><input type="text" id="txtCp" name="txtCp" size="7" requiered></li>
 		</ol>
 	</fieldset>
 	</form>
@@ -713,17 +724,18 @@
 			<li><label for="credito">*Credito:</label><input type="text" id="txtCreditoNuevo" name="txtCreditoNuevo" size="5" requiered><label for="diasCredito">*Dias Cred:</label><input type="text" id="txtDiasCredNuevo" name="txtDiasCredNuevo" size="5" requiered>
 			<label for="limiteCredito">*Limite Cred:</label><input type="text" id="txtLimiteCredNuevo" name="txtLimiteCredNuevo" size="5" requiered><label for="ventaAnual">*Venta anual:</label><input type="text" id="txtVentaAnualNuevo" name="txtVentaAnualNuevo" size="5" requiered></li>
 			<li><label for="saldo">*Saldo:</label><input type="text" id="txtSaldoNuevo" name="txtSaldoNuevo" size="5" requiered>
-			<label for="desc">*Descuento</label><select id="opcDescNuevo" name="opcDescNuevo" requiered><option value="0">Sin Descuento</option><option value="5.00">Cliente Frecuente</option><option value="2.00">INSEN 2%</option><option value="3.00">INSEN 3%</option></select>
-			<label for="descExtra">*Desc. Extra:</label><input type="text" id="txtDescExtraNuevo" name="txtDescExtraNuevo" size="5" requiered>
-			<label for="ventaMensual">*Venta Mensual:</label><input type="text" id="txtVentaMensualNuevo" name="txtVentaMensualNuevo" size="5" requiered></li>
+			<label for="desc">*Descuento</label><select id="opcDescNuevo" name="opcDescNuevo" requiered><option value="0">Sin Descuento</option><option value="5.00">Cliente Frecuente</option><option value="2.00">INSEN 2%</option><option value="3.00">INSEN 3%</option><option value="4.00">INSEN 4%</option><option value="50.00">INSEN 5%</option></select>
+			<label for="descExtra">*Desc. Extra:</label><input type="text" id="txtDescExtraNuevo" name="txtDescExtraNuevo" size="5" disabled>
+			</li>
+			<li><label for="ventaMensual">*Venta Mensual:</label><input type="text" id="txtVentaMensualNuevo" name="txtVentaMensualNuevo" size="5" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Direccion</legend>
 		<ol>
 			<li><label for="calle">*Calle: </label><input type="text" id="txtCalleNuevo" name="txtCalleNuevo" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExtNuevo" name="txtNoExtNuevo" size="5" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoIntNuevo" name="txtNoIntNuevo" size="5" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColoniaNuevo" name="txtColoniaNuevo" requiered><label for="estado">*Estado: </label><input type="text" id="txtEstadoNuevo" name="txtEstadoNuevo" size="23" requiered><li>
-			<li><label for="cp">*C.P: </label><input type="text" id="txtCpNuevo" name="txtCpNuevo" size="7" requiered></li>
+			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColoniaNuevo" name="txtColoniaNuevo" requiered><label for="ciudad">*Ciudad: </label><input type="text" id="txtCiudadNuevo" name="txtCiudadNuevo" size="23" requiered><li>
+			<li><label for="estado">*Estado: </label><input type="text" id="txtEstadoNuevo" name="txtEstadoNuevo" size="23" requiered><label for="cp">*C.P: </label><input type="text" id="txtCpNuevo" name="txtCpNuevo" size="7" requiered></li>
 		</ol>
 	</fieldset>
 	</form>
@@ -806,7 +818,7 @@
 					
 					<tr>
 						<th style="width: 2%">Clave</th>
-						<th style="width: 40%">Nombre</th>
+						<th style="width: 80%">Nombre</th>
 						<th style="width: 5%">Email</th>
 						<th style="width: 10%">RFC</th>
 						<th style="width: 2%">Credito</th>
@@ -821,6 +833,7 @@
 						<th style="width: 2%" >No.Ext.</th>
 						<th style="width: 2%" >No.Int.</th>
 						<th style="width: 10%">Colonia</th>
+						<th style="width: 10%">Ciudad</th>
 						<th style="width: 5%">Estado</th>
 						<th style="width: 5%">CP</th>
 				    </tr>
@@ -843,6 +856,7 @@
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="NoExt" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="NoInt" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Colonia" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Ciudad" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Estado" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="CP" /></th>	
 					</tr>								

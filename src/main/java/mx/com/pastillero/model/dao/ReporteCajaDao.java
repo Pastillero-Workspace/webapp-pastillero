@@ -2,14 +2,9 @@ package mx.com.pastillero.model.dao;
 
 import mx.com.pastillero.model.formBeans.ReporteCaja;
 
-
-
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

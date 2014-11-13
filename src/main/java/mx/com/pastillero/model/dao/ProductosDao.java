@@ -7,9 +7,7 @@ import mx.com.pastillero.model.formBeans.Productos;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -141,6 +139,40 @@ public class ProductosDao extends GenericoDAO
 		return resultado;
 		
 	}
+	
+	public boolean actualizarExistencias(Productos p)
+	{
+		
+		boolean resultado = false;
+		Session session = null;
+		Transaction tx = null;
+		try{
+			session = factory.openSession();
+			tx  = session.beginTransaction();
+			Productos producto = (Productos) session.get(Productos.class, p.getIdProducto());
+			producto.setExistencias(p.getExistencias());	
+			// update product			
+			session.update(producto);	
+			tx.commit();
+			resultado = true;
+		}catch(HibernateException e){
+			resultado=false;
+			logger.error("Error en actualizar : Verifique datos");
+			e.printStackTrace();
+		}
+		finally{
+			if(session!=null&&session.isOpen()){
+				try{
+					session.close();
+				}catch(Exception ex){
+					ex.printStackTrace();
+				}
+			}
+		}
+		return resultado;
+		
+	}
+	
 	
 	public boolean guardarProducto(Productos producto) {
 

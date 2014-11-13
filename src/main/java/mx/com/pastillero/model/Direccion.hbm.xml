@@ -12,9 +12,10 @@
          <generator class="native"/>
       </id>
       <property name="calle" column="calle" type="string"/>
-      <property name="noInt" column="no_int" type="int"/>
-      <property name="noExt" column="no_ext" type="int"/>
+      <property name="noInt" column="no_int" type="string"/>
+      <property name="noExt" column="no_ext" type="string"/>
       <property name="colonia" column="colonia" type="string"/>
+      <property name="ciudad" column="ciudad" type="string"/>
       <property name="estado" column="estado" type="string"/>
       <property name="cp" column="CP" type="int"/>
        </class>

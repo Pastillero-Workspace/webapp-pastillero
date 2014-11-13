@@ -1,7 +1,6 @@
 <%@page import="mx.com.pastillero.model.formBeans.Usuario"%>
 <%@page import="mx.com.pastillero.model.dao.UPDDao"%>
 <%@page import="java.util.List"%>
-<%@page import="org.hibernate.SessionFactory"%>
 <%@page import="mx.com.pastillero.types.Types"%>
 
 
@@ -60,7 +59,7 @@
 					.draw();
 				    //alert("valor" + $(this).parent().index());					
                   
-			} );			
+			} );
 	<% 		 	
 	 	UPDDao userDao = new UPDDao();
 	 	List<Usuario> usuarios = userDao.mostrarUsuarios();   	 	

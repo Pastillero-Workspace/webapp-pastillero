@@ -35,36 +35,34 @@ public class UsuarioController extends HttpServlet{
 		if(request.getParameter("tarea").equals("update"))
 		{
 		    // Usuario
-			String olduser = request.getParameter("olduser");
-			String usuario = request.getParameter("txtUsuario");
-			String contrasena = request.getParameter("txtContrasena");
-			String perfil = request.getParameter("txtPerfil");
-			int activo = Integer.parseInt(request.getParameter("txtActivo"));
-			String sucursal = request.getParameter("txtSucursal");
+			String olduser = request.getParameter("olduser").trim();
+			String usuario = request.getParameter("txtUsuario").trim();
+			String contrasena = request.getParameter("txtContrasena").trim();
+			String perfil = request.getParameter("txtPerfil").trim();
+			int activo = Integer.parseInt(request.getParameter("txtActivo").trim());
+			String sucursal = request.getParameter("txtSucursal").trim();
 			//Persona
-			String nombre = request.getParameter("txtNombre");
-			String apellidopat = request.getParameter("txtApePat");
-			String apellidomat = request.getParameter("txtApeMat");
-			String fechaingreso =request.getParameter("txtFechaIn");
-			String rfc =  request.getParameter("txtRFC");
-			String curp = request.getParameter("txtCURP");
-			String turno = request.getParameter("txtTurno");
-			String email = request.getParameter("txtEmail");
-			String telfijo = request.getParameter("txtTelFijo");
-			String telmovil = request.getParameter("txtTelMovil");
+			String nombre = request.getParameter("txtNombre").trim();
+			String apellidopat = request.getParameter("txtApePat").trim();
+			String apellidomat = request.getParameter("txtApeMat").trim();
+			String fechaingreso =request.getParameter("txtFechaIn").trim();
+			String rfc =  request.getParameter("txtRFC").trim();
+			String curp = request.getParameter("txtCURP").trim();
+			String turno = request.getParameter("txtTurno").trim();
+			String email = request.getParameter("txtEmail").trim();
+			String telfijo = request.getParameter("txtTelFijo").trim();
+			String telmovil = request.getParameter("txtTelMovil").trim();
 			// Direccion
-			String calle =   request.getParameter("txtCalle");
-			int noext = Integer.parseInt(request.getParameter("txtNoExt"));
-			int noint = Integer.parseInt(request.getParameter("txtNoInt"));
-			String colonia = request.getParameter("txtColonia");
-			String estado = request.getParameter("txtEstado");
-			int cp = Integer.parseInt(request.getParameter("txtCp"));
+			String calle =   request.getParameter("txtCalle").trim();
+			String noext = request.getParameter("txtNoExt").trim();
+			String noint = request.getParameter("txtNoInt").trim();
+			String colonia = request.getParameter("txtColonia").trim();
+			String ciudad = request.getParameter("txtCiudad").trim();
+			String estado = request.getParameter("txtEstado").trim();
+			int cp = Integer.parseInt(request.getParameter("txtCp").trim());
 			// logical businnes temporaly implementation
 			
-			System.out.println("values:"+olduser+" "+usuario+" | "+contrasena+" | "+perfil+" | "+activo+" | "+sucursal+" | "+nombre+" | "+
-					apellidopat+" | "+apellidomat+" | "+fechaingreso+" | "+rfc+" | "+curp+" | "+turno+" | "+email+" | "+telfijo+" | "+
-					telmovil+" | "+calle+" | "+noext+" | "+noint+" | "+colonia+" | "+estado+" | "+cp);
-			
+						
 				Usuario u = new Usuario();
 				Persona p = new Persona();
 				Direccion d = new Direccion();
@@ -79,9 +77,10 @@ public class UsuarioController extends HttpServlet{
 			p = pd.readUniquePersonbyId(u);	
 			d = dd.readUniqueDirectionbyId(p);
 			
-			System.out.println(" User: " +u.getIdUsuario());
+			/*System.out.println(" User: " +u.getIdUsuario());
 			System.out.println(" Person: " +p.getIdPersona());
 			System.out.println(" Directory: " +d.getIdDireccion());
+			*/
 			
 		// update data i u,p,d
 			
@@ -106,6 +105,7 @@ public class UsuarioController extends HttpServlet{
 			d.setColonia(colonia);
 			d.setNoInt(noint);
 			d.setNoExt(noext);
+			d.setCiudad(ciudad);
 			d.setEstado(estado);
 			d.setCp(cp);
 			
@@ -117,33 +117,32 @@ public class UsuarioController extends HttpServlet{
 		if(request.getParameter("tarea").equals("create"))
 		{
 			
-			String usuario = request.getParameter("txtUsuario");
-			String contrasena = request.getParameter("txtContrasena");
-			String perfil = request.getParameter("txtPerfil");
-			int activo = Integer.parseInt(request.getParameter("txtActivo"));
-			String sucursal = request.getParameter("txtSucursal");
+			String usuario = request.getParameter("txtUsuario").trim();
+			String contrasena = request.getParameter("txtContrasena").trim();
+			String perfil = request.getParameter("txtPerfil").trim();
+			int activo = Integer.parseInt(request.getParameter("txtActivo").trim());
+			String sucursal = request.getParameter("txtSucursal").trim();
 			//Persona
-			String nombre = request.getParameter("txtNombre");
-			String apellidopat = request.getParameter("txtApePat");
-			String apellidomat = request.getParameter("txtApeMat");
-			String fechaingreso =request.getParameter("txtFechaIn");
-			String rfc =  request.getParameter("txtRFC");
-			String curp = request.getParameter("txtCURP");
-			String turno = request.getParameter("txtTurno");
-			String email = request.getParameter("txtEmail");
-			String telfijo = request.getParameter("txtTelFijo");
-			String telmovil = request.getParameter("txtTelMovil");
+			String nombre = request.getParameter("txtNombre").trim();
+			String apellidopat = request.getParameter("txtApePat").trim();
+			String apellidomat = request.getParameter("txtApeMat").trim();
+			String fechaingreso =request.getParameter("txtFechaIn").trim();
+			String rfc =  request.getParameter("txtRFC").trim();
+			String curp = request.getParameter("txtCURP").trim();
+			String turno = request.getParameter("txtTurno").trim();
+			String email = request.getParameter("txtEmail").trim();
+			String telfijo = request.getParameter("txtTelFijo").trim();
+			String telmovil = request.getParameter("txtTelMovil").trim();
 			// Direccion
-			String calle =   request.getParameter("txtCalle");
-			int noext = Integer.parseInt(request.getParameter("txtNoExt"));
-			int noint = Integer.parseInt(request.getParameter("txtNoInt"));
-			String colonia = request.getParameter("txtColonia");
-			String estado = request.getParameter("txtEstado");
-			int cp = Integer.parseInt(request.getParameter("txtCp"));
+			String calle =   request.getParameter("txtCalle").trim();
+			String noext = request.getParameter("txtNoExt").trim();
+			String noint = request.getParameter("txtNoInt").trim();
+			String colonia = request.getParameter("txtColonia").trim();
+			String ciudad = request.getParameter("txtCiudad").trim();
+			String estado = request.getParameter("txtEstado").trim();
+			int cp = Integer.parseInt(request.getParameter("txtCp").trim());
 			
-			System.out.println("values:"+usuario+" | "+contrasena+" | "+perfil+" | "+activo+" | "+sucursal+" | "+nombre+" | "+
-			apellidopat+" | "+apellidomat+" | "+fechaingreso+" | "+rfc+" | "+curp+" | "+turno+" | "+email+" | "+telfijo+" | "+
-			telmovil+" | "+calle+" | "+noext+" | "+noint+" | "+colonia+" | "+estado+" | "+cp);
+			
 			
 
 			Usuario u = new Usuario();
@@ -175,6 +174,7 @@ public class UsuarioController extends HttpServlet{
 			d.setColonia(colonia);
 			d.setNoInt(noint);
 			d.setNoExt(noext);
+			d.setCiudad(ciudad);
 			d.setEstado(estado);
 			d.setCp(cp);
 		
