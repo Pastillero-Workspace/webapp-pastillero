@@ -71,6 +71,10 @@
   		<servlet-name>salida</servlet-name>
   		<servlet-class>mx.com.pastillero.controller.SalidaController</servlet-class>
   	</servlet>
+  	<servlet>
+    	<servlet-name>consulta</servlet-name>
+    	<servlet-class>mx.com.pastillero.controller.ConsultaController</servlet-class>
+  </servlet>
 
 	<!--  Servlet Mappings -->
 	
@@ -133,6 +137,10 @@
   <servlet-mapping>
   	<servlet-name>salida</servlet-name>
   	<url-pattern>/salida.jr</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>consulta</servlet-name>
+    <url-pattern>/consulta.jr</url-pattern>
   </servlet-mapping>
 	
 	

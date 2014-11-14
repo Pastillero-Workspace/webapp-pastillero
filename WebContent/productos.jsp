@@ -29,6 +29,7 @@
 	
 	<script type="text/javascript" language="javascript" class="init">
 	var op = false;
+	var codBarRespaldo = "";
 	<% HttpSession sesion = request.getSession(false);
 	  String usuario = (String)sesion.getAttribute("usuario");
 	   String nombre = (String)sesion.getAttribute("nombre");
@@ -230,6 +231,7 @@
 							}
 							if(date==2){
 								$("#txtCodBar").val(value);
+								codBarRespaldo = value;
 							}
 							if(date==3){
 								$("#txtDescripcion").val(value);
@@ -505,7 +507,8 @@
 							    $('#txtUltimoCosto').val().trim()!=""&&$('#txtCostoPromedio').val().trim()!=""&&$('#txtCostoReal').val().trim()!=""){
 								$.post('productos.jr',				
 						        {
-									tarea: 'actualizar',					
+									tarea: 'actualizar',	
+									codBarRespaldo: codBarRespaldo,
 									txtProveedor: $('#txtProveedor').val(),
 									txtClave: $('#txtClave').val(),
 									txtCodBar: $('#txtCodBar').val(),

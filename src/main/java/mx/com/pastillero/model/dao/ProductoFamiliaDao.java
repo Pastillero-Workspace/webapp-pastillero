@@ -42,6 +42,60 @@ public class ProductoFamiliaDao extends GenericoDAO {
 		return list;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> buscarCodigo(String codigo)
+	{
+		Session session = null;	
+		List<Object[]> list = null;
+		try{
+			session = factory.openSession();
+			list = session.createQuery("select p.idProducto, p.codBar, p.existencias, p.descripcion, f.nombre,"
+					+ "p.laboratorio, p.cls, p.SSA, p.iva, p.ieps, p.categoria, p.pareto, p.precioPub, p.precioDesc"
+					+ " from Productos as p, Familia as f "
+					+ "where p.idFamilia = f.idFamilia and p.codBar like '%"+codigo+"'").list();
+		}catch(HibernateException e){
+			list = null;
+			logger.error("ERROR: No se pudo mostrar la informacion de los productos por famila.");
+			e.printStackTrace();
+		}finally{
+			if (session != null && session.isOpen()) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return list;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> buscarDescripcion(String descripcion)
+	{
+		Session session = null;	
+		List<Object[]> list = null;
+		try{
+			session = factory.openSession();
+			list = session.createQuery("select p.idProducto, p.codBar, p.existencias, p.descripcion, f.nombre,"
+					+ "p.laboratorio, p.cls, p.SSA, p.iva, p.ieps, p.categoria, p.pareto, p.precioPub, p.precioDesc"
+					+ " from Productos as p, Familia as f "
+					+ "where p.idFamilia = f.idFamilia and p.descripcion like '%"+descripcion+"%'").list();
+		}catch(HibernateException e){
+			list = null;
+			logger.error("ERROR: No se pudo mostrar la informacion de los productos por famila.");
+			e.printStackTrace();
+		}finally{
+			if (session != null && session.isOpen()) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return list;
+	}
+	
 	
 	/*METODO: getProductoByCodigo 
 	 * Entrada: codigo de barras a buscar
@@ -105,6 +159,8 @@ public class ProductoFamiliaDao extends GenericoDAO {
 		}	
 		return resultado;
 	}
+	
+	
 
 
 }

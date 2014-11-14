@@ -58,29 +58,6 @@
                   
 		});
 			
-			<%
-				ProductoFamiliaDao consulta = new ProductoFamiliaDao();
-				List<Object[]> listConsulta = consulta.mostrar();
-			
-			%>
-			
-		// Se crea array de datos aleatorios
-			  var data = [];			  
-				<%for ( int i=0 ; i<listConsulta.size() ; i++ ){ %>
-                    	 data[<%=i%>]= ['<%=listConsulta.get(i)[1]%>', '<%=listConsulta.get(i)[2]%>', '<%=listConsulta.get(i)[3]%>', '<%=listConsulta.get(i)[4]%>',
- 					             '<%=listConsulta.get(i)[5]%>', '<%=listConsulta.get(i)[6]%>', '<%=listConsulta.get(i)[7]%>','<%=listConsulta.get(i)[8]%>','<%=listConsulta.get(i)[9]%>',
- 					             '<%=listConsulta.get(i)[10]%>','<%=listConsulta.get(i)[11]%>','<%=listConsulta.get(i)[12]%>','<%=listConsulta.get(i)[13]%>'];
-				<%}%>
-                 
-			// Se establece el control de datos al destino
-			var table = $('#search').DataTable( {
-			data:           data,
-			deferRender:    true,
-			dom:            "frtiS",
-			scrollY:        500,
-			scrollCollapse: true,
-			pagingType: "full_numbers"
-		} );
 		// botones adicionales para limpiar campos de textos
 		$('<input type="button" id="refresh" style="width: 25%" value="Limpiar datos"/>').appendTo('div.dataTables_filter');
 			$('#refresh').click(function(e) 
@@ -113,6 +90,61 @@
              });
        });
 		
+	    $(document).ready(function (){
+	    	var table = $('#search').DataTable( {
+				//data:           data,
+				deferRender:    true,
+				dom:            "frtiS",
+				scrollY:        500,
+				scrollCollapse: true,
+				pagingType: "full_numbers"
+			} );
+	    	$('#txtCodigo').keypress(function(event) {
+				if (event.which == 13) {
+					 //buscar($('#txtCodigo').val(),$('#txtDescripcion').val());
+					 buscar($('#txtCodigo').val(),"");
+					 $('#txtCodigo').val('');
+				}});
+			$('#txtDescripcion').keypress(function(event) {
+				if (event.which == 13) {
+					//buscar($('#txtCodigo').val(),$('#txtDescripcion').val());	
+					buscar("",$('#txtDescripcion').val());
+					$('#txtDescripcion').val('')
+				}});
+			function buscar(txtcodigo, txtdescripcion){
+				console.log("**busqueda**");
+				$.ajax({
+			        url: "/webapp-pastillero/consulta.jr",
+			        type: 'POST',
+			        dataType: 'json',
+			        data://txtcodigo+':'+txtdescripcion,
+			        	{
+			        	txtCodigo: txtcodigo,
+			        	txtDescripcion: txtdescripcion
+			        	},
+			        contentType: 'application/json',
+			        mimeType: 'application/json', 
+			        success: function (listaConsulta) {
+			        	console.log("**datos: "+listaConsulta);
+			        	// Se crea array de datos aleatorios
+						  table.clear().draw();
+						  
+						  $.each(listaConsulta, function(i, producto){
+							  table.row.add([producto[1],producto[2],producto[3],producto[4]
+							  			,producto[5],producto[6],producto[7],producto[8]
+							  			,producto[9],producto[10],producto[11],producto[12]
+							  			,producto[13]]);
+						  });
+						  table.draw();
+			        },
+			        error:function(data,status,er) {
+			            alert("error: "+data+" status: "+status+" er:"+er);
+			        }
+			    });
+			}
+	    });
+	    
+		
 </script>
 </head>
 <body>
@@ -144,10 +176,15 @@
 				</span>
 			</li>
 		</ul>
-	</div>			
+	</div>		
+	<!-- Seccion de busqueda -->
+	<div class="container">
+		Codigo: <input type="text" id="txtCodigo" name="codigo"><br>
+		Descripcion: <input type="text" id="txtDescripcion" name="descripcion">		
+	</div>	
 		<div class="container">
 			<section>
-			<table id="search" class="display"cellspacing="0" width="1024px">
+			<table id="search" class="display" cellspacing="0" width="1024px">
 				<thead>	
 					<tr>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Codigo" /></th>

@@ -33,7 +33,7 @@ public class ProductoController extends HttpServlet{
 	
 		// This is a hard-code : Not good idea for implementation
 		ProductosDao pd = new ProductosDao();
-		List<Productos> lpds = pd.productoPorCodigo(request.getParameter("txtCodBar"));
+		List<Productos> lpds = pd.productoPorCodigo(request.getParameter("codBarRespaldo"));
 		if(request.getParameter("tarea").equals("actualizar"))
 		{
 			String familia = request.getParameter("txtFamilia");

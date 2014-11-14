@@ -67,7 +67,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 		
 		if(request.getParameter("tarea").equals("actualizar")){
 					
-			List<Object[]> IdProveedor = proveedorDireccion.getIdProveedor(request.getParameter("txtNombre").trim());
+			List<Object[]> IdProveedor = proveedorDireccion.getIdProveedor(request.getParameter("nombreRespaldo").trim());
 			
 			p.setIdProveedor(Integer.parseInt(IdProveedor.get(0)[0].toString()));
 			p.setNombre(request.getParameter("txtNombre").trim());

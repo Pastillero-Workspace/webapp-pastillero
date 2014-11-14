@@ -26,6 +26,7 @@
 	
 	<script type="text/javascript" language="javascript" class="init">
 	var op = false;
+	var claveRespaldo = "";
 	<% HttpSession sesion = request.getSession(false);
 	  String usuario = (String)sesion.getAttribute("usuario");
 	   String nombre = (String)sesion.getAttribute("nombre");
@@ -188,6 +189,7 @@
 						$.each(registro, function(date,value){
 							if(date==0){
 								$("#txtClave").val(value);
+								claveRespaldo = value;
 							}
 							if(date==1){
 								$("#txtNombre").val(value);
@@ -265,6 +267,7 @@
 							if($('#txtNombre').val().trim()!=""){
 									$.post('cliente.jr',{
 									tarea: 'actualizar',
+									claveRespaldo: claveRespaldo,
 									txtClave: $('#txtClave').val(),
 									txtNombre: $('#txtNombre').val(),
 									txtEmail: $('#txtEmail').val(),
