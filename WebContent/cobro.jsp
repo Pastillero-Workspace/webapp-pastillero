@@ -84,11 +84,42 @@
 			$.post('medico.jr', {
 				tarea : 'mostrar'
 			}, function(data) {
+				var medicos = data.split(',');
 				$("#selMedico").empty();
-				var $select = $('#selMedico');
-				$select.append(data);
+				//var $select = $('#selMedico');
+				//$select.append(data);
+				$( "#selMedico" ).autocomplete({
+		        	      source: medicos
+		        	});
 				$("#formAltaAntibiotico").dialog('open');
 			});
+			/*$.ajax({
+		        url: "/webapp-pastillero/consulta.jr",
+		        type: 'POST',
+		        dataType: 'json',
+		        data://txtcodigo+':'+txtdescripcion,
+		        	{
+		        	workout: 'getMedicos'
+		        	},
+		        contentType: 'application/json',
+		        mimeType: 'application/json', 
+		        success: function (medicos) {
+		        	//
+		        	alert(medicos);
+		        	$("#selMedico").empty();
+		        	var nombreMedicos = [];
+		        	$.each(medicos, function(i, medico){
+		        		nombreMedicos.push(medico);
+					  });
+		        	$( "#selMedico" ).autocomplete({
+		        	      source: nombreMedicos
+		        	});
+		        	$("#formAltaAntibiotico").dialog('open');
+		        },
+		        error:function(data,status,er) {
+		            alert("error: "+data+" status: "+status+" er:"+er);
+		        }
+		    });*/
 		}
 	}
 </script>
@@ -270,10 +301,7 @@
 			<legend>Formulario Antibiotico</legend>
 			<fieldset>
 				<ol>
-					<li><label> Medico:</label><select name="selMedico"
-						id="selMedico">
-							<option value="null">Seleccione ...</option>
-					</select></li>
+					<li><label> Medico:</label><input name="selMedico"	id="selMedico"></li>
 					<li><label> Receta:</label><select name="selReceta"
 						id="selReceta">
 							<option value="SI">SI</option>

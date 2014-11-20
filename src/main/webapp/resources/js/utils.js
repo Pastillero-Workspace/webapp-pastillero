@@ -28,27 +28,35 @@ $(document).ready(function() {
 												workout : 'getNota'
 											},function(data) {
 												console.log("data: "+data);
-												if (data != 'Reload') {
-													$('#txtFolio').val(data);
-													$('#txtCaja').val("1");
-													$('#txtTotal').val("0.0");
-													$('#txtDesT').val("0.0");
-													$('#txtSubtotal').val("0.0");
-													$('#txtIva').val("0.0");
-													$('#txtPrecT').val("0.0");
-													$('#openFormAltaCobro').prop("disabled",true);
-													
-													var myObject = new Object();
-													myObject.idnt = $('#txtFolio').val();
-													myObject.caja = $('#txtCaja').val();
-													myObject.usuario = $('#txtUsuario').val();
-													
-													localStorage.setItem("nota",JSON.stringify(myObject));
+												if(data != 'Error'){
+													if (data != 'Reload') {
+														$('#txtFolio').val(data);
+														$('#txtCaja').val("1");
+														$('#txtTotal').val("0.0");
+														$('#txtDesT').val("0.0");
+														$('#txtSubtotal').val("0.0");
+														$('#txtIva').val("0.0");
+														$('#txtPrecT').val("0.0");
+														$('#openFormAltaCobro').prop("disabled",true);
+														
+														var myObject = new Object();
+														myObject.idnt = $('#txtFolio').val();
+														myObject.caja = $('#txtCaja').val();
+														myObject.usuario = $('#txtUsuario').val();
+														
+														localStorage.setItem("nota",JSON.stringify(myObject));
+														localStorage.setItem("idcontrolventa", "1");
+													}
+												}else{
+													//console.log('El cajero no ha iniciado sesion');
+													alert('El cajero no ha iniciado sesion');
+													window.close();
 												}
+												
 											}).fail(function(xhr,textStatus, errorThrown){
 												alert("Error: "+errorThrown);
 											});
-											localStorage.setItem("idcontrolventa", "1");
+											
 										} else {
 											// loading data if page is reload
 											// (read data from localstorage)

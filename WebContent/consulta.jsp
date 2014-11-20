@@ -119,6 +119,7 @@
 			        dataType: 'json',
 			        data://txtcodigo+':'+txtdescripcion,
 			        	{
+			        	workout: 'getProductos',
 			        	txtCodigo: txtcodigo,
 			        	txtDescripcion: txtdescripcion
 			        	},
