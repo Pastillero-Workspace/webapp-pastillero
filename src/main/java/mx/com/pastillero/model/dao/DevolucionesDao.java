@@ -6,7 +6,6 @@ import mx.com.pastillero.model.formBeans.DevolucionCompra;
 import mx.com.pastillero.model.formBeans.DevolucionVenta;
 import mx.com.pastillero.model.formBeans.MovimientoDevolucionCompra;
 import mx.com.pastillero.model.formBeans.MovimientoDevolucionVenta;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -248,7 +247,36 @@ public class DevolucionesDao extends GenericoDAO{
 		}
 		return res;		
 	}
+	@SuppressWarnings("unchecked")
+	public List<Object[]> consultarNota(String fechaIni, String fechaFin){
+		Session session = null;
+		List<Object[]> notas = null;
+		
+		try{
+			session = factory.openSession();
+			notas = session.createQuery("select n.fecha, n.hora, n.idNota, p.nombre, c.nombre, n.estado, "
+					+ "n.subtotal, n.descuento, n.iva, n.total from Nota n, Usuario u, Cliente c, Persona p where "
+					+ "n.fecha >= '"+fechaIni+"' and n.fecha <= '"+fechaFin+"' and n.idUsuario=u.idUsuario and "
+					+ "n.idCliente=c.idCliente and u.idPersona=p.idPersona order by idNota desc").list();
+		}catch(HibernateException e){
+			notas = null;
+			logger.error("ERROR: No se puede mostrar el detalle de la venta.\n");
+			e.printStackTrace();
+		}finally{
+			if (session != null && session.isOpen()) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}		
+		return notas;
+		
+	}
+	
 	
 	
 
 }
+

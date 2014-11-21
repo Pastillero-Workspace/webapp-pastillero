@@ -53,7 +53,8 @@ public class CobroController extends HttpServlet {
 	// Time data
 	Date date;
 	DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
-	DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	//DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+	DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 	private String hora;
 	private String fecha;
 	private FamiliaDao familia;
@@ -352,7 +353,7 @@ public class CobroController extends HttpServlet {
 				itemNota.setDescripcion(pr.getDescripcion());
 				itemNota.setAdquiridos(0);
 				itemNota.setVendidos(pr.getCantidad());
-				float valor = (itemNota.getVendidos() * pr.getPreciopub());
+				float valor = (itemNota.getVendidos() * pr.getPreciodesc());
 				itemNota.setValor(valor);
 				List<Productos> producto = psd.productoPorCodigo(itemNota.getClave());
 				int quedan = (producto.get(0).getExistencias() - itemNota.getVendidos());
@@ -360,7 +361,7 @@ public class CobroController extends HttpServlet {
 				itemNota.setQuedan(quedan);
 				itemNota.setHora(hora);
 				itemNota.setFecha(fecha);
-				itemNota.setUtilidad((pr.getPreciopub() - pr.getUltimocosto()) * pr.getCantidad());
+				itemNota.setUtilidad((pr.getPreciodesc() - pr.getUltimocosto()) * pr.getCantidad());
 				p.setExistencias(itemNota.getQuedan());
 				p.setIdProducto(pr.getIdproducto());
 				pdao.actualizarTotales(p);

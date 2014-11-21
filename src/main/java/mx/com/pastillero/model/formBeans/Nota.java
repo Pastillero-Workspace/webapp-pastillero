@@ -1,5 +1,8 @@
 package mx.com.pastillero.model.formBeans;
 
+import java.util.Date;
+
+
 public class Nota {
 	private int idNota;
 	private String fecha;
@@ -42,7 +45,6 @@ public class Nota {
 		this.hora = hora;
 	}
 
-
 	public String getEstado() {
 		return estado;
 	}
@@ -51,6 +53,45 @@ public class Nota {
 		this.estado = estado;
 	}
 
+	public float getPrecio() {
+		return precio;
+	}
+
+	public void setPrecio(float precio) {
+		this.precio = precio;
+	}
+
+	public float getDescuento() {
+		return descuento;
+	}
+
+	public void setDescuento(float descuento) {
+		this.descuento = descuento;
+	}
+
+	public float getIva() {
+		return iva;
+	}
+
+	public void setIva(float iva) {
+		this.iva = iva;
+	}
+
+	public float getSubtotal() {
+		return subtotal;
+	}
+
+	public void setSubtotal(float subtotal) {
+		this.subtotal = subtotal;
+	}
+
+	public float getTotal() {
+		return total;
+	}
+
+	public void setTotal(float total) {
+		this.total = total;
+	}
 
 	public int getIdCliente() {
 		return idCliente;
@@ -67,36 +108,6 @@ public class Nota {
 	public void setIdUsuario(int idUsuario) {
 		this.idUsuario = idUsuario;
 	}
-	public float getPrecio() {
-		return precio;
-	}
-	public void setPrecio(float precio) {
-		this.precio = precio;
-	}
-	public float getDescuento() {
-		return descuento;
-	}
-	public void setDescuento(float descuento) {
-		this.descuento = descuento;
-	}
-	public float getIva() {
-		return iva;
-	}
-	public void setIva(float iva) {
-		this.iva = iva;
-	}
-	public float getSubtotal() {
-		return subtotal;
-	}
-	public void setSubtotal(float subtotal) {
-		this.subtotal = subtotal;
-	}
-	public float getTotal() {
-		return total;
-	}
-	public void setTotal(float total) {
-		this.total = total;
-	}
 
 	@Override
 	public String toString() {
@@ -106,6 +117,70 @@ public class Nota {
 				+ ", total=" + total + ", idCliente=" + idCliente
 				+ ", idUsuario=" + idUsuario + "]";
 	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + Float.floatToIntBits(descuento);
+		result = prime * result + ((estado == null) ? 0 : estado.hashCode());
+		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
+		result = prime * result + ((hora == null) ? 0 : hora.hashCode());
+		result = prime * result + idCliente;
+		result = prime * result + idNota;
+		result = prime * result + idUsuario;
+		result = prime * result + Float.floatToIntBits(iva);
+		result = prime * result + Float.floatToIntBits(precio);
+		result = prime * result + Float.floatToIntBits(subtotal);
+		result = prime * result + Float.floatToIntBits(total);
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Nota other = (Nota) obj;
+		if (Float.floatToIntBits(descuento) != Float
+				.floatToIntBits(other.descuento))
+			return false;
+		if (estado == null) {
+			if (other.estado != null)
+				return false;
+		} else if (!estado.equals(other.estado))
+			return false;
+		if (fecha == null) {
+			if (other.fecha != null)
+				return false;
+		} else if (!fecha.equals(other.fecha))
+			return false;
+		if (hora == null) {
+			if (other.hora != null)
+				return false;
+		} else if (!hora.equals(other.hora))
+			return false;
+		if (idCliente != other.idCliente)
+			return false;
+		if (idNota != other.idNota)
+			return false;
+		if (idUsuario != other.idUsuario)
+			return false;
+		if (Float.floatToIntBits(iva) != Float.floatToIntBits(other.iva))
+			return false;
+		if (Float.floatToIntBits(precio) != Float.floatToIntBits(other.precio))
+			return false;
+		if (Float.floatToIntBits(subtotal) != Float
+				.floatToIntBits(other.subtotal))
+			return false;
+		if (Float.floatToIntBits(total) != Float.floatToIntBits(other.total))
+			return false;
+		return true;
+	}
+
 	
 
 }

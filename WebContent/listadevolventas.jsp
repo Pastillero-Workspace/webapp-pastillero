@@ -22,6 +22,7 @@
 	<script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
 	<!-- <script src="<c:url value="/resources/js/jquery-ui-1.10.4.custom.js" />"></script> -->
 	<script src="<c:url value="/resources/js/jquery-ui-dialog.js" />"></script>
+	<script src="<c:url value="/resources/js/blockUI/jquery.blockUI.js" />"></script>
 	
 	<script src="<c:url value="/resources/js/jquery.dataTables.js" />"></script>
 	<script src="<c:url value="/resources/js/dataTables.scroller.js" />"></script>
@@ -56,7 +57,35 @@
 			}
 	 %>
 		$(document).ready(function() {
-		
+			 window.nota = function nota () 
+			{
+				var obj=[];
+				var t = $('#search').DataTable();
+				var nota = "";
+				var cont=0;
+				$('#search tbody').on('click','button',function(){
+					++cont;
+					obj = t.row( $(this).parents('tr') ).data();
+					if(cont==1){
+						if(obj[5] == "COMPLETO"){
+							blockpage();
+							$.post("devolucion.jr",{
+								devolucion: 'venta',
+								nota: obj[2]
+							},function(e){	
+							});
+							setTimeout(function(e){
+								window.open("detalleventasdev.jsp","_blank");
+							},2500);
+							$.unblockUI();
+						}else{
+							alert("No puede devolver una venta si aun no esta Completa");
+						}
+					}
+				});
+			}
+			
+			
 		    // Algoritmo de filtrado
 			$("#search thead input").on( 'keypress changed', function (e) 
 			{  
@@ -69,26 +98,6 @@
 			} );			
 		    
 			
-		
-		// Se crea array de datos aleatorios
-		var data = [];
-		<%
-			DevolucionesDao dev = new DevolucionesDao();
-			List<Object[]> venta = dev.mostrarVentas();
-			for(int i = 0; i < venta.size();i++){ 
-		%>
-		data[<%=i%>]=[  '<%=venta.get(i)[0]%>',
-				        '<%=venta.get(i)[1]%>',
-				   	    '<%=venta.get(i)[2]%>',
-				   	    '<%=venta.get(i)[3]%>',
-				   	    '<%=venta.get(i)[4]%>',
-				   	    '<%=venta.get(i)[5]%>',
-				   	    '<%=venta.get(i)[6]%>',
-				   	    '<%=venta.get(i)[7]%>',
-				   	 	'<%=venta.get(i)[8]%>',
-				   	 	'<%=venta.get(i)[9]%>',
-				   	    '<button id="<%=i%>">Devolver</button>'];
-		<%}%> 
 			// Se establece el control de datos al destino
 			var table = $('#search').DataTable( {
 			//data:           data,
@@ -97,7 +106,7 @@
 			//"bSort":		false,
 			//scrollY:        500,
 			//scrollCollapse: true,
-			data:	data,
+			//data:	data,
 			dom : "rtiS",
 			"stateSave" : true,
 		    "bSort": false,
@@ -158,37 +167,6 @@
 		                  
 					} );
 		
-				//Tabla Detalle Movimiento	
-				
-				<%for(int i=0; i<venta.size(); i++){%>
-					var obj=[];
-					$("#"+<%=i%>).button().click(function(){
-						var t = $('#search').DataTable();
-						var nota = "";
-						var cont=0;
-						$('#search tbody').on('click','button',function(){
-							++cont;
-							obj = t.row( $(this).parents('tr') ).data();
-							if(cont==1){
-								if(obj[5] == "COMPLETO"){
-									$.post("devolucion.jr",{
-										devolucion: 'venta',
-										nota: obj[2]
-									},function(e){	
-									});
-									setTimeout(function(e){
-										window.open("detalleventasdev.jsp","_blank");
-									},2500);
-								}else{
-									alert("No puede devolver una venta si aun no esta Completa");
-								}
-							}
-						});
-						
-						
-					});
-				<%}%>
-								
 				$("#formDevVentas").dialog({
 					modal:true,
 					autoOpen: false,
@@ -206,15 +184,68 @@
 						}
 					}
 				});
-				$("#formDevVentas").dialog("option", "width", 1200);
-				$("#formDevVentas").dialog("option", "height", 370);
+				$("#formBuscarNota").dialog({
+					modal:true,
+					autoOpen: false,
+					closeOnEscape: true,
+					buttons:{
+						"Buscar": {
+							text: "Buscar",
+							id:		"btnBuscar",
+							click:	function(){
+									blockpage();
+									$("#formBuscarNota").dialog("close");
+									var table = $('#search').DataTable();
+									table.clear().draw();
+									$.post("consultanota.jr",{
+										tarea: "consultar",
+										txtFechaIni: $("#txtFechaIni").val(),
+										txtFechaFin: $("#txtFechaFin").val()
+									},function(e){
+										$.each(e, function(key, nota) { // Iterate over the JSON object.
+											table.row.add([nota[0],nota[1],nota[2],nota[3],nota[4]
+								  			,nota[5],nota[6],nota[7],nota[8]
+								  			,nota[9],'<button onclick="nota()" id="'+key+'">Devolver</button>']);
+							  			});
+							  			table.draw();
+									});
+									$.unblockUI();
+							}
+						}
+					}
+				});
+				$("#formBuscarNota").dialog("option", "width", 450);
+				$("#formBuscarNota").dialog("option", "height", 200);
+				
+				$( "#txtFechaIni" ).datepicker({ dateFormat: "yy-mm-dd"});
+				$( "#txtFechaFin" ).datepicker({ dateFormat: "yy-mm-dd"});
 				
 				$("#txtCantidad").keypress(function (e){
 					if(e.which == 13){
 						$("#btnDevolver").focus();
 					}
 				});
+				$("#btnMostrar").button().click(function(e){
+					blockpage();
+					var table = $('#search').DataTable();
+					table.clear().draw();
+					$.post("consultanota.jr",{
+						tarea: "mostrar"	
+					},function(e){
+						 
+						 $.each(e, function(key, value) { // Iterate over the JSON object.
+							table.row.add([value[0],value[1],value[2],value[3]
+				  			,value[4],value[5],value[6],value[7]
+				  			,value[8],value[9],'<button onclick="nota()" id="'+key+'">Devolver</button>']);
+			  			});
+			  			table.draw();
+					});
+					$.unblockUI();
+				});
 				
+				$("#btnBuscar").button().click(function(e){
+					$("#formBuscarNota").dialog("open");
+				});
 			});
 
 		    /*Salir*/
@@ -259,6 +290,12 @@
 		</table>
 </div>
 
+<div id="formBuscarNota" title="Buscar Nota" class="text-form">
+	<p>Coloque el rango de fechas entre las cuales se encuentra la nota.</p>
+	<label for="fechaIni">Fecha Inicial: </label><input type="text" id="txtFechaIni" size="10">
+	<label for="fechaFin">Fecha Final: </label><input type="text" id="txtFechaFin" size="10"> 
+</div>
+
 
 
 <div>
@@ -290,6 +327,10 @@
 		<div class="container">
 			<div>
 				<h3></br>Lista de Ventas, presione en el boton Devolver cuando un Cliente devuelva algun producto indicado.<br>¡IMPORTANTE! Tenga cuidado al realizar una devolución.</h3>
+			</div>
+			<div>
+				<button id="btnMostrar">Mostrar todas</button>
+				<button id="btnBuscar">Buscar nota</button>
 			</div>
 			
 			<table id="search" class="display"cellspacing="0"  width="760px">

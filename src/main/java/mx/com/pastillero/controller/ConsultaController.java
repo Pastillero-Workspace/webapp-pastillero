@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import java.util.List;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,38 +40,39 @@ public class ConsultaController extends HttpServlet {
 	}
 	
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		logger.info("consulta");
-		List<Object[]> listConsulta = null;
-		ProductoFamiliaDao consulta = new ProductoFamiliaDao();
-		ObjectMapper mapper = new ObjectMapper();
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
-		
-		if(br!=null){
-//			logger.info("datos: "+br.readLine());
-			String [] parametros =br.readLine().split("&");
+			logger.info("Consultando Productos...");
+			List<Object[]> listConsulta = null;
+			ProductoFamiliaDao consulta = new ProductoFamiliaDao();
+			ObjectMapper mapper = new ObjectMapper();
 			
-			String [] codigoTemp = parametros[0].split("=");
-			String [] descripcionTemp = parametros[1].split("=");		
-//			en caso de venir vacio se le asigna un valor irrelevante
-//			String codigo = (codigoTemp.length==2)?codigoTemp[1]:"*";
-//			String descripcion = (descripcionTemp.length==2)?descripcionTemp[1]:"<";
+			BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
 			
-//			listConsulta = consulta.buscar(codigo, descripcion);
-			
-			if(codigoTemp.length==2){
-				listConsulta = consulta.buscarCodigo(codigoTemp[1]);
-			}else if(descripcionTemp.length==2){
-				listConsulta = consulta.buscarDescripcion(descripcionTemp[1]);
+			if(br!=null){
+//				logger.info("datos: "+br.readLine());
+				String [] parametros =br.readLine().split("&");
+				
+				String [] codigoTemp = parametros[0].split("=");
+				String [] descripcionTemp = parametros[1].split("=");		
+//				en caso de venir vacio se le asigna un valor irrelevante
+//				String codigo = (codigoTemp.length==2)?codigoTemp[1]:"*";
+//				String descripcion = (descripcionTemp.length==2)?descripcionTemp[1]:"<";
+				
+//				listConsulta = consulta.buscar(codigo, descripcion);
+				
+				if(codigoTemp.length==2){
+					listConsulta = consulta.buscarCodigo(codigoTemp[1]);
+				}else if(descripcionTemp.length==2){
+					listConsulta = consulta.buscarDescripcion(descripcionTemp[1]);
+				}
+				
+				
+				
+				
 			}
 			
-			
-			
-			logger.info("datos: "+listConsulta.size());
-		}
-		
-		response.setContentType("application/json");
-		mapper.writeValue(response.getOutputStream(), listConsulta);
+			response.setContentType("application/json");
+			mapper.writeValue(response.getOutputStream(), listConsulta);
+			logger.info("Consulta realizada con exito!");
 	}
 
 }

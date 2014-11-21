@@ -18,6 +18,7 @@
 	<script src="<c:url value="/resources/js/jquery-1.10.2.js" />"></script>
 	<script src="<c:url value="/resources/js/jquery-ui-1.10.4.custom.js" />"></script>
 	<script src="<c:url value="/resources/js/jquery-ui-dialog.js" />"></script>
+	<script src="<c:url value="/resources/js/blockUI/jquery.blockUI.js" />"></script>
 	
 	<script src="<c:url value="/resources/js/jquery.dataTables.js" />"></script>
 	<script src="<c:url value="/resources/js/dataTables.scroller.js" />"></script>
@@ -93,25 +94,41 @@
 	    $(document).ready(function (){
 	    	var table = $('#search').DataTable( {
 				//data:           data,
-				deferRender:    true,
+				//deferRender:    true,
 				dom:            "frtiS",
+				//dom:			"rtiS",
 				scrollY:        500,
+				"stateSave" : true,
+				"bSort": false,
 				scrollCollapse: true,
 				pagingType: "full_numbers"
 			} );
 	    	$('#txtCodigo').keypress(function(event) {
 				if (event.which == 13) {
 					 //buscar($('#txtCodigo').val(),$('#txtDescripcion').val());
-					 buscar($('#txtCodigo').val(),"");
-					 $('#txtCodigo').val('');
+					 $('#btnBuscar').focus();
+					 
 				}});
 			$('#txtDescripcion').keypress(function(event) {
 				if (event.which == 13) {
 					//buscar($('#txtCodigo').val(),$('#txtDescripcion').val());	
-					buscar("",$('#txtDescripcion').val());
-					$('#txtDescripcion').val('')
+					$('#btnBuscar').focus();
+					
 				}});
+			$("#btnBuscar").button().click(function(e){
+				if($("#txtCodigo").val().trim() != ""){
+					buscar($('#txtCodigo').val(),"");	
+					$('#txtCodigo').val('');
+				}else if($("#txtDescripcion").val().trim() != ""){
+					buscar("",$('#txtDescripcion').val());
+					$('#txtDescripcion').val('');
+				}else{
+					alert("Para realizar una busqueda llene alguno de los campos");
+				}
+				
+			});
 			function buscar(txtcodigo, txtdescripcion){
+				blockpage();
 				console.log("**busqueda**");
 				$.ajax({
 			        url: "/webapp-pastillero/consulta.jr",
@@ -136,6 +153,7 @@
 							  			,producto[13]]);
 						  });
 						  table.draw();
+						  $.unblockUI();
 			        },
 			        error:function(data,status,er) {
 			            alert("error: "+data+" status: "+status+" er:"+er);
@@ -178,29 +196,20 @@
 		</ul>
 	</div>		
 	<!-- Seccion de busqueda -->
-	<div class="container">
-		Codigo: <input type="text" id="txtCodigo" name="codigo"><br>
-		Descripcion: <input type="text" id="txtDescripcion" name="descripcion">		
-	</div>	
+	
 		<div class="container">
 			<section>
+			<div STYLE="float: left; top:150px; left:10px; width:600px; background-color:#00cccc;  margin: 20px;">
+				<form>
+				<ul STYLE="list-style-type: none;">
+					<li><label for="codigo"><b>Codigo:</b></label><input type="text" id="txtCodigo" name="codigo" size="50"><button type="button" id="btnBuscar">Buscar.</button><br></li>
+					<li><label for="descripcion"><b>Descripcion:</b></label><input type="text" id="txtDescripcion" name="descripcion" size="50"></li>
+				</ul>
+				</form>
+				
+			</div>
 			<table id="search" class="display" cellspacing="0" width="1024px">
 				<thead>	
-					<tr>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Codigo" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Existencias" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Descripcion" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="FAM" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Lab" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="CLS" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="SSA" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="IVA" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="IEPS" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="CAT" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="PAR" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="PrecioP" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="PrecioD" /></th>
-					</tr>			
 					<tr>
 						<th style="width: 10%">Codigo</th>
 						<th style="width: 2%">EXST</th>
@@ -215,7 +224,22 @@
 						<th style="width: 4%" >PAR</th>
 						<th style="width: 8%">PRECP</th>
 						<th >PRECD</th>
-				    </tr>								
+				    </tr>	
+				    <tr>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+					</tr>							
 				</thead>
 				<tbody>
 				</tbody>

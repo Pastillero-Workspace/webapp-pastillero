@@ -65,7 +65,6 @@ public class ItemVenta {
 	public void setUltimocosto(float ultimocosto) {
 		this.ultimocosto = ultimocosto;
 	}
-	
 	@Override
 	public String toString() {
 		return "ItemVenta [codigo=" + codigo + ", Descripcion=" + Descripcion
@@ -74,6 +73,8 @@ public class ItemVenta {
 				+ ", idproducto=" + idproducto + ", habian=" + habian
 				+ ", ultimocosto=" + ultimocosto + "]";
 	}
+	
+	
 	
 	
 }
