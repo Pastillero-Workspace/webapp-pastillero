@@ -89,7 +89,8 @@
 				//var $select = $('#selMedico');
 				//$select.append(data);
 				$( "#selMedico" ).autocomplete({
-		        	      source: medicos
+					//source: medicos
+					source: medicos
 		        	});
 				$("#formAltaAntibiotico").dialog('open');
 			});
