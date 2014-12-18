@@ -129,20 +129,20 @@
 			});
 			function buscar(txtcodigo, txtdescripcion){
 				blockpage();
-				console.log("**busqueda**");
 				$.ajax({
-			        url: "/webapp-pastillero/consulta.jr",
+			        url: "consulta.jr",
 			        type: 'POST',
 			        dataType: 'json',
 			        data://txtcodigo+':'+txtdescripcion,
 			        	{
+			        	workout: 'getProductos',
 			        	txtCodigo: txtcodigo,
 			        	txtDescripcion: txtdescripcion
 			        	},
 			        contentType: 'application/json',
 			        mimeType: 'application/json', 
 			        success: function (listaConsulta) {
-			        	console.log("**datos: "+listaConsulta);
+			        	
 			        	// Se crea array de datos aleatorios
 						  table.clear().draw();
 						  
@@ -225,21 +225,7 @@
 						<th style="width: 8%">PRECP</th>
 						<th >PRECD</th>
 				    </tr>	
-				    <tr>
-						<th><input class="boxinit" style="width: 90%" type="text" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" /></th>
-					</tr>							
+				   					
 				</thead>
 				<tbody>
 				</tbody>

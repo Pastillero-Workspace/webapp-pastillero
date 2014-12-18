@@ -208,6 +208,7 @@ function EnviarFormulario() {
 	var datosNota = {
 			idnt:	$('#txtFolio').val(),
 			caja:	$('#txtCaja').val(),
+			cajero: $('#txtCajero').val(),
 			usuario:$('#txtUsuario').val(),
 			cliente:$('#txtCliente').val(),
 			dcliente:$('#txtDescripcion').val()
@@ -227,7 +228,7 @@ function EnviarFormulario() {
 		workout : 'insertdbp'
 	}, function(data) {
 		if (data == "OK") {
-			alert("Ok");
+			//alert("Ok");
 			var popPrinter;
 			// delete storage
 			table = null;

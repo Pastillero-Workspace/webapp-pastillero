@@ -4,7 +4,7 @@
 	pageEncoding="ISO-8859-1"%>
 <%@page import="mx.com.pastillero.types.Types"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -84,11 +84,42 @@
 			$.post('medico.jr', {
 				tarea : 'mostrar'
 			}, function(data) {
+				var medicos = data.split(',');
 				$("#selMedico").empty();
-				var $select = $('#selMedico');
-				$select.append(data);
+				//var $select = $('#selMedico');
+				//$select.append(data);
+				$( "#selMedico" ).autocomplete({
+					source: medicos
+		        	});
 				$("#formAltaAntibiotico").dialog('open');
 			});
+			/*$.ajax({
+		        url: "/webapp-pastillero/consulta.jr",
+		        type: 'POST',
+		        dataType: 'json',
+		        data://txtcodigo+':'+txtdescripcion,
+		        	{
+		        	workout: 'getMedicos'
+		        	},
+		        contentType: 'application/json',
+		        mimeType: 'application/json', 
+		        success: function (medicos) {
+		        	//
+		        	alert(medicos);
+		        	$("#selMedico").empty();
+		        	var nombreMedicos = [];
+		        	$.each(medicos, function(i, medico){
+		        		nombreMedicos.push(medico);
+					  });
+		        	$( "#selMedico" ).autocomplete({
+		        	      source: nombreMedicos
+		        	});
+		        	$("#formAltaAntibiotico").dialog('open');
+		        },
+		        error:function(data,status,er) {
+		            alert("error: "+data+" status: "+status+" er:"+er);
+		        }
+		    });*/
 		}
 	}
 </script>
@@ -111,6 +142,11 @@
 					<label id="box-caja">Caja</label>
 					<p>
 						<input type="text" id="txtCaja" name="inputCaja" readonly>
+				</div>
+				<div class="float-left">
+					<label id="box-cajero">Cajero</label>
+					<p>
+						<input type="text" id="txtCajero" name="inputCajero" readonly></p>
 				</div>
 				<div class="float-left">
 					<label id="box-folio">Folio</label>
@@ -270,10 +306,7 @@
 			<legend>Formulario Antibiotico</legend>
 			<fieldset>
 				<ol>
-					<li><label> Medico:</label><select name="selMedico"
-						id="selMedico">
-							<option value="null">Seleccione ...</option>
-					</select></li>
+					<li><label> Medico:</label><input name="selMedico"	id="selMedico"></li>
 					<li><label> Receta:</label><select name="selReceta"
 						id="selReceta">
 							<option value="SI">SI</option>

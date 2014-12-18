@@ -123,42 +123,53 @@ public class CobroController extends HttpServlet {
 			logger.info(request.getParameter("varUsuario"));
 			String Usuario = request.getParameter("varUsuario");
 			sessionid = Integer.parseInt(request.getParameter("context"));
+			List<Usuario> cajeros = new UsuarioDao().readUserActive();
 			
-			if (sessionid == 1) {
-				UsuarioDao ud = new UsuarioDao();
-				ClienteDao cd = new ClienteDao();
-				this.Usuario = ud.getUniqueUsuario(Usuario);
-				
-				if (!cd.readFirstCliente().isEmpty()) {
-					this.Cliente = cd.readFirstCliente().get(0);
+			if (cajeros!=null && !cajeros.isEmpty()) {
+				if (sessionid == 1) {
+					UsuarioDao ud = new UsuarioDao();
+					ClienteDao cd = new ClienteDao();
+					this.Usuario = ud.getUniqueUsuario(Usuario);
+					
+					if (!cd.readFirstCliente().isEmpty()) {
+						this.Cliente = cd.readFirstCliente().get(0);
+					} else
+						this.Cliente.setIdCliente(1);
+					
+					// setting time
+					hora = hourFormat.format(date);
+					fecha = dateFormat.format(date);
+					
+					// setting data
+					nt = new Nota();
+					nt.setFecha(fecha);
+					nt.setHora(hora);
+					nt.setEstado("PROCESO");
+					nt.setPrecio(0);
+					nt.setDescuento(0);
+					nt.setIva(0);
+					nt.setSubtotal(0);
+					nt.setTotal(0);
+					nt.setIdUsuario(this.Usuario.getIdUsuario());
+					nt.setIdCliente(this.Cliente.getIdCliente());
+					nt.setIdCajero(0);
+					
+					// insert blank note in db.
+					NotaDao getLastId = new NotaDao();
+					String lastIdNota = Integer.toString(getLastId.getLastInsertIdNota(nt));
+					logger.info("FOLIO: " + lastIdNota);
+					logger.info("CAJERO: "+cajeros.get(0).getUsuario());
+					
+					String result = lastIdNota + "+" + cajeros.get(0).getUsuario();
+					response.getWriter().write(result);
 				} else
-					this.Cliente.setIdCliente(1);
+					response.getWriter().write("Reload");
+			}else{
+				logger.error("El cajero no ha iniciado sesion.");
+				response.getWriter().write("Error");
+			}
 				
-				// setting time
-				hora = hourFormat.format(date);
-				fecha = dateFormat.format(date);
-				
-				// setting data
-				nt = new Nota();
-				nt.setFecha(fecha);
-				nt.setHora(hora);
-				nt.setEstado("PROCESO");
-				nt.setPrecio(0);
-				nt.setDescuento(0);
-				nt.setIva(0);
-				nt.setSubtotal(0);
-				nt.setTotal(0);
-				nt.setIdUsuario(this.Usuario.getIdUsuario());
-				nt.setIdCliente(this.Cliente.getIdCliente());
-				
-				// insert blank note in db.
-				NotaDao getLastId = new NotaDao();
-				String lastIdNota = Integer.toString(getLastId.getLastInsertIdNota(nt));
-				logger.info("FOLIO: " + lastIdNota);
-				
-				response.getWriter().write(lastIdNota);
-			} else
-				response.getWriter().write("Reload");
+			
 		}
 		
 		/* Obtiene el nombre dle cliente */
@@ -209,15 +220,18 @@ public class CobroController extends HttpServlet {
 			String receta = request.getParameter("varReceta");
 			String sello = request.getParameter("varSello");
 			
-			logger.info("medico recibido: " + nombreMedico);
-			logger.info("receta: " + receta);
-			logger.info("sello: " + sello);
+			if(nombreMedico.length() != 0){
+				logger.info("medico recibido: " + nombreMedico);
+				logger.info("receta: " + receta);
+				logger.info("sello: " + sello);
+			}
+			
 			
 			mdd = new MedicoDireccionDao();
 			antibDao = new AntibioticoDao();
 			psd = new ProductosDao();
 			int idMedico = 0;
-			if (nombreMedico.compareTo("null") != 0) {
+			if (nombreMedico.length() != 0) {
 				idMedico = mdd.getIdMedicoByName(nombreMedico).get(0);
 			}
 			try {
@@ -250,8 +264,6 @@ public class CobroController extends HttpServlet {
 			    		}
 			    	}
 					
-					logger.info("codigo nuevo: " + codigo);
-					
 					/* ------------------------------------------ */
 					iv.setCodigo(codigo.toString());
 					iv.setDescripcion(objitem.get("Descripcion").toString());
@@ -268,7 +280,7 @@ public class CobroController extends HttpServlet {
 						
 						logger.info("Id producto y codigo : "+ iv.getIdproducto() + "|" + iv.getCodigo());
 						
-						if (nombreMedico.compareTo("null") != 0	&& antibDao.isAntibiotico(iv.getCodigo())) {
+						if (nombreMedico.length() != 0	&& antibDao.isAntibiotico(iv.getCodigo())) {
 							Antibioticos antibiotico = new Antibioticos();
 							antibiotico.setAdquiridos(0);
 							antibiotico.setDocumento(objnota.get("idnt").toString()); // id de la nota
@@ -306,6 +318,7 @@ public class CobroController extends HttpServlet {
 			// Get client and user for insert new order sale
 			
 			List<Usuario> lu = new ArrayList<Usuario>();
+			List<Usuario> listaCajero = new ArrayList<Usuario>();
 			List<Persona> lp = new ArrayList<Persona>();
 			UsuarioDao ud = new UsuarioDao();
 			PersonaDao pd = new PersonaDao();
@@ -316,6 +329,7 @@ public class CobroController extends HttpServlet {
 				mapCliente = cd.getSearchClientebyClave(objnota.get("cliente").toString());
 				lu = ud.getUsuario(objnota.get("usuario").toString());
 				lp = pd.getPersonabyId(lu.get(0).getIdPersona());
+				listaCajero = ud.getUsuario(objnota.get("cajero").toString());
 			}
 			
 			// date and hour
@@ -330,6 +344,7 @@ public class CobroController extends HttpServlet {
 			n.setEstado("COMPLETO");
 			n.setIdCliente(mapCliente.get(0).getIdCliente());
 			n.setIdUsuario(lu.get(0).getIdUsuario());
+			n.setIdCajero(listaCajero.get(0).getIdUsuario());
 			n.setFecha(fecha);
 			n.setHora(hora);
 			n.setPrecio(0);

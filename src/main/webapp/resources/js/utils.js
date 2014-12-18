@@ -28,27 +28,40 @@ $(document).ready(function() {
 												workout : 'getNota'
 											},function(data) {
 												console.log("data: "+data);
-												if (data != 'Reload') {
-													$('#txtFolio').val(data);
-													$('#txtCaja').val("1");
-													$('#txtTotal').val("0.0");
-													$('#txtDesT').val("0.0");
-													$('#txtSubtotal').val("0.0");
-													$('#txtIva').val("0.0");
-													$('#txtPrecT').val("0.0");
-													$('#openFormAltaCobro').prop("disabled",true);
-													
-													var myObject = new Object();
-													myObject.idnt = $('#txtFolio').val();
-													myObject.caja = $('#txtCaja').val();
-													myObject.usuario = $('#txtUsuario').val();
-													
-													localStorage.setItem("nota",JSON.stringify(myObject));
+												if(data != 'Error'){
+													if (data != 'Reload') {
+														var datos = data.split("+");
+														console.log(datos[0]);
+														console.log(datos[1]);
+														$('#txtFolio').val(datos[0]);
+														$('#txtCaja').val("1");
+														$('#txtCajero').val(datos[1]);
+														$('#txtTotal').val("0.0");
+														$('#txtDesT').val("0.0");
+														$('#txtSubtotal').val("0.0");
+														$('#txtIva').val("0.0");
+														$('#txtPrecT').val("0.0");
+														$('#openFormAltaCobro').prop("disabled",true);
+														
+														var myObject = new Object();
+														myObject.idnt = $('#txtFolio').val();
+														myObject.caja = $('#txtCaja').val();
+														myObject.cajero = $('#txtCajero').val();
+														myObject.usuario = $('#txtUsuario').val();
+														
+														localStorage.setItem("nota",JSON.stringify(myObject));
+														localStorage.setItem("idcontrolventa", "1");
+													}
+												}else{
+													//console.log('El cajero no ha iniciado sesion');
+													alert('No hay ningun Cajero con sesion iniciada.');
+													window.close();
 												}
+												
 											}).fail(function(xhr,textStatus, errorThrown){
 												alert("Error: "+errorThrown);
 											});
-											localStorage.setItem("idcontrolventa", "1");
+											
 										} else {
 											// loading data if page is reload
 											// (read data from localstorage)
@@ -61,6 +74,7 @@ $(document).ready(function() {
 											if (arraynt != null) {
 												$('#txtFolio').val(arraynt.idnt);
 												$('#txtCaja').val(arraynt.caja);
+												$('#txtCajero').val(arraynt.cajero);
 												$('#txtUsuario').val(arraynt.usuario);
 												$('#txtCliente').val(arraynt.cliente);
 												$('#txtDescripcion').val(arraynt.dcliente);
@@ -353,6 +367,7 @@ $(document).ready(function() {
 											var myObject = new Object();
 											myObject.idnt = $('#txtFolio').val();
 											myObject.caja = $('#txtCaja').val();
+											myObject.cajero = $('#txtCajero').val();
 											myObject.usuario = $('#txtUsuario').val();
 											myObject.cliente = $('#txtCliente').val();
 											myObject.dcliente = $('#txtDescripcion').val();

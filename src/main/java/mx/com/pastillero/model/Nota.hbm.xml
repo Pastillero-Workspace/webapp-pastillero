@@ -21,5 +21,6 @@
       <property name="total" column="total" type="float"/>
       <property name="idCliente" column="idCliente" type="int"/>
       <property name="idUsuario" column="idUsuario" type="int"/>
+      <property name="idCajero" column="idCajero" type="int" />
       </class>
 </hibernate-mapping>

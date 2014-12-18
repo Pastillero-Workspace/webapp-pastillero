@@ -255,6 +255,7 @@
 			<li><a href="${pageContext.request.contextPath}/clientes.jsp" target="_blank">Clientes</a></li>
 			<li><a href="${pageContext.request.contextPath}/medicos.jsp" target="_blank">Medicos</a></li>
 			<li><a onclick="info(1)">Corte de Caja</a></li>
+			<li><a href="${pageContext.request.contextPath}/recepciones.jsp" target="_blank">Recepcion</a></li>
 
     </ul>
 	</div>

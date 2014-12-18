@@ -47,6 +47,7 @@ public class ConsultaNotaController extends HttpServlet{
 			
 		}
 		else if(request.getParameter("tarea").equals("consultar")){
+			logger.info("Buscando Notas...");
 			DevolucionesDao dev  = new DevolucionesDao();
 			
 			String	fechaIni = request.getParameter("txtFechaIni").trim();
@@ -60,6 +61,7 @@ public class ConsultaNotaController extends HttpServlet{
 			response.setContentType("application/json");
 			response.setCharacterEncoding("UTF-8");
 			response.getWriter().write(json);
+			logger.info("Notas encontradas con Exito!");
 		}
 	}
 

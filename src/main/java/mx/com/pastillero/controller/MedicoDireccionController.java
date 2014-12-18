@@ -80,8 +80,9 @@ public class MedicoDireccionController extends HttpServlet {
 			List<Object[]> listmedico = medicoDireccion.mostrar();
 			StringBuilder medico = new StringBuilder();
 			for (Object[] med : listmedico) {
-				medico.append("<option value=\"" + med[2] + "\">" + med[2]
-						+ "</option>");
+				/*medico.append("<option value=\"" + med[2] + "\">" + med[2]
+						+ "</option>");*/
+				medico.append(""+med[2]+",");
 			}
 			response.setContentType("text/plain");
 			response.setCharacterEncoding("UTF-8");

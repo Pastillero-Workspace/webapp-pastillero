@@ -15,6 +15,7 @@ public class Nota {
     private float total;
 	private int idCliente;
 	private int idUsuario;
+	private int idCajero;
 	
 	public Nota()
 	{
@@ -109,13 +110,21 @@ public class Nota {
 		this.idUsuario = idUsuario;
 	}
 
+	public int getIdCajero() {
+		return idCajero;
+	}
+
+	public void setIdCajero(int idCajero) {
+		this.idCajero = idCajero;
+	}
+
 	@Override
 	public String toString() {
 		return "Nota [idNota=" + idNota + ", fecha=" + fecha + ", hora=" + hora
 				+ ", estado=" + estado + ", precio=" + precio + ", descuento="
 				+ descuento + ", iva=" + iva + ", subtotal=" + subtotal
 				+ ", total=" + total + ", idCliente=" + idCliente
-				+ ", idUsuario=" + idUsuario + "]";
+				+ ", idUsuario=" + idUsuario + ", idCajero=" + idCajero + "]";
 	}
 
 	@Override
@@ -126,6 +135,7 @@ public class Nota {
 		result = prime * result + ((estado == null) ? 0 : estado.hashCode());
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
 		result = prime * result + ((hora == null) ? 0 : hora.hashCode());
+		result = prime * result + idCajero;
 		result = prime * result + idCliente;
 		result = prime * result + idNota;
 		result = prime * result + idUsuario;
@@ -162,6 +172,8 @@ public class Nota {
 			if (other.hora != null)
 				return false;
 		} else if (!hora.equals(other.hora))
+			return false;
+		if (idCajero != other.idCajero)
 			return false;
 		if (idCliente != other.idCliente)
 			return false;

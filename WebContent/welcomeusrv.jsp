@@ -145,6 +145,7 @@
 			<li><a href="${pageContext.request.contextPath}/cobro.jsp" target="_blank">Cobro</a></li>
 			<li><a href="${pageContext.request.contextPath}/clientes.jsp" target="_blank">Clientes</a></li>
 		    <li><a href="${pageContext.request.contextPath}/medicos.jsp" target="_blank">Medicos</a></li>
+		    <li><a href="${pageContext.request.contextPath}/recepciones.jsp" target="_blank">Recepcion</a></li>
 <%-- 		<li><a href="${pageContext.request.contextPath}/recepcion.jsp"  target="_blank">Recepción</a></li>
 			<li><a href="${pageContext.request.contextPath}/productos.jsp"  target="_blank">Productos</a></li> --%>
 
