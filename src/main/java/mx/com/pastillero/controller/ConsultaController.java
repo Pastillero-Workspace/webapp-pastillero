@@ -73,6 +73,7 @@ public class ConsultaController extends HttpServlet {
 					if(codigoTemp.length==2){
 						listConsulta = consultaP.buscarCodigo(codigoTemp[1]);
 					}else if(descripcionTemp.length==2){
+						
 						listConsulta = consultaP.buscarDescripcion(descripcionTemp[1]);
 					}
 					
