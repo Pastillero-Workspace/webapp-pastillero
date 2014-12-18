@@ -29,20 +29,20 @@ public class ClienteDireccionController extends HttpServlet{
 
 		
 		if(request.getParameter("tarea").equals("agregar")){
-			d.setCalle(request.getParameter("txtCalle").trim());
+			d.setCalle(request.getParameter("txtCalle").trim().toUpperCase());
 			d.setNoInt(request.getParameter("txtNoInt").trim());
 			d.setNoExt(request.getParameter("txtNoExt").trim());
-			d.setColonia(request.getParameter("txtColonia").trim());
-			d.setCiudad(request.getParameter("txtCiudad").trim());
-			d.setEstado(request.getParameter("txtEstado").trim());
+			d.setColonia(request.getParameter("txtColonia").trim().toUpperCase());
+			d.setCiudad(request.getParameter("txtCiudad").trim().toUpperCase());
+			d.setEstado(request.getParameter("txtEstado").trim().toUpperCase());
 			d.setCp(Integer.parseInt(request.getParameter("txtCp").trim()));
 			
 			int idDireccion = clienteDireccion.guardarDireccion(d);
 			
 			c.setClave(request.getParameter("txtClave").trim());
-			c.setNombre(request.getParameter("txtNombre").trim());
+			c.setNombre(request.getParameter("txtNombre").trim().toUpperCase());
 			c.setEmail(request.getParameter("txtEmail").trim());
-			c.setRfc(request.getParameter("txtRfc").trim());
+			c.setRfc(request.getParameter("txtRfc").trim().toUpperCase());
 			c.setCredito(Integer.parseInt(request.getParameter("txtCredito").trim()));
 			c.setDiasCredito(Integer.parseInt(request.getParameter("txtDiasCred")));
 			c.setLimiteCredito(Float.parseFloat(request.getParameter("txtLimiteCred")));
@@ -52,15 +52,30 @@ public class ClienteDireccionController extends HttpServlet{
 			c.setVentaMensual(Float.parseFloat(request.getParameter("txtVentaMensual")));
 			c.setIdDireccion(idDireccion);
 			
-			float opcDesc = Float.parseFloat(request.getParameter("opcDesc"));
+			//float opcDesc = Float.parseFloat(request.getParameter("opcDesc"));
+			int opcDesc = Integer.parseInt(request.getParameter("opcDesc"));
 			
-			if(opcDesc == 5){
+			/*if(opcDesc == 5){
 				c.setDescuentoExtra(opcDesc);
 				c.setInsen(0);
 			}else{
 				c.setInsen(opcDesc);
 				c.setDescuentoExtra(0);
+			}*/
+			
+			float insen=0.00f, cltefrec=0.00f;
+			
+			switch(opcDesc){
+			    case 1:cltefrec=5.00f;break;
+			    case 2:insen = 2.00f;break;
+			    case 3:insen = 3.00f;break;
+			    case 4:insen = 4.00f;break;
+			    case 5:insen = 5.00f;break;
+			    default: cltefrec = 0.00f;insen = 0.00f;break;
 			}
+			
+			c.setDescuentoExtra(cltefrec);
+			c.setInsen(insen);
 			
 			clienteDireccion.guardarCliente(c);
 			
@@ -72,9 +87,9 @@ public class ClienteDireccionController extends HttpServlet{
 			List<Object[]> idCliente = clienteDireccion.getIdCliente(request.getParameter("claveRespaldo").trim());
 			
 			c.setClave(request.getParameter("txtClave").trim());
-			c.setNombre(request.getParameter("txtNombre").trim());
+			c.setNombre(request.getParameter("txtNombre").trim().toUpperCase());
 			c.setEmail(request.getParameter("txtEmail").trim());
-			c.setRfc(request.getParameter("txtRfc").trim());
+			c.setRfc(request.getParameter("txtRfc").trim().toUpperCase());
 			c.setCredito(Integer.parseInt(request.getParameter("txtCredito").trim()));
 			c.setDiasCredito(Integer.parseInt(request.getParameter("txtDiasCred")));
 			c.setLimiteCredito(Float.parseFloat(request.getParameter("txtLimiteCred")));
@@ -85,23 +100,38 @@ public class ClienteDireccionController extends HttpServlet{
 			c.setIdCliente(Integer.parseInt(idCliente.get(0)[0].toString()));
 			c.setIdDireccion(Integer.parseInt(idCliente.get(0)[1].toString()));
 			
-			float opcDesc = Float.parseFloat(request.getParameter("opcDesc"));
+			//float opcDesc = Float.parseFloat(request.getParameter("opcDesc"));
+			int opcDesc = Integer.parseInt(request.getParameter("opcDesc"));
 			
-			if(opcDesc == 5){
+			/*if(opcDesc == 5){
 				c.setDescuentoExtra(opcDesc);
 				c.setInsen(0);
 			}else{
 				c.setInsen(opcDesc);
 				c.setDescuentoExtra(0);
+			}*/
+			
+			float insen=0.00f, cltefrec=0.00f;
+			
+			switch(opcDesc){
+			    case 1:cltefrec=5.00f;break;
+			    case 2:insen = 2.00f;break;
+			    case 3:insen = 3.00f;break;
+			    case 4:insen = 4.00f;break;
+			    case 5:insen = 5.00f;break;
+			    default: cltefrec = 0.00f;insen = 0.00f;break;
 			}
 			
+			c.setDescuentoExtra(cltefrec);
+			c.setInsen(insen);
+			
 			d.setIdDireccion(Integer.parseInt(idCliente.get(0)[1].toString()));
-			d.setCalle(request.getParameter("txtCalle"));
+			d.setCalle(request.getParameter("txtCalle").toUpperCase());
 			d.setNoExt(request.getParameter("txtNoExt"));
 			d.setNoInt(request.getParameter("txtNoInt"));
-			d.setColonia(request.getParameter("txtColonia"));
-			d.setCiudad(request.getParameter("txtCiudad").trim());
-			d.setEstado(request.getParameter("txtEstado"));
+			d.setColonia(request.getParameter("txtColonia").trim().toUpperCase());
+			d.setCiudad(request.getParameter("txtCiudad").trim().toUpperCase());
+			d.setEstado(request.getParameter("txtEstado").trim().toUpperCase());
 			d.setCp(Integer.parseInt(request.getParameter("txtCp")));
 			
 			clienteDireccion.actualizarCliente(c, d);

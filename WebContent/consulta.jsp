@@ -135,7 +135,7 @@
 			        dataType: 'json',
 			        data://txtcodigo+':'+txtdescripcion,
 			        	{
-			        	workout: 'getProductos',
+			        	workout:'consulta',
 			        	txtCodigo: txtcodigo,
 			        	txtDescripcion: txtdescripcion
 			        	},
@@ -157,6 +157,7 @@
 			        },
 			        error:function(data,status,er) {
 			            alert("error: "+data+" status: "+status+" er:"+er);
+			            $.unblockUI();
 			        }
 			    });
 			}

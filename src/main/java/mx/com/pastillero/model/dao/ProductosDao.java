@@ -55,7 +55,7 @@ public class ProductosDao extends GenericoDAO
 			  	results = cr.list();
 		  	}catch(HibernateException e){
 		  		results = null;
-		  		logger.error("ERROR: No se pudo guardar en la tabla Antibioticos.");
+		  		logger.error("ERROR: No se pudo mostrar la tabla Antibioticos.");
 				e.printStackTrace();
 		  	}finally{
 		  		if (session != null && session.isOpen()) {
@@ -257,7 +257,65 @@ public class ProductosDao extends GenericoDAO
 	}
 
 
-	  
-	  
-		  
+	@SuppressWarnings("unchecked")
+	public List<Object[]> buscarCodigo(String codigo)
+	{
+		Session session = null;	
+		List<Object[]> list = null;
+		try{
+			session = factory.openSession();
+			list = session.createQuery("select p.proveedor, p.clave, p.codBar, p.descripcion, f.nombre, p.precioPub, p.precioDesc, p.precioFarmacia,"
+					+"p.iva, p.linea, p.referencia, p.SSA, p.laboratorio, p.departamento, p.categoria, p.actualizable, p.descuento, p.costo,"
+					+"p.equivalencia, p.superfamilia, p.cls, p.zona, p.pareto, p.ieps, p.ieps2, p.limitado, p.kit, p.comision, p.maxdescuento,"
+					+"p.grupo, p.aplicadescbase, p.aplicapo, p.antibiotico, p.existencias, p.ultimoproveedor, p.ultimocosto, p.costopromedio, p.costoreal "
+					+ " from Productos as p, Familia as f "
+					+ "where p.idFamilia = f.idFamilia and p.codBar like '%"+codigo+"'").list();
+		}catch(HibernateException e){
+			list = null;
+			logger.error("ERROR: No se pudo mostrar la informacion de los productos.");
+			e.printStackTrace();
+		}finally{
+			if (session != null && session.isOpen()) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return list;
+	}
+
+
+	@SuppressWarnings("unchecked")
+	public List<Object[]> buscarDescripcion(String descripcion) {
+		Session session = null;	
+		List<Object[]> list = null;
+		try{
+			session = factory.openSession();
+			list = session.createQuery("select p.proveedor, p.clave, p.codBar, p.descripcion, f.nombre, p.precioPub, p.precioDesc, p.precioFarmacia,"
+					+"p.iva, p.linea, p.referencia, p.SSA, p.laboratorio, p.departamento, p.categoria, p.actualizable, p.descuento, p.costo,"
+					+"p.equivalencia, p.superfamilia, p.cls, p.zona, p.pareto, p.ieps, p.ieps2, p.limitado, p.kit, p.comision, p.maxdescuento,"
+					+"p.grupo, p.aplicadescbase, p.aplicapo, p.antibiotico, p.existencias, p.ultimoproveedor, p.ultimocosto, p.costopromedio, p.costoreal "
+					+ " from Productos as p, Familia as f "
+					+ "where p.idFamilia = f.idFamilia and p.descripcion like '%"+descripcion+"%'").list();
+		}catch(HibernateException e){
+			list = null;
+			logger.error("ERROR: No se pudo mostrar la informacion de los productos.");
+			e.printStackTrace();
+		}finally{
+			if (session != null && session.isOpen()) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return list;
+	}
+	
+	
+	
+	
 }

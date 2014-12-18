@@ -35,16 +35,16 @@ public class MedicoDireccionController extends HttpServlet {
 		Medico m = new Medico();
 		Direccion d = new Direccion();
 		if (request.getParameter("tarea").equals("agregar")) {
-			d.setCalle(request.getParameter("txtCalle").trim());
+			d.setCalle(request.getParameter("txtCalle").trim().toUpperCase());
 			d.setNoInt(request.getParameter("txtNoInt").trim());
 			d.setNoExt(request.getParameter("txtNoExt").trim());
-			d.setColonia(request.getParameter("txtColonia").trim());
-			d.setCiudad(request.getParameter("txtCiudad").trim());
-			d.setEstado(request.getParameter("txtEstado").trim());
+			d.setColonia(request.getParameter("txtColonia").trim().toUpperCase());
+			d.setCiudad(request.getParameter("txtCiudad").trim().toUpperCase());
+			d.setEstado(request.getParameter("txtEstado").trim().toUpperCase());
 			d.setCp(Integer.parseInt(request.getParameter("txtCp").trim()));
 			int idDireccion = medicoDireccion.guardarDireccion(d);
 			m.setCedula(request.getParameter("txtCedula").trim());
-			m.setNombre(request.getParameter("txtNombre").trim());
+			m.setNombre(request.getParameter("txtNombre").trim().toUpperCase());
 			m.setTelFijo(request.getParameter("txtTelFijo").trim());
 			m.setTelMovil(request.getParameter("txtTelMovil").trim());
 			m.setEmail(request.getParameter("txtEmail").trim());
@@ -55,17 +55,17 @@ public class MedicoDireccionController extends HttpServlet {
 			List<Object[]> IdMedico = medicoDireccion.getIdMedico(request.getParameter("txtCedula").trim());
 			m.setIdMedico(Integer.parseInt(IdMedico.get(0)[0].toString()));
 			m.setCedula(request.getParameter("txtCedula").trim());
-			m.setNombre(request.getParameter("txtNombre").trim());
+			m.setNombre(request.getParameter("txtNombre").trim().toUpperCase());
 			m.setTelFijo(request.getParameter("txtTelFijo").trim());
 			m.setTelMovil(request.getParameter("txtTelMovil").trim());
 			m.setEmail(request.getParameter("txtEmail").trim());
 			d.setIdDireccion(m.getIdDireccion());
-			d.setCalle(request.getParameter("txtCalle").trim());
+			d.setCalle(request.getParameter("txtCalle").trim().toUpperCase());
 			d.setNoInt(request.getParameter("txtNoInt").trim());
 			d.setNoExt(request.getParameter("txtNoExt").trim());
-			d.setColonia(request.getParameter("txtColonia").trim());
-			d.setCiudad(request.getParameter("txtCiudad").trim());
-			d.setEstado(request.getParameter("txtEstado").trim());
+			d.setColonia(request.getParameter("txtColonia").trim().toUpperCase());
+			d.setCiudad(request.getParameter("txtCiudad").trim().toUpperCase());
+			d.setEstado(request.getParameter("txtEstado").trim().toUpperCase());
 			d.setCp(Integer.parseInt(request.getParameter("txtCp").trim()));
 			medicoDireccion.actualizarMedico(m, d);
 		}
