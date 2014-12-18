@@ -62,6 +62,7 @@ public class ConsultaController extends HttpServlet {
 						listConsulta = consultaPF.buscarCodigo(codigoTemp[1]);
 					}else if(descripcionTemp.length==2){
 						listConsulta = consultaPF.buscarDescripcion(descripcionTemp[1]);
+						
 					}
 				}
 				if(workout[1].equals("producto")){
