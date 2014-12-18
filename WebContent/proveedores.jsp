@@ -659,24 +659,24 @@
 		<legend>Proveedor</legend>
 		<ol>
 			<li><label for="nombre">*Nombre: </label><input type="text" size="56" id="txtNombre" name="txtNombre" requiered autofocus >  </li>
-			<li><label for="email">*Email: </label><input type="text" size="25" id="txtEmail" name="txtEmail" requiered><label for="fax">*Fax: </label><input type="text" size="18" id="txtFax" name="txtFax" requiered></li>
-			<li><label for="rfc">*RFC: </label><input type="text" size="25" id="txtRfc" name="txtRfc" requiered><label for="diasCredito">* Dias Credito: </label><input type="text" size="10" id="txtDiasCredito" name="txtDiasCredito" requiered></li>
+			<li><label for="email">*Email: </label><input type="text" size="25" id="txtEmail" name="txtEmail" value="SIN ASIGNAR" requiered><label for="fax">*Fax: </label><input type="text" size="18" id="txtFax" name="txtFax" value="000 00 00 00" requiered></li>
+			<li><label for="rfc">*RFC: </label><input type="text" size="25" id="txtRfc" name="txtRfc" value="SIN ASIGNAR" requiered><label for="diasCredito">* Dias Credito: </label><input type="text" size="10" id="txtDiasCredito" name="txtDiasCredito" value="00" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Direccion</legend>
 		<ol>
-			<li><label for="calle">*Calle: </label><input type="text" id="txtCalle" name="txtCalle" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExt" name="txtNoExt" size="5" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoInt" name="txtNoInt" size="5" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColonia" name="txtColonia" requiered><label for="estado">*Estado: </label><input type="text" id="txtEstado" name="txtEstado" size="23" requiered><li>
-			<li><label for="cp">*C.P: </label><input type="text" id="txtCp" name="txtCp" size="7" requiered></li>
+			<li><label for="calle">*Calle: </label><input type="text" id="txtCalle" name="txtCalle" value="SIN ASIGNAR" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExt" name="txtNoExt" size="5" value="00" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoInt" name="txtNoInt" size="5" value="00" requiered><li>
+			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColonia" name="txtColonia" value="SIN ASIGNAR" requiered><label for="estado">*Estado: </label><input type="text" id="txtEstado" name="txtEstado" size="23" value="SIN ASIGNAR" requiered><li>
+			<li><label for="cp">*C.P: </label><input type="text" id="txtCp" name="txtCp" size="7" value="00000" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Descuentos</legend>
 		<ol>
-			<li><label for="descGeneral">*Descuento General: </label><input type="text" size="5" id="txtDescGeneral" name="txtDescGeneral" requiered></li>
-			<li><label for="desc2">*Descuento 2: </label><input type="text" size="5" id="txtDesc2" name="txtDesc2" requiered></li>
-			<li><label for="desc3">*Descuento 3</label><input type="text" size="5" id="txtDesc3" name="txtDesc3" requiered></li>
+			<li><label for="descGeneral">*Descuento General: </label><input type="text" size="5" id="txtDescGeneral" name="txtDescGeneral" value="0.00" requiered></li>
+			<li><label for="desc2">*Descuento 2: </label><input type="text" size="5" id="txtDesc2" name="txtDesc2" value="0.00" requiered></li>
+			<li><label for="desc3">*Descuento 3</label><input type="text" size="5" id="txtDesc3" name="txtDesc3" value="0.00" requiered></li>
 		</ol>
 	</fieldset>
 	</form>
@@ -689,24 +689,24 @@
 		<legend>Proveedor</legend>
 		<ol>
 			<li><label for="nombre">*Nombre: </label><input type="text" size="56" id="txtNombreNuevo" name="txtNombreNuevo" requiered autofocus >  </li>
-			<li><label for="email">*Email: </label><input type="text" size="25" id="txtEmailNuevo" name="txtEmailNuevo" requiered><label for="fax">*Fax: </label><input type="text" size="18" id="txtFaxNuevo" name="txtFaxNuevo" requiered></li>
-			<li><label for="rfc">*RFC: </label><input type="text" size="25" id="txtRfcNuevo" name="txtRfcNuevo" requiered><label for="diasCredito">* Dias Credito: </label><input type="text" size="10" id="txtDiasCreditoNuevo" name="txtDiasCreditoNuevo" requiered></li>
+			<li><label for="email">*Email: </label><input type="text" size="25" id="txtEmailNuevo" name="txtEmailNuevo" value="SIN ASIGNAR" requiered><label for="fax">*Fax: </label><input type="text" size="18" id="txtFaxNuevo" name="txtFaxNuevo" value="000 00 00 00" requiered></li>
+			<li><label for="rfc">*RFC: </label><input type="text" size="25" id="txtRfcNuevo" name="txtRfcNuevo" value="SIN ASIGNAR" requiered><label for="diasCredito">* Dias Credito: </label><input type="text" size="10" id="txtDiasCreditoNuevo" name="txtDiasCreditoNuevo" value="00" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Direccion</legend>
 		<ol>
-			<li><label for="calle">*Calle: </label><input type="text" id="txtCalleNuevo" name="txtCalleNuevo" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExtNuevo" name="txtNoExtNuevo" size="5" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoIntNuevo" name="txtNoIntNuevo" size="5" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColoniaNuevo" name="txtColoniaNuevo" requiered><label for="estado">*Estado: </label><input type="text" id="txtEstadoNuevo" name="txtEstadoNuevo" size="23" requiered><li>
-			<li><label for="cp">*C.P: </label><input type="text" id="txtCpNuevo" name="txtCpNuevo" size="7" requiered></li>
+			<li><label for="calle">*Calle: </label><input type="text" id="txtCalleNuevo" name="txtCalleNuevo" value="SIN ASIGNAR" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExtNuevo" name="txtNoExtNuevo" size="5" value="00" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoIntNuevo" name="txtNoIntNuevo" size="5" value="00" requiered><li>
+			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColoniaNuevo" name="txtColoniaNuevo" value="SIN ASIGNAR" requiered><label for="estado">*Estado: </label><input type="text" id="txtEstadoNuevo" name="txtEstadoNuevo" size="23" value="SIN ASIGNAR" requiered><li>
+			<li><label for="cp">*C.P: </label><input type="text" id="txtCpNuevo" name="txtCpNuevo" size="7" value="00000" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Descuentos</legend>
 		<ol>
-			<li><label for="descGeneral">*Descuento General: </label><input type="text" size="5" id="txtDescGeneralNuevo" name="txtDescGeneralNuevo" requiered></li>
-			<li><label for="desc2">*Descuento 2: </label><input type="text" size="5" id="txtDesc2Nuevo" name="txtDesc2Nuevo" requiered></li>
-			<li><label for="desc3">*Descuento 3</label><input type="text" size="5" id="txtDesc3Nuevo" name="txtDesc3Nuevo" requiered></li>
+			<li><label for="descGeneral">*Descuento General: </label><input type="text" size="5" id="txtDescGeneralNuevo" name="txtDescGeneralNuevo" value="0.00" requiered></li>
+			<li><label for="desc2">*Descuento 2: </label><input type="text" size="5" id="txtDesc2Nuevo" name="txtDesc2Nuevo" value="0.00" requiered></li>
+			<li><label for="desc3">*Descuento 3</label><input type="text" size="5" id="txtDesc3Nuevo" name="txtDesc3Nuevo" value="0.00" requiered></li>
 		</ol>
 	</fieldset>
 	</form>

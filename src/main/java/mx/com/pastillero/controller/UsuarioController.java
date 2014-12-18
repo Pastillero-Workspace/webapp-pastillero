@@ -38,27 +38,27 @@ public class UsuarioController extends HttpServlet{
 			String olduser = request.getParameter("olduser").trim();
 			String usuario = request.getParameter("txtUsuario").trim();
 			String contrasena = request.getParameter("txtContrasena").trim();
-			String perfil = request.getParameter("txtPerfil").trim();
+			String perfil = request.getParameter("txtPerfil").trim().toUpperCase();
 			int activo = Integer.parseInt(request.getParameter("txtActivo").trim());
-			String sucursal = request.getParameter("txtSucursal").trim();
+			String sucursal = request.getParameter("txtSucursal").trim().toUpperCase();
 			//Persona
-			String nombre = request.getParameter("txtNombre").trim();
-			String apellidopat = request.getParameter("txtApePat").trim();
-			String apellidomat = request.getParameter("txtApeMat").trim();
+			String nombre = request.getParameter("txtNombre").trim().toUpperCase();
+			String apellidopat = request.getParameter("txtApePat").trim().toUpperCase();
+			String apellidomat = request.getParameter("txtApeMat").trim().toUpperCase();
 			String fechaingreso =request.getParameter("txtFechaIn").trim();
-			String rfc =  request.getParameter("txtRFC").trim();
-			String curp = request.getParameter("txtCURP").trim();
+			String rfc =  request.getParameter("txtRFC").trim().toUpperCase();
+			String curp = request.getParameter("txtCURP").trim().toUpperCase();
 			String turno = request.getParameter("txtTurno").trim();
 			String email = request.getParameter("txtEmail").trim();
 			String telfijo = request.getParameter("txtTelFijo").trim();
 			String telmovil = request.getParameter("txtTelMovil").trim();
 			// Direccion
-			String calle =   request.getParameter("txtCalle").trim();
+			String calle =   request.getParameter("txtCalle").trim().toUpperCase();
 			String noext = request.getParameter("txtNoExt").trim();
 			String noint = request.getParameter("txtNoInt").trim();
-			String colonia = request.getParameter("txtColonia").trim();
-			String ciudad = request.getParameter("txtCiudad").trim();
-			String estado = request.getParameter("txtEstado").trim();
+			String colonia = request.getParameter("txtColonia").trim().toUpperCase();
+			String ciudad = request.getParameter("txtCiudad").trim().toUpperCase();
+			String estado = request.getParameter("txtEstado").trim().toUpperCase();
 			int cp = Integer.parseInt(request.getParameter("txtCp").trim());
 			// logical businnes temporaly implementation
 			
@@ -119,27 +119,27 @@ public class UsuarioController extends HttpServlet{
 			
 			String usuario = request.getParameter("txtUsuario").trim();
 			String contrasena = request.getParameter("txtContrasena").trim();
-			String perfil = request.getParameter("txtPerfil").trim();
+			String perfil = request.getParameter("txtPerfil").trim().toUpperCase();
 			int activo = Integer.parseInt(request.getParameter("txtActivo").trim());
-			String sucursal = request.getParameter("txtSucursal").trim();
+			String sucursal = request.getParameter("txtSucursal").trim().toUpperCase();
 			//Persona
-			String nombre = request.getParameter("txtNombre").trim();
-			String apellidopat = request.getParameter("txtApePat").trim();
-			String apellidomat = request.getParameter("txtApeMat").trim();
+			String nombre = request.getParameter("txtNombre").trim().toUpperCase();
+			String apellidopat = request.getParameter("txtApePat").trim().toUpperCase();
+			String apellidomat = request.getParameter("txtApeMat").trim().toUpperCase();
 			String fechaingreso =request.getParameter("txtFechaIn").trim();
-			String rfc =  request.getParameter("txtRFC").trim();
-			String curp = request.getParameter("txtCURP").trim();
+			String rfc =  request.getParameter("txtRFC").trim().toUpperCase();
+			String curp = request.getParameter("txtCURP").trim().toUpperCase();
 			String turno = request.getParameter("txtTurno").trim();
 			String email = request.getParameter("txtEmail").trim();
 			String telfijo = request.getParameter("txtTelFijo").trim();
 			String telmovil = request.getParameter("txtTelMovil").trim();
 			// Direccion
-			String calle =   request.getParameter("txtCalle").trim();
+			String calle =   request.getParameter("txtCalle").trim().toUpperCase();
 			String noext = request.getParameter("txtNoExt").trim();
 			String noint = request.getParameter("txtNoInt").trim();
-			String colonia = request.getParameter("txtColonia").trim();
-			String ciudad = request.getParameter("txtCiudad").trim();
-			String estado = request.getParameter("txtEstado").trim();
+			String colonia = request.getParameter("txtColonia").trim().toUpperCase();
+			String ciudad = request.getParameter("txtCiudad").trim().toUpperCase();
+			String estado = request.getParameter("txtEstado").trim().toUpperCase();
 			int cp = Integer.parseInt(request.getParameter("txtCp").trim());
 			
 			

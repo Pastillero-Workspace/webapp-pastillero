@@ -215,31 +215,49 @@
 							if(date==8){
 								$("#txtSaldo").val(value);
 							}
-							if(date==9){
-								$("#txtDescExtra").val(value);
+							if(date==9){//insen
+								console.log('insen: '+value);
+							    var opcInsen = value.split(".");
+								if(value != '0.0'){
+									console.log("insen: "+opcInsen[0]);
+									//$('#opcDesc option[value="'+opcInsen[0]+'"]:selected');
+									switch(opcInsen[0]){
+										case '2':$('#opcDesc option[value="2"]:selected');break;
+										case '3':$('#opcDesc option[value="3"]:selected');break;
+										case '4':$('#opcDesc option[value="4"]:selected');break;
+										case '5':$('#opcDesc option[value="5"]:selected');break;
+									}
+								}
 							}
-							if(date==10){
-								$("#txtVentaMensual").val(value);
+							if(date==10){//cltefrec
+								console.log('clteFrec: '+value);
+								if(value != '0.0'){
+									console.log("frec");
+									$('#opcDesc option[value="1"]:selected');	
+								}
 							}
 							if(date==11){
-								$("#txtCalle").val(value);
+								$("#txtVentaMensual").val(value);
 							}
 							if(date==12){
-								$("#txtNoExt").val(value);
+								$("#txtCalle").val(value);
 							}
 							if(date==13){
-								$("#txtNoInt").val(value);
+								$("#txtNoExt").val(value);
 							}
 							if(date==14){
-								$("#txtColonia").val(value);
+								$("#txtNoInt").val(value);
 							}
 							if(date==15){
-								$("#txtCiudad").val(value);
+								$("#txtColonia").val(value);
 							}
 							if(date==16){
-								$("#txtEstado").val(value);
+								$("#txtCiudad").val(value);
 							}
 							if(date==17){
+								$("#txtEstado").val(value);
+							}
+							if(date==18){
 								$("#txtCp").val(value);
 							}
 							
@@ -265,6 +283,19 @@
 						id:		"btnActualizar",
 						click:	function(){
 							if($('#txtNombre').val().trim()!=""){
+								
+								var cltefrec = 0.00;
+								var insen = 0.00;
+								
+								switch($("#opcDesc option:selected").val()){
+								    case '1':cltefrec=5.00;break;
+								    case '2':insen = 2.00;break;
+								    case '3':insen = 3.00;break;
+								    case '4':insen = 4.00;break;
+								    case '5':insen = 5.00;break;
+								    default: cltefrec = 0.00;insen = 0.00;break;
+								}
+								
 									$.post('cliente.jr',{
 									tarea: 'actualizar',
 									claveRespaldo: claveRespaldo,
@@ -302,8 +333,10 @@
 										$('#txtLimiteCred').val(),						
 										$('#txtVentaAnual').val(),
 										$('#txtSaldo').val(),
-										$('#opcDesc option:selected').val(),
-										$('#txtDescExtra').val(),
+										//$('#opcDesc option:selected').val(),
+										//$('#txtDescExtra').val(),
+										insen,
+										cltefrec,
 										$('#txtVentaMensual').val(),						
 										$('#txtCalle').val(),
 										$('#txtNoExt').val(),
@@ -356,6 +389,19 @@
 						id:		"btnAgregarNuevo",
 						click:	function(){
 							if($('#txtClaveNuevo').val().trim()!=""){
+								
+								var cltefrec = 0.00;
+								var insen = 0.00;
+								
+								switch($('#opcDescNuevo option:selected').val()){
+								    case '1':cltefrec=5.00;break;
+								    case '2':insen = 2.00;break;
+								    case '3':insen = 3.00;break;
+								    case '4':insen = 4.00;break;
+								    case '5':insen = 5.00;break;
+								    default: cltefrec = 0.00;insen = 0.00;break;
+								}
+								
 									$.post('cliente.jr',{
 										tarea: 'agregar',
 										txtClave: $('#txtClaveNuevo').val(),
@@ -381,8 +427,7 @@
 										
 									});
 									
-									table.row.add([
-											            
+									table.row.add([											            
 										$('#txtClaveNuevo').val(),
 										$('#txtNombreNuevo').val(),
 										$('#txtEmailNuevo').val(),						
@@ -392,8 +437,10 @@
 										$('#txtLimiteCredNuevo').val(),						
 										$('#txtVentaAnualNuevo').val(),
 										$('#txtSaldoNuevo').val(),
-										$('#opcDescNuevo option:selected').val(),
-										$('#txtDescExtraNuevo').val(),
+										//$('#opcDescNuevo option:selected').val(),
+										//$('#txtDescExtraNuevo').val(),
+										insen,
+										cltefrec,
 										$('#txtVentaMensualNuevo').val(),						
 										$('#txtCalleNuevo').val(),
 										$('#txtNoExtNuevo').val(),
@@ -682,27 +729,30 @@
 		<legend>Cliente</legend>
 		<ol>
 			<li><label for="clave">*Clave: </label><input type="text" id="txtClave" name="txtClave" size="5" requiered autofocus><label for="nombre">*Nombre: </label><input type="text" size="45" id="txtNombre" name="txtNombre" requiered> </li>
-			<li><label for="email">*Email: </label><input type="text" size="30" id="txtEmail" name="txtEmail" requiered><label for="tel">*Tel: </label><input type="text" size="20" id="txtTel" name="txtTel" requiered></li>
-			<li><label for="rfc">*RFC: </label><input type="text" size="15" id="txtRfc" name="txtRfc" requiered></li>
+			<li><label for="email">*Email: </label><input type="text" size="30" id="txtEmail" name="txtEmail" value="SIN ASIGNAR" requiered><label for="tel">*Tel: </label><input type="text" size="20" id="txtTel" name="txtTel" value="00-00-00-00-00" requiered></li>
+			<li><label for="rfc">*RFC: </label><input type="text" size="15" id="txtRfc" name="txtRfc" value="SIN ASIGNAR" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Credito</legend>
 		<ol>
-			<li><label for="credito">*Credito:</label><input type="text" id="txtCredito" name="txtCredito" size="5" requiered><label for="diasCredito">*Dias Cred:</label><input type="text" id="txtDiasCred" name="txtDiasCred" size="5" requiered>
-			<label for="limiteCredito">*Limite Cred:</label><input type="text" id="txtLimiteCred" name="txtLimiteCred" size="5" requiered><label for="ventaAnual">*Venta anual:</label><input type="text" id="txtVentaAnual" name="txtVentaAnual" size="5" requiered></li>
-			<li><label for="saldo">*Saldo:</label><input type="text" id="txtSaldo" name="txtSaldo" size="5" requiered>
-			<label for="desc">*Descuento</label><select id="opcDesc" name="opcDesc" requiered><option value="0">Sin Descuento</option><option value="5.00">Cliente Frecuente</option><option value="2.00">INSEN 2%</option><option value="3.00">INSEN 3%</option></select>
-			<label for="descExtra">*Desc. Extra:</label><input type="text" id="txtDescExtra" name="txtDescExtra" size="5" requiered>
-			<label for="ventaMensual">*Venta Mensual:</label><input type="text" id="txtVentaMensual" name="txtVentaMensual" size="5" requiered></li>
+			<li><label for="credito">*Credito:</label><input type="text" id="txtCredito" name="txtCredito" size="5" value="0" requiered><label for="diasCredito">*Dias Cred:</label><input type="text" id="txtDiasCred" name="txtDiasCred" size="5" value="00" requiered>
+			<label for="limiteCredito">*Limite Cred:</label><input type="text" id="txtLimiteCred" name="txtLimiteCred" size="5" value="0.00" requiered><label for="ventaAnual">*Venta anual:</label><input type="text" id="txtVentaAnual" name="txtVentaAnual" size="5" value="0.00" requiered></li>
+			<li><label for="saldo">*Saldo:</label><input type="text" id="txtSaldo" name="txtSaldo" size="5" value="0.00" requiered>
+			<!--label for="desc">*Descuento</label><select id="opcDesc" name="opcDesc" requiered><option value="0">Sin Descuento</option><option value="5.00">Cliente Frecuente</option><option value="2.00">INSEN 2%</option><option value="3.00">INSEN 3%</option></select-->
+			
+			<label for="desc">*Descuento</label><select id="opcDesc" name="opcDesc" requiered><option value="0">Sin Descuento</option><option value="1">Cliente Frecuente</option><option value="2">INSEN 2%</option><option value="3">INSEN 3%</option><option value="4">INSEN 4%</option><option value="5">INSEN 5%</option></select>
+			
+			<!--label for="descExtra">*Desc. Extra:</label><input type="text" id="txtDescExtra" name="txtDescExtra" size="5" value="0.00" requiered-->
+			<label for="ventaMensual">*Venta Mensual:</label><input type="text" id="txtVentaMensual" name="txtVentaMensual" size="5" value="0.00" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Direccion</legend>
 		<ol>
-			<li><label for="calle">*Calle: </label><input type="text" id="txtCalle" name="txtCalle" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExt" name="txtNoExt" size="5" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoInt" name="txtNoInt" size="5" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColonia" name="txtColonia" requiered><label for="ciudad">*Ciudad: </label><input type="text" id="txtCiudad" name="txtCiudad" size="30" requiered><li>
-			<li><label for="estado">*Estado: </label><input type="text" id="txtEstado" name="txtEstado" size="30" requiered><label for="cp">*C.P: </label><input type="text" id="txtCp" name="txtCp" size="7" requiered></li>
+			<li><label for="calle">*Calle: </label><input type="text" id="txtCalle" name="txtCalle" value="SIN ASIGNAR" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExt" name="txtNoExt" size="5" value="00" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoInt" name="txtNoInt" size="5" value="00" requiered><li>
+			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColonia" name="txtColonia" value="SIN ASIGNAR" requiered><label for="ciudad">*Ciudad: </label><input type="text" id="txtCiudad" name="txtCiudad" size="30" value="SIN ASIGNAR" requiered><li>
+			<li><label for="estado">*Estado: </label><input type="text" id="txtEstado" name="txtEstado" size="30" value="SIN ASIGNAR" requiered><label for="cp">*C.P: </label><input type="text" id="txtCp" name="txtCp" size="7" value="00000" requiered></li>
 		</ol>
 	</fieldset>
 	</form>
@@ -717,59 +767,35 @@
 		<legend>Cliente</legend>
 		<ol>
 			<li><label for="clave">*Clave: </label><input type="text" id="txtClaveNuevo" name="txtClaveNuevo" size="5" requiered autofocus><label for="nombre">*Nombre: </label><input type="text" size="45" id="txtNombreNuevo" name="txtNombreNuevo" requiered> </li>
-			<li><label for="email">*Email: </label><input type="text" size="30" id="txtEmailNuevo" name="txtEmailNuevo" requiered><label for="tel">*Tel: </label><input type="text" size="20" id="txtTelNuevo" name="txtTelNuevo" requiered></li>
-			<li><label for="rfc">*RFC: </label><input type="text" size="15" id="txtRfcNuevo" name="txtRfcNuevo" requiered></li>
+			<li><label for="email">*Email: </label><input type="text" size="30" id="txtEmailNuevo" name="txtEmailNuevo" value="SIN ASIGNAR" requiered><label for="tel">*Tel: </label><input type="text" size="20" id="txtTelNuevo" name="txtTelNuevo" value="00-00-00-00-00" requiered></li>
+			<li><label for="rfc">*RFC: </label><input type="text" size="15" id="txtRfcNuevo" name="txtRfcNuevo" value="SIN ASIGNAR" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Credito</legend>
 		<ol>
-			<li><label for="credito">*Credito:</label><input type="text" id="txtCreditoNuevo" name="txtCreditoNuevo" size="5" requiered><label for="diasCredito">*Dias Cred:</label><input type="text" id="txtDiasCredNuevo" name="txtDiasCredNuevo" size="5" requiered>
-			<label for="limiteCredito">*Limite Cred:</label><input type="text" id="txtLimiteCredNuevo" name="txtLimiteCredNuevo" size="5" requiered><label for="ventaAnual">*Venta anual:</label><input type="text" id="txtVentaAnualNuevo" name="txtVentaAnualNuevo" size="5" requiered></li>
-			<li><label for="saldo">*Saldo:</label><input type="text" id="txtSaldoNuevo" name="txtSaldoNuevo" size="5" requiered>
-			<label for="desc">*Descuento</label><select id="opcDescNuevo" name="opcDescNuevo" requiered><option value="0">Sin Descuento</option><option value="5.00">Cliente Frecuente</option><option value="2.00">INSEN 2%</option><option value="3.00">INSEN 3%</option><option value="4.00">INSEN 4%</option><option value="50.00">INSEN 5%</option></select>
-			<label for="descExtra">*Desc. Extra:</label><input type="text" id="txtDescExtraNuevo" name="txtDescExtraNuevo" size="5" disabled>
-			</li>
-			<li><label for="ventaMensual">*Venta Mensual:</label><input type="text" id="txtVentaMensualNuevo" name="txtVentaMensualNuevo" size="5" requiered></li>
+			<li><label for="credito">*Credito:</label><input type="text" id="txtCreditoNuevo" name="txtCreditoNuevo" size="5" value="0" requiered><label for="diasCredito">*Dias Cred:</label><input type="text" id="txtDiasCredNuevo" name="txtDiasCredNuevo" size="5" value="00" requiered>
+			<label for="limiteCredito">*Limite Cred:</label><input type="text" id="txtLimiteCredNuevo" name="txtLimiteCredNuevo" size="5" value="0.00" requiered><label for="ventaAnual">*Venta anual:</label><input type="text" id="txtVentaAnualNuevo" name="txtVentaAnualNuevo" size="5" value="0.00" requiered></li>
+			<li><label for="saldo">*Saldo:</label><input type="text" id="txtSaldoNuevo" name="txtSaldoNuevo" size="5" value="0.00" requiered>
+			<!--label for="desc">*Descuento</label><select id="opcDescNuevo" name="opcDescNuevo" requiered><option value="0">Sin Descuento</option><option value="5.00">Cliente Frecuente</option><option value="2.00">INSEN 2%</option><option value="3.00">INSEN 3%</option><option value="4.00">INSEN 4%</option><option value="50.00">INSEN 5%</option></select-->
+			
+			<label for="desc">*Descuento</label><select id="opcDescNuevo" name="opcDescNuevo" requiered><option value="0">Sin Descuento</option><option value="1">Cliente Frecuente</option><option value="2">INSEN 2%</option><option value="3">INSEN 3%</option><option value="4">INSEN 4%</option><option value="5">INSEN 5%</option></select>
+			
+			<!--label for="descExtra">*Desc. Extra:</label><input type="text" id="txtDescExtraNuevo" name="txtDescExtraNuevo" size="5" value="0.00" disabled-->
+			
+			<label for="ventaMensual">*Venta Mensual:</label><input type="text" id="txtVentaMensualNuevo" name="txtVentaMensualNuevo" size="5" value="0.00" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Direccion</legend>
 		<ol>
-			<li><label for="calle">*Calle: </label><input type="text" id="txtCalleNuevo" name="txtCalleNuevo" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExtNuevo" name="txtNoExtNuevo" size="5" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoIntNuevo" name="txtNoIntNuevo" size="5" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColoniaNuevo" name="txtColoniaNuevo" requiered><label for="ciudad">*Ciudad: </label><input type="text" id="txtCiudadNuevo" name="txtCiudadNuevo" size="23" requiered><li>
-			<li><label for="estado">*Estado: </label><input type="text" id="txtEstadoNuevo" name="txtEstadoNuevo" size="23" requiered><label for="cp">*C.P: </label><input type="text" id="txtCpNuevo" name="txtCpNuevo" size="7" requiered></li>
+			<li><label for="calle">*Calle: </label><input type="text" id="txtCalleNuevo" name="txtCalleNuevo" value="SIN ASIGNAR" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExtNuevo" name="txtNoExtNuevo" size="5" value="00" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoIntNuevo" name="txtNoIntNuevo" size="5" value="00" requiered><li>
+			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColoniaNuevo" name="txtColoniaNuevo" value="SIN ASIGNAR" requiered><label for="ciudad">*Ciudad: </label><input type="text" id="txtCiudadNuevo" name="txtCiudadNuevo" size="23" value="SIN ASIGNAR" requiered><li>
+			<li><label for="estado">*Estado: </label><input type="text" id="txtEstadoNuevo" name="txtEstadoNuevo" size="23" value="SIN ASIGNAR" requiered><label for="cp">*C.P: </label><input type="text" id="txtCpNuevo" name="txtCpNuevo" size="7" value="00000" requiered></li>
 		</ol>
 	</fieldset>
 	</form>
-</div>
-<!--Fomulario para dar de alta un medico, este formulario se mostrara en un Dialog de JQuery, se activara al hacer click en el menu "Alta medico" dentro de la pagina principal-->
-	<div id="formAltaMedico" title="Alta de nuevo Médico" class="text-form">
-		<form action="" id="formMedico">
-			<legend>* Campos Obligatorios</legend>
-			<fieldset>
-				<legend>Generales</legend>
-				<ol>
-					<li><label for="clave">* Clave:</label><input type="text" name="clave" id="clave" placeholder="Ingrese Clave de Médico" requiered autofocus> <label for="cedula">* Cédula:</label><input type="text" name="cedula" id="cedula" requiered></li>
-					<li><label for="nombre">* Nombre:</label><input type="text" name="nombre" id="nombre" size="54" requiered></li>
-				</ol>
-			</fieldset>
-			<fieldset>
-				<legend>Datos de Domicilio</legend>
-				<ol>
-					<li><label for="calle">Calle:</label><input type="text" name="calle" id="calle"><label for="numero">Número:</label><input type="text" name="numero" id="numero"></li>
-					<li><label for="municipio">Municipio:</label><input type="text" name="municipio" id="municipio"><label for="estado">Estado:</label><input type="text" name="estado" id="estado"></li>
-					<li><label for="cp">C.P:</label><input type="text" name="cp" id="cp"></li>
-				</ol>
-			</fieldset>
-			<fieldset>
-				<legend>Datos de Contacto</legend>
-				<ol>
-					<li><label for="telefono">Telefono:</label><input type="text" name="telefono" id="telefono"><label for="email">E-Mail:</label><input type="text" name="email" id="email"></li>
-				</ol>
-			</fieldset>
-		</form>
-	</div>	
+</div>	
 	<!--Insersion de la imagen de marca de agua en la parte del centro del sistema-->	
 <div>
 			<div id="header">

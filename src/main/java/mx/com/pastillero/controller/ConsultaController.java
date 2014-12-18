@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import mx.com.pastillero.model.dao.ProductoFamiliaDao;
+import mx.com.pastillero.model.dao.ProductosDao;
 
 /**
  * Servlet implementation class ConsultaController
@@ -42,37 +43,45 @@ public class ConsultaController extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			logger.info("Consultando Productos...");
 			List<Object[]> listConsulta = null;
-			ProductoFamiliaDao consulta = new ProductoFamiliaDao();
 			ObjectMapper mapper = new ObjectMapper();
-			
 			BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream()));
 			
 			if(br!=null){
 //				logger.info("datos: "+br.readLine());
 				String [] parametros =br.readLine().split("&");
 				
-				String [] codigoTemp = parametros[0].split("=");
-				String [] descripcionTemp = parametros[1].split("=");		
-//				en caso de venir vacio se le asigna un valor irrelevante
-//				String codigo = (codigoTemp.length==2)?codigoTemp[1]:"*";
-//				String descripcion = (descripcionTemp.length==2)?descripcionTemp[1]:"<";
+				String [] workout = parametros[0].split("=");
 				
-//				listConsulta = consulta.buscar(codigo, descripcion);
-				
-				if(codigoTemp.length==2){
-					listConsulta = consulta.buscarCodigo(codigoTemp[1]);
-				}else if(descripcionTemp.length==2){
-					listConsulta = consulta.buscarDescripcion(descripcionTemp[1]);
+				if(workout[1].equals("consulta")){
+					ProductoFamiliaDao consultaPF = new ProductoFamiliaDao();
+					
+					String [] codigoTemp = parametros[1].split("=");
+					String [] descripcionTemp = parametros[2].split("=");
+					
+					if(codigoTemp.length==2){
+						listConsulta = consultaPF.buscarCodigo(codigoTemp[1]);
+					}else if(descripcionTemp.length==2){
+						listConsulta = consultaPF.buscarDescripcion(descripcionTemp[1]);
+					}
 				}
-				
-				
-				
-				
+				if(workout[1].equals("producto")){
+					ProductosDao consultaP = new ProductosDao();
+					
+					String [] codigoTemp = parametros[1].split("=");
+					String [] descripcionTemp = parametros[2].split("=");
+					
+					if(codigoTemp.length==2){
+						listConsulta = consultaP.buscarCodigo(codigoTemp[1]);
+					}else if(descripcionTemp.length==2){
+						listConsulta = consultaP.buscarDescripcion(descripcionTemp[1]);
+					}
+					
+				}
 			}
 			
 			response.setContentType("application/json");
 			mapper.writeValue(response.getOutputStream(), listConsulta);
-			logger.info("Consulta realizada con exito!");
+			//logger.info("Consulta realizada con exito!");
 	}
 
 }

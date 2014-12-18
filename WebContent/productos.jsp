@@ -20,6 +20,7 @@
 	<script src="<c:url value="/resources/js/jquery-1.10.2.js" />"></script>
 	<script src="<c:url value="/resources/js/jquery-ui-1.10.4.custom.js" />"></script>
 	<script src="<c:url value="/resources/js/jquery-ui-dialog.js" />"></script>
+	<script src="<c:url value="/resources/js/blockUI/jquery.blockUI.js" />"></script>
 	
 	<!-- The Javascript config datatables -->
 	<script src="<c:url value="/resources/js/jquery.dataTables.js" />"></script>
@@ -52,81 +53,83 @@
 		$(document).ready(function() {
 		
 		    // Algoritmo de filtrado
-			$("#search thead input").on( 'keypress changed', function (e) 
-			{  
+			$("#search thead input").on( 'keypress changed', function (e){  
 					 table
 					.column( $(this).parent().index()+':visible' )
 					.search(this.value)
 					.draw();				                  
+			});			
+ 	         
+			// Se establece el control de datos al destino
+			var table = $('#search').DataTable({
+				//data:	data,
+				dom : "plrti",
+				"stateSave" : true,
+			    "bSort": false,
+				scrollY : 350,
+				scrollX : 1280,
+				scrollCollapse : true
+				
 			});
 			
+			$('#txtCodigo').keypress(function(event) {
+				if (event.which == 13) {
+					 $('#btnBuscar').focus();
+					 
+				}});
+			$('#txtDescripcion').keypress(function(event) {
+				if (event.which == 13) {	
+					$('#btnBuscar').focus();
+					
+				}});
+			$("#btnBuscar").button().click(function(e){
+				if($("#txtCodigo").val().trim() != ""){
+					buscar($('#txtCodigo').val(),"");	
+					$('#txtCodigo').val('');
+				}else if($("#txtDescripcion").val().trim() != ""){
+					buscar("",$('#txtDescripcion').val());
+					$('#txtDescripcion').val('');
+				}else{
+					alert("Para realizar una busqueda llene alguno de los campos");
+				}
+				
+			});
+			function buscar(txtcodigo, txtdescripcion){
+				console.log('buscar...');
+				blockpage();
+				$.ajax({
+					url: "/webapp-pastillero/consulta.jr",
+			        type: 'POST',
+			        dataType: 'json',
+			        data:{
+			        	workout:'producto',
+			        	txtCodigo: txtcodigo,
+			        	txtDescripcion: txtdescripcion
+			        	},
+			        contentType: 'application/json',
+			        mimeType: 'application/json', 
+			        success: function (listaConsulta) {
+						  table.clear().draw();
+						  
+						  $.each(listaConsulta, function(i, producto){
+							  table.row.add([
+							             producto[0],producto[1],producto[2],producto[3],producto[4],producto[5],producto[6],producto[7],producto[8],
+							             producto[9],producto[10],producto[11],producto[12],producto[13],producto[14],producto[15],producto[16],producto[17],
+							             producto[18],producto[19],producto[20],producto[21],producto[22],producto[23],producto[24],producto[25],producto[26],
+							             producto[27],producto[28],producto[29],producto[30],producto[31],producto[32],producto[33],producto[34],producto[35],
+							             producto[36],producto[37]
+							  ]);
+						  });
+						  table.draw();
+						  $.unblockUI();
+			        },
+			        error:function(data,status,er) {
+			            alert("error: "+data+" status: "+status+" er:"+er);
+			            $.unblockUI();
+			        }
+			    });
+			}
 			
- 	<%	 		 	
-	 	ProductosDao psd = new ProductosDao();
- 		FamiliaDao fd = new FamiliaDao();
-	 	
-	 	List<Productos> datos = psd.mostrar();
-	 	List<Familia> familia = fd.getFamilia();
-	%>
-		// Se crea array de datos aleatorios
-    	var data = [];		
-		<%for(int i=0; i< datos.size(); i++)
-		{
-		    int iFamilia = datos.get(i).getIdFamilia();
-		    List<Familia> f = fd.getFamilia(datos.get(i).getIdFamilia());
-		%>
-		
-			data[<%=i%>]=[  '<%=datos.get(i).getProveedor() %>',
-			   	            '<%=datos.get(i).getClave() %>',
-			   	            '<%=datos.get(i).getCodBar() %>',
-			   	            '<%=datos.get(i).getDescripcion() %>',
-			   	            '<%=f.get(0).getNombre() %>',		   	               
-			   	            '<%=datos.get(i).getPrecioPub() %>',
-			   	            '<%=datos.get(i).getPrecioDesc() %>',
-			   	            '<%=datos.get(i).getPrecioFarmacia() %>',
-			   	            '<%=datos.get(i).getIva() %>',
-			   	            '<%=datos.get(i).getLinea() %>',
-					        '<%=datos.get(i).getReferencia() %>',
-					        '<%=datos.get(i).getSSA() %>',
-					        '<%=datos.get(i).getLaboratorio() %>',
-					        '<%=datos.get(i).getDepartamento() %>',
-					        '<%=datos.get(i).getCategoria() %>',
-					        '<%=datos.get(i).getActualizable() %>',
-					        '<%=datos.get(i).getDescuento() %>',
-					        '<%=datos.get(i).getCosto() %>',
-					        '<%=datos.get(i).getEquivalencia() %>',
-					        '<%=datos.get(i).getSuperfamilia() %>',
-					        '<%=datos.get(i).getCls() %>',
-					        '<%=datos.get(i).getZona() %>',
-					        '<%=datos.get(i).getPareto() %>',
-					        '<%=datos.get(i).getIeps() %>',
-					        '<%=datos.get(i).getIeps2() %>',
-					        '<%=datos.get(i).getLimitado() %>',
-					        '<%=datos.get(i).getKit() %>',
-					        '<%=datos.get(i).getComision() %>',
-					        '<%=datos.get(i).getMaxdescuento() %>',
-					        '<%=datos.get(i).getGrupo() %>',
-					        '<%=datos.get(i).getAplicadescbase() %>',
-					        '<%=datos.get(i).getAplicapo() %>',
-					        '<%=datos.get(i).getAntibiotico() %>',
-					        '<%=datos.get(i).getExistencias() %>',
-					        '<%=datos.get(i).getUltimoproveedor() %>',
-					        '<%=datos.get(i).getUltimocosto() %>',
-					        '<%=datos.get(i).getCostopromedio() %>',
-					        '<%=datos.get(i).getCostoreal() %>'];
-		<%}%>         
-			// Se establece el control de datos al destino
-			var table = $('#search').DataTable( {
-			data:	data,
-			dom : "plrti",
-			"stateSave" : true,
-		    "bSort": false,
-			scrollY : 350,
-			scrollX : 1280,
-			scrollCollapse : true
-			
-		} );
-			 
 			// datatable configuration
 		    $('#search tbody').on( 'click', 'tr', function () {
 		        if ( $(this).hasClass('selected') ) {
@@ -917,6 +920,14 @@
 			
 			<div id="buttons">
 							
+			</div>
+			<div STYLE="float: left; top:150px; left:10px; width:600px; background-color:#00cccc;  margin: 20px;">
+				<form>
+				<ul STYLE="list-style-type: none;">
+					<li><label for="codigo"><b>Codigo:</b></label><input type="text" id="txtCodigo" name="codigo" size="50"><button type="button" id="btnBuscar">Buscar.</button><br></li>
+					<li><label for="descripcion"><b>Descripcion:</b></label><input type="text" id="txtDescripcion" name="descripcion" size="50"></li>
+				</ul>
+				</form>
 			</div>
 			<!-- panel de productos -->
 			<table id="search" class="display"cellspacing="0" width="1280px">
