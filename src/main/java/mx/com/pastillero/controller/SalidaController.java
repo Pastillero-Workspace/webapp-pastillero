@@ -93,13 +93,13 @@ public class SalidaController extends HttpServlet{
 			// Actualiza salida con datos actualizados y completos
 			salida.setFecha(request.getParameter("txtFecha").toString().trim());
 			salida.setHora(hora.format(date));
-			salida.setMerma(request.getParameter("txtMerma").trim());
-			salida.setNumFactura(request.getParameter("txtFactura").trim());
+			salida.setMerma(request.getParameter("txtMerma").trim().toUpperCase());
+			salida.setNumFactura(request.getParameter("txtFactura").trim().toUpperCase());
 			salida.setFolioElectronico(Integer.parseInt(request.getParameter("txtFolio").trim()));
 			
 			
 			RecepcionDao r  = new RecepcionDao();
-			salida.setIdUsuario(r.idUsuario(request.getParameter("txtResponsable")));
+			salida.setIdUsuario(r.idUsuario(request.getParameter("txtResponsable").trim()));
 			System.out.println(salida.toString());
 			
 						
@@ -120,9 +120,9 @@ public class SalidaController extends HttpServlet{
 					
 					movimientoSalida.setTipo("SALIDA - "+salida.getMerma().toUpperCase());
 					movimientoSalida.setIdNota(Integer.parseInt(request.getParameter("txtFolio").trim()));
-					movimientoSalida.setDocumento(request.getParameter("txtFactura").trim());
+					movimientoSalida.setDocumento(request.getParameter("txtFactura").trim().toUpperCase());
 					movimientoSalida.setClave(pr.get("Codigo").toString());
-					movimientoSalida.setDescripcion(pr.get("Descripcion").toString());
+					movimientoSalida.setDescripcion(pr.get("Descripcion").toString().toUpperCase());
 					movimientoSalida.setAdquiridos(0);
 					movimientoSalida.setVendidos(Integer.parseInt(pr.get("Cant").toString()));
 					movimientoSalida.setValor(Float.parseFloat(pr.get("Costo").toString()));

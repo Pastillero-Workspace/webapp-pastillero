@@ -20,14 +20,11 @@ public class ProveedorDireccionDao extends GenericoDAO{
 		List<Object[]> proveedor = null;
 		try{
 			session = factory.openSession();
-			proveedor =  session.createQuery("select p.idProveedor, p.nombre, p.email, p.fax, p.rfc,"
-					+ " p.diasCredito, p.idDireccion, p.descGeneral, p.desc2, p.desc3, d.calle, d.noInt, d.noExt, d.colonia, "
+			proveedor =  session.createQuery("select p.idProveedor, p.nombre, p.razonSocial, p.email, p.fax, p.rfc,"
+					+ " p.diasCredito, p.idDireccion, p.descGeneral, p.desc2, p.desc3, d.calle, d.noExt, d.noInt, d.colonia, "
 					+ "d.ciudad, d.estado, d.cp from Proveedor as p, Direccion as d where p.idDireccion=d.idDireccion").list();
 		
-			for(Object[] p:proveedor){
-				System.out.println("idProveedor[0] "+p[0]+" nombre[1] "+p[1]+" email[2] "+p[2]+" fax[3] "+p[3]+" rfc[4] "+p[4]+" diasCred[5] "+p[5]+" idDireccion[6] "+p[6]+" desGeneral[7] "+p[7]+" desc2[8] "
-						+p[8]+" desc3[9] "+p[9]+" calle[10]"+p[10]+" noInt[11] "+p[11]+" noExt[12] "+p[12]+" colonia[13]"+p[13]+" estado[14]"+p[14]+" cp[15]"+p[15]);
-			}
+			
 		}catch(HibernateException e){
 			proveedor = null;
 			logger.error("ERROR: No se pudo recuperar la informacion del proveedor.");
@@ -80,6 +77,7 @@ public class ProveedorDireccionDao extends GenericoDAO{
 			session.save(p);
 			tx.commit();
 			resultado = true;
+			logger.info("Proveedor guardado con Exito! "+p.getNombre());
 		}catch(Exception ex){
 			resultado = false;
 			System.out.println("Error al guardar Proveedor");
@@ -107,6 +105,7 @@ public class ProveedorDireccionDao extends GenericoDAO{
 			tx = session.beginTransaction();
 			Proveedor proveedor = (Proveedor) session.get(Proveedor.class, p.getIdProveedor());
 			proveedor.setNombre(p.getNombre());
+			proveedor.setRazonSocial(p.getRazonSocial());
 			proveedor.setEmail(p.getEmail());
 			proveedor.setFax(p.getFax());
 			proveedor.setRfc(p.getRfc());
@@ -130,6 +129,7 @@ public class ProveedorDireccionDao extends GenericoDAO{
 			
 			tx.commit();
 			resultado = true;
+			logger.info("Proveedor actualizado con Exito! "+proveedor.getNombre());
 		}catch(HibernateException ex){
 			resultado = false;
 			logger.error("Error al actualizar proveedor");
@@ -184,6 +184,7 @@ public class ProveedorDireccionDao extends GenericoDAO{
 			session.delete(proveedor);
 			tx.commit();
 			resultado = true;
+			logger.info("Proveedor eliminado con Exito! "+proveedor.getNombre());
 		}catch(Exception ex){
 			resultado = false;
 			logger.error("Error al eliminar proveedor");

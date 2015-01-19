@@ -23,7 +23,7 @@ public class UPDDao extends GenericoDAO{
 				session = factory.openSession();
 				usuarios = session.createQuery("select u.usuario,u.contrasena,u.perfil,u.activo,u.sucursal"+
 						" ,p.nombre,p.apellidoPat,p.apellidoMat,p.fechaIngreso,p.rfc,p.curp,p.turno,p.email,p.telFijo,p.telMovil,"
-					    +" d.calle,d.noInt,d.noExt,d.colonia,d.ciudad,d.estado,d.cp"
+					    +" d.calle,d.noExt,d.noInt,d.colonia,d.ciudad,d.estado,d.cp"
 						+" from Usuario as u,Persona as p,Direccion as d where u.idPersona = p.idPersona and p.idDireccion = d.idDireccion").list();
 			}catch(HibernateException e){
 				usuarios = null;
@@ -143,9 +143,10 @@ public class UPDDao extends GenericoDAO{
 	  		if(Persona !=null)
 	  		{
 	  			u.setIdPersona(Persona.intValue());
+	  			System.out.println(u.toString());
 	  			Usuario = (Integer)session.save(u);
 	  		}	
-	  		session.clear();
+	  		//session.clear();
 	  		tx.commit(); 
 	  	}catch(HibernateException e1){
 	  		Usuario = -1;

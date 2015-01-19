@@ -86,18 +86,21 @@
 					        '<%=datos.get(i)[17]%>',
 					        '<%=datos.get(i)[18]%>',
 					        '<%=datos.get(i)[19]%>',
-					        '<%=datos.get(i)[20]%>'];
+					        '<%=datos.get(i)[20]%>',
+					        '<%=datos.get(i)[21]%>'];
 		<%}%>	
 	         
 			// Se establece el control de datos al destino
 			var table = $('#search').DataTable( {
 			scrollY:        700,
-			scrollX: 		1200,
+			scrollX: 		1700,
 			data:	data,
+			
 			dom : "rtiS",
 			"stateSave" : true,
 		    "bSort": false,
-			scrollY : 200,
+			scrollY : 350,
+			scrollX : 1280,
 			scrollCollapse : true
 			
 		} );
@@ -159,12 +162,12 @@
 				// boton agregar
 				$("#btnAgregar").button().click(function(e)
 			    {					
-					$("#txtFechaIngreso").val('01-01-14');
+					$("#txtFechaIngresoNuevo").val('01-01-14');
 					$("#txtNoExtNuevo").val('0');
 					$("#txtNoIntNuevo").val('0');
 					$("#txtCpNuevo").val('0');
 					$("#formUsuarioNuevo").dialog("open");
-					$("#txtUsuario").select();
+					$("#txtUsuarioNuevo").select();
 				});
 				$("#btnExcel").button().click(function(e){
 					var t = $('#search').tableToJSON();
@@ -185,59 +188,59 @@
 						$.each(registro, function(date,value){
 							if(date==0)
 							{
-								$("#utxtUsuario").val(value);
+								$("#txtUsuario").val(value);
 								oldvalue = value;
 							}
 							if(date==1){
-								$("#utxtContrasena").val(value);
+								$("#txtContrasena").val(value);
 							}
 							if(date==2){
-								$("#utxtPerfil").val(value);
+								$("#txtPerfil").val(value);
 							}
 							if(date==3){
 								 if(value == '1')
 								 {
-								  	$("#uchkActivo").prop("checked",true);
-								 	$("#uchkActivo").val(value);
+								  	$("#chkActivo").prop("checked",true);
+								 	$("#chkActivo").val(value);
 								 }
 								 else
 								 {
-									$("#uchkActivo").prop("checked",false);
-									$("#uchkActivo").val(value);
+									$("#chkActivo").prop("checked",false);
+									$("#chkActivo").val(value);
 								 }
 							}
 							if(date==4){
-								$("#utxtSucursal").val(value);
+								$("#txtSucursal").val(value);
 							}
 							if(date==5){
-								$("#utxtNombre").val(value);
+								$("#txtNombre").val(value);
 							}
 							if(date==6){
-								$("#utxtApePat").val(value);
+								$("#txtApePat").val(value);
 							}
 							if(date==7){
-								$("#utxtApeMat").val(value);
+								$("#txtApeMat").val(value);
 							}
 							if(date==8){
-								$("#utxtFechaIngreso").val(value);
+								$("#txtFechaIngreso").val(value);
 							}
 							if(date==9){
-								$("#utxtRFC").val(value);
+								$("#txtRFC").val(value);
 							}
 							if(date==10){
-								$("#utxtCURP").val(value);
+								$("#txtCURP").val(value);
 							}
 							if(date==11){
-								$("#utxtTurno").val(value);
+								$("#txtTurno").val(value);
 							}
 							if(date==12){
-								$("#utxtEmail").val(value);
+								$("#txtEmail").val(value);
 							}
 							if(date==13){
-								$("#utxtTelFijo").val(value);
+								$("#txtTelFijo").val(value);
 							}
 							if(date==14){
-								$("#utxtTelMovil").val(value);
+								$("#txtTelMovil").val(value);
 							}
 
 							if(date==15){
@@ -253,15 +256,18 @@
 								$("#txtColonia").val(value);
 							}
 							if(date==19){
-								$("#txtEstado").val(value);
+								$("#txtCiudad").val(value);
 							}
 							if(date==20){
+								$("#txtEstado").val(value);
+							}
+							if(date==21){
 								$("#txtCp").val(value);
 							}
 							
 						});
 						$("#formUsuario").dialog("open");
-						$("#utxtUsuario").select();
+						$("#txtUsuario").select();
 					}
 					else{
 						window.alert("Seleccione a un usuario");
@@ -283,25 +289,26 @@
 										{
 											tarea: 'update',
 											olduser : oldvalue,
-											txtUsuario:     $('#utxtUsuario').val(),
-											txtContrasena:  $('#utxtContrasena').val(),
-											txtPerfil:   $('#utxtPerfil').val(),
-											txtActivo:   $('#uchkActivo').val(),
-											txtSucursal: $('#utxtSucursal').val(),
-											txtNombre: $('#utxtNombre').val(),
-											txtApePat: $('#utxtApePat').val(),
-											txtApeMat: $('#utxtApeMat').val(),
-											txtFechaIn: $('#utxtFechaIngreso').val(),
-											txtRFC: $('#utxtRFC').val(),
-											txtCURP: $('#utxtCURP').val(),
-											txtTurno: $('#utxtTurno').val(),
-											txtEmail: $('#utxtEmail').val(),
-											txtTelFijo: $('#utxtTelFijo').val(),
-											txtTelMovil: $('#utxtTelMovil').val(),
+											txtUsuario:     $('#txtUsuario').val(),
+											txtContrasena:  $('#txtContrasena').val(),
+											txtPerfil:   $('#txtPerfil').val(),
+											txtActivo:   $('#chkActivo').val(),
+											txtSucursal: $('#txtSucursal').val(),
+											txtNombre: $('#txtNombre').val(),
+											txtApePat: $('#txtApePat').val(),
+											txtApeMat: $('#txtApeMat').val(),
+											txtFechaIn: $('#txtFechaIngreso').val(),
+											txtRFC: $('#txtRFC').val(),
+											txtCURP: $('#txtCURP').val(),
+											txtTurno: $('#txtTurno').val(),
+											txtEmail: $('#txtEmail').val(),
+											txtTelFijo: $('#txtTelFijo').val(),
+											txtTelMovil: $('#txtTelMovil').val(),
 											txtCalle: $('#txtCalle').val(),
 											txtNoExt: $('#txtNoExt').val(),
 											txtNoInt: $('#txtNoInt').val(),
 											txtColonia: $('#txtColonia').val(),
+											txtCiudad: $('#txtCiudad').val(),
 											txtEstado: $('#txtEstado').val(),
 											txtCp: $('#txtCp').val()										
 										}
@@ -314,25 +321,26 @@
 											  alert("Usuario modificado existosamente");
 											  $("#formUsuario").dialog("close");
 											  table.row(index).data([	
-												$('#utxtUsuario').val(),
-												$('#utxtContrasena').val(),
-												$('#utxtPerfil').val(),
-												$('#uchkActivo').val(),
-												$('#utxtSucursal').val(),
-												$('#utxtNombre').val(),
-												$('#utxtApePat').val(),
-												$('#utxtApeMat').val(),
-												$('#utxtFechaIngreso').val(),
-												$('#utxtRFC').val(),
-												$('#utxtCURP').val(),
-												$('#utxtTurno').val(),
-												$('#utxtEmail').val(),
-												$('#utxtTelFijo').val(),
-												$('#utxtTelMovil').val(),
+												$('#txtUsuario').val(),
+												$('#txtContrasena').val(),
+												$('#txtPerfil').val(),
+												$('#chkActivo').val(),
+												$('#txtSucursal').val(),
+												$('#txtNombre').val(),
+												$('#txtApePat').val(),
+												$('#txtApeMat').val(),
+												$('#txtFechaIngreso').val(),
+												$('#txtRFC').val(),
+												$('#txtCURP').val(),
+												$('#txtTurno').val(),
+												$('#txtEmail').val(),
+												$('#txtTelFijo').val(),
+												$('#txtTelMovil').val(),
 												$('#txtCalle').val(),
 												$('#txtNoExt').val(),
 												$('#txtNoInt').val(),
 												$('#txtColonia').val(),
+												$('#txtCiudad').val(),
 												$('#txtEstado').val(),
 												$('#txtCp').val()	
 									        ]);	
@@ -342,7 +350,7 @@
 				  }
 				}
 			});
-			$("#formUsuario").dialog("option", "width", 700);
+			$("#formUsuario").dialog("option", "width", 800);
 			$("#formUsuario").dialog("option", "height", 600);
 			
 			/* Formulario de usuario nuevo */
@@ -356,29 +364,30 @@
 						text: "Agregar",
 						id:		"btnAgregarNuevo",
 						click:	function(){
-							if($('#txtUsuario').val().trim()!="" && $('#txtContrasena').val().trim()!="" )
+							if($('#txtUsuarioNuevo').val().trim()!="" && $('#txtContrasenaNuevo').val().trim()!="" )
 							{
 									$.post('usuario.jr',{
 										tarea: 'create',
-										txtUsuario:   $('#txtUsuario').val(),
-										txtContrasena:  $('#txtContrasena').val(),
-										txtPerfil:   $('#txtPerfil').val(),
-										txtActivo:   $('#chkActivo').val(),
-										txtSucursal: $('#txtSucursal').val(),
-										txtNombre: $('#txtNombre').val(),
-										txtApePat: $('#txtApePat').val(),
-										txtApeMat: $('#txtApeMat').val(),
-										txtFechaIn: $('#txtFechaIngreso').val(),
-										txtRFC: $('#txtRFC').val(),
-										txtCURP: $('#txtCURP').val(),
-										txtTurno: $('#txtTurno').val(),
-										txtEmail: $('#txtEmail').val(),
-										txtTelFijo: $('#txtTelFijo').val(),
-										txtTelMovil: $('#txtTelMovil').val(),
+										txtUsuario:   $('#txtUsuarioNuevo').val(),
+										txtContrasena:  $('#txtContrasenaNuevo').val(),
+										txtPerfil:   $('#txtPerfilNuevo').val(),
+										txtActivo:   $('#chkActivoNuevo').val(),
+										txtSucursal: $('#txtSucursalNuevo').val(),
+										txtNombre: $('#txtNombreNuevo').val(),
+										txtApePat: $('#txtApePatNuevo').val(),
+										txtApeMat: $('#txtApeMatNuevo').val(),
+										txtFechaIn: $('#txtFechaIngresoNuevo').val(),
+										txtRFC: $('#txtRFCNuevo').val(),
+										txtCURP: $('#txtCURPNuevo').val(),
+										txtTurno: $('#txtTurnoNuevo').val(),
+										txtEmail: $('#txtEmailNuevo').val(),
+										txtTelFijo: $('#txtTelFijoNuevo').val(),
+										txtTelMovil: $('#txtTelMovilNuevo').val(),
 										txtCalle: $('#txtCalleNuevo').val(),
 										txtNoExt: $('#txtNoExtNuevo').val(),
 										txtNoInt: $('#txtNoIntNuevo').val(),
 										txtColonia: $('#txtColoniaNuevo').val(),
+										txtCiudad: $('#txtCiudadNuevo').val(),
 										txtEstado: $('#txtEstadoNuevo').val(),
 										txtCp: $('#txtCpNuevo').val()										
 									},function(data){
@@ -388,25 +397,26 @@
 											  alert("Usuario agregado existosamente");
 											  $("#formUsuarioNuevo").dialog("close");
 											  table.row(index).data([	
-														$('#txtUsuario').val(),
-														$('#txtContrasena').val(),
-														$('#txtPerfil').val(),
-														$('#chkActivo').val(),
-														$('#txtSucursal').val(),
-														$('#txtNombre').val(),
-														$('#txtApePat').val(),
-														$('#txtApeMat').val(),
-														$('#txtFechaIngreso').val(),
-														$('#txtRFC').val(),
-														$('#txtCURP').val(),
-														$('#txtTurno').val(),
-														$('#txtEmail').val(),
-														$('#txtTelFijo').val(),
-														$('#txtTelMovil').val(),
+														$('#txtUsuarioNuevo').val(),
+														$('#txtContrasenaNuevo').val(),
+														$('#txtPerfilNuevo').val(),
+														$('#chkActivoNuevo').val(),
+														$('#txtSucursalNuevo').val(),
+														$('#txtNombreNuevo').val(),
+														$('#txtApePatNuevo').val(),
+														$('#txtApeMatNuevo').val(),
+														$('#txtFechaIngresoNuevo').val(),
+														$('#txtRFCNuevo').val(),
+														$('#txtCURPNuevo').val(),
+														$('#txtTurnoNuevo').val(),
+														$('#txtEmailNuevo').val(),
+														$('#txtTelFijoNuevo').val(),
+														$('#txtTelMovilNuevo').val(),
 														$('#txtCalleNuevo').val(),
 														$('#txtNoExtNuevo').val(),
 														$('#txtNoIntNuevo').val(),
 														$('#txtColoniaNuevo').val(),
+														$('#txtCiudadNuevo').val(),
 														$('#txtEstadoNuevo').val(),
 														$('#txtCpNuevo').val()	
 													]);	
@@ -422,19 +432,19 @@
 					}
 				}
 			});
-			$("#formUsuarioNuevo").dialog("option", "width", 760);
+			$("#formUsuarioNuevo").dialog("option", "width", 800);
 			$("#formUsuarioNuevo").dialog("option", "height", 650);
 			// cheboxes
 			
 			
-		    $('#uchkActivo').click(function() {
+		    $('#chkActivoNuevo').click(function() {
 		        if (!$(this).is(':checked')) 
 		        {
-		        	$('#uchkActivo').val('0');
+		        	$('#chkActivoNuevo').val('0');
 		        }
 		        else
 		        {
-		        	$('#uchkActivo').val('1');
+		        	$('#chkActivoNuevo').val('1');
 		        }
 		    });
 			
@@ -452,110 +462,6 @@
 			
 			
 			//Tecla enter en todos los campos
-			$("#utxtUsuario").keypress(function(e){
-				if(e.which == 13){
-					$("#utxtContrasena").select();
-				}
-			});
-			$("#utxtContrasena").keypress(function(e){
-				if(e.which == 13){
-					$("#utxtPerfil").select();
-				}
-			});
-			$("#utxtPerfil").keypress(function(e){
-				if(e.which == 13){
-					$("#utxtSucursal").select();
-				}
-			});
-			$("#utxtSucursal").keypress(function(e){
-				if(e.which == 13){
-					$("#utxtNombre").select();
-				}
-			});
-			
-			$("#utxtNombre").keypress(function(e){
-				if(e.which == 13){
-					$("#utxtApePat").select();
-				}
-			});
-			$("#utxtApePat").keypress(function(e){
-				if(e.which == 13){
-					$("#utxtApeMat").select();
-				}
-			});
-			$("#utxtApeMat").keypress(function(e){
-				if(e.which == 13){
-					$("#utxtFechaIngreso").select();
-				}
-			});
-			$("#utxtFechaIngreso").keypress(function(e){
-				if(e.which == 13){
-					$("#utxtRFC").select();
-				}
-			});
-			$("#utxtRFC").keypress(function(e){
-				if(e.which == 13){
-					$("#utxtCURP").select();
-				}
-			});
-			$("#utxtCURP").keypress(function(e){
-				if(e.which == 13){
-					$("#utxtTurno").select();
-				}
-			});
-			$("#utxtTurno").keypress(function(e){
-				if(e.which == 13){
-					$("#utxtEmail").select();
-				}
-			});
-			$("#utxtEmail").keypress(function(e){
-				if(e.which == 13){
-					$("#utxtTelFijo").select();
-				}
-			});
-			$("#utxtTelFijo").keypress(function(e){
-				if(e.which == 13){
-					$("#utxtTelMovil").select();
-				}
-			});
-			$("#utxtTelMovil").keypress(function(e){
-				if(e.which == 13){
-					
-					$("#txtCalle").select();
-				}
-			});
-			$("#txtCalle").keypress(function(e){
-				if(e.which == 13){
-					$("#txtNoExt").select();
-				}
-			});
-			$("#txtNoExt").keypress(function(e){
-				if(e.which == 13){
-					$("#txtNoInt").select();
-				}
-			});
-			$("#txtNoInt").keypress(function(e){
-				if(e.which == 13){
-					$("#txtColonia").select();
-				}
-			});
-			$("#txtColonia").keypress(function(e){
-					if(e.which == 13){
-						$("#txtEstado").select();
-				}
-			});
-			$("#txtEstado").keypress(function(e){
-				if(e.which == 13){
-					$("#txtCp").select();
-				}
-			});
-			$("#txtCp").keypress(function(e){
-				if(e.which == 13){
-					$("#btnActualizar").focus();
-				}
-			});
-			
-			// eventos del segundo formulario
 			$("#txtUsuario").keypress(function(e){
 				if(e.which == 13){
 					$("#txtContrasena").select();
@@ -625,6 +531,115 @@
 			$("#txtTelMovil").keypress(function(e){
 				if(e.which == 13){
 					
+					$("#txtCalle").select();
+				}
+			});
+			$("#txtCalle").keypress(function(e){
+				if(e.which == 13){
+					$("#txtNoExt").select();
+				}
+			});
+			$("#txtNoExt").keypress(function(e){
+				if(e.which == 13){
+					$("#txtNoInt").select();
+				}
+			});
+			$("#txtNoInt").keypress(function(e){
+				if(e.which == 13){
+					$("#txtColonia").select();
+				}
+			});
+			$("#txtColonia").keypress(function(e){
+					if(e.which == 13){
+						$("#txtCiudad").select();
+				}
+			});
+			$("#txtCiudad").keypress(function(e){
+				if(e.which == 13){
+					$("#txtEstado").select();
+			}
+		});
+			$("#txtEstado").keypress(function(e){
+				if(e.which == 13){
+					$("#txtCp").select();
+				}
+			});
+			$("#txtCp").keypress(function(e){
+				if(e.which == 13){
+					$("#btnActualizar").focus();
+				}
+			});
+			
+			// eventos del segundo formulario
+			$("#txtUsuarioNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtContrasenaNuevo").select();
+				}
+			});
+			$("#txtContrasenaNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtPerfilNuevo").select();
+				}
+			});
+			$("#txtPerfilNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtSucursalNuevo").select();
+				}
+			});
+			$("#txtSucursalNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtNombreNuevo").select();
+				}
+			});
+			
+			$("#txtNombreNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtApePatNuevo").select();
+				}
+			});
+			$("#txtApePatNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtApeMatNuevo").select();
+				}
+			});
+			$("#txtApeMatNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtFechaIngresoNuevo").select();
+				}
+			});
+			$("#txtFechaIngresoNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtRFCNuevo").select();
+				}
+			});
+			$("#txtRFCNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtCURPNuevo").select();
+				}
+			});
+			$("#txtCURPNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtTurnoNuevo").select();
+				}
+			});
+			$("#txtTurnoNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtEmailNuevo").select();
+				}
+			});
+			$("#txtEmailNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtTelFijoNuevo").select();
+				}
+			});
+			$("#txtTelFijoNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtTelMovilNuevo").select();
+				}
+			});
+			$("#txtTelMovilNuevo").keypress(function(e){
+				if(e.which == 13){
+					
 					$("#txtCalleNuevo").select();
 				}
 			});
@@ -645,9 +660,14 @@
 			});
 			$("#txtColoniaNuevo").keypress(function(e){
 					if(e.which == 13){
-						$("#txtEstadoNuevo").select();
+						$("#txtCiudadNuevo").select();
 				}
 			});
+			$("#txtCiudadNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtEstadoNuevo").select();
+			}
+		});
 			$("#txtEstadoNuevo").keypress(function(e){
 				if(e.which == 13){
 					$("#txtCpNuevo").select();
@@ -661,7 +681,7 @@
 			
 			
 			$(function() {
-			    $("#utxtFechaIngreso").datepicker();
+			    $("#txtFechaIngresoNuevo").datepicker();
 			});
 			$(function() {
 			    $("#txtFechaIngreso").datepicker();
@@ -694,27 +714,27 @@
 	<fieldset>
 		<legend>Usuario</legend>
 		<ol>
-			<li><label for="usuario">*Usuario: </label><input type="text" id="utxtUsuario" name="usuario" size="20" requiered ><label for="nombre">*Contraseña: </label><input type="text" size="15" id="utxtContrasena" name="contraseña" requiered> </li>
-			<li><label for="perfil">*Perfil: </label><input type="text" size="20" id="utxtPerfil" name="Perfil" requiered><label for="tel">*Usuario Activo:</label><input type="checkbox" id="uchkActivo"name="Activo" value="0"requiered>
-	        <label for="sucursal">*Sucursal: </label><input type="text" size="15" id="utxtSucursal" name="sucursal" value="SIN ASIGNAR" requiered></li>
+			<li><label for="usuario">*Usuario: </label><input type="text" id="txtUsuario" name="usuario" size="20" requiered ><label for="nombre">*Contraseña: </label><input type="text" size="15" id="txtContrasena" name="contraseña" requiered> </li>
+			<li><label for="perfil">*Perfil: </label><input type="text" size="20" id="txtPerfil" name="Perfil" requiered><label for="tel">*Usuario Activo:</label><input type="checkbox" id="chkActivo"name="Activo" value="0"requiered>
+	        <label for="sucursal">*Sucursal: </label><input type="text" size="15" id="txtSucursal" name="sucursal" value="SIN ASIGNAR" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Datos Personales</legend>
 		<ol>
-			<li><label for="persona">Nombre:</label><input type="text" id="utxtNombre" name="Nombre" size="25" requiered><label for="Apellido Paterno">*Apellido Paterno:</label><input type="text" id="utxtApePat" name="Apellido Paterno" size="25" requiered></li>
-			<li><label for="apellidopat">*Apellido Materno:</label><input type="text" id="utxtApeMat" name="apellidopat" size="25" requiered><label for="fechaingreso">*Fecha Ingreso:</label><input type="text" id="utxtFechaIngreso" name="fechaingreso" size="25" value="00-00-0000" requiered></li>
-			<li><label for="rfc">*RFC:</label><input type="text" id="utxtRFC" name="rfc" size="25" value="SIN ASIGNAR" requiered><label for="curp">*CURP:</label><input type="text" id="utxtCURP" name="curp" size="25" value="SIN ASIGNAR" requiered></li>
-			<li><label for="turno">*Turno:</label><input type="text" id="utxtTurno" name="turno" size="25" value="SIN ASIGNAR" requiered><label for="email">*Email:</label><input type="text" id="utxtEmail" name="email" size="25" value="SIN ASIGNAR" requiered></li>
-			<li><label for="telfijo">*Telefono Fijo:</label><input type="text" id="utxtTelFijo" name="telfijo" size="15" value="(000)-000-00-00" requiered><label for="telmovil">*Telefono Móvil:</label><input type="text" id="utxtTelMovil" name="telmovil" size="15" value="00-00-00-00-00"></li>
+			<li><label for="persona">Nombre:</label><input type="text" id="txtNombre" name="Nombre" size="25" requiered><label for="Apellido Paterno">*Apellido Paterno:</label><input type="text" id="txtApePat" name="Apellido Paterno" size="25" requiered></li>
+			<li><label for="apellidopat">*Apellido Materno:</label><input type="text" id="txtApeMat" name="apellidopat" size="25" requiered><label for="fechaingreso">*Fecha Ingreso:</label><input type="text" id="txtFechaIngreso" name="fechaingreso" size="25" value="00-00-0000" requiered></li>
+			<li><label for="rfc">*RFC:</label><input type="text" id="txtRFC" name="rfc" size="25" value="SIN ASIGNAR" requiered><label for="curp">*CURP:</label><input type="text" id="txtCURP" name="curp" size="25" value="SIN ASIGNAR" requiered></li>
+			<li><label for="turno">*Turno:</label><input type="text" id="txtTurno" name="turno" size="25" value="SIN ASIGNAR" requiered><label for="email">*Email:</label><input type="text" id="txtEmail" name="email" size="25" value="SIN ASIGNAR" requiered></li>
+			<li><label for="telfijo">*Telefono Fijo:</label><input type="text" id="txtTelFijo" name="telfijo" size="15" value="(000)-000-00-00" requiered><label for="telmovil">*Telefono Móvil:</label><input type="text" id="txtTelMovil" name="telmovil" size="15" value="00-00-00-00-00"></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Direccion</legend>
 		<ol>
-			<li><label for="calle">*Calle: </label><input type="text" id="txtCalle" name="txtCalleNuevo" value="SIN ASIGNAR" requiered><label for="noExt">*Num.Ext.: </label><input type="text" id="txtNoExt" name="txtNoExtNuevo" size="5" value="00" requiered><label for="noInt">*Num.Int.: </label><input type="text" id="txtNoInt" name="txtNoIntNuevo" size="5" value="00" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColonia" name="txtColoniaNuevo" value="SIN ASIGNAR" requiered><label for="estado">*Estado: </label><input type="text" id="txtEstado" name="txtEstadoNuevo" size="15" value="SIN ASIGNAR" requiered><li>
-			<li><label for="cp">*C.P: </label><input type="text" id="txtCp" name="txtCp" size="5" value="00000" requiered></li>
+			<li><label for="calle">*Calle: </label><input type="text" id="txtCalle" name="txtCalle" value="SIN ASIGNAR" requiered><label for="noExt">*Num.Ext.: </label><input type="text" id="txtNoExt" name="txtNoExt" size="5" value="00" requiered><label for="noInt">*Num.Int.: </label><input type="text" id="txtNoInt" name="txtNoInt" size="5" value="00" requiered><li>
+			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColonia" name="txtColonia" value="SIN ASIGNAR" requiered><label for="ciudad">*Ciudad: </label><input type="text" id="txtCiudad" name="txtCiudad" size="15" value="SIN ASIGNAR" requiered><li>
+			<li><label for="estado">*Estado: </label><input type="text" id="txtEstado" name="txtEstado" size="15" value="SIN ASIGNAR" requiered><label for="cp">*C.P: </label><input type="text" id="txtCp" name="txtCp" size="5" value="00000" requiered></li>
 		</ol>
 	</fieldset>
 	</form>
@@ -725,27 +745,27 @@
 	<fieldset>
 		<legend>Usuario</legend>
 		<ol>
-			<li><label for="usuario">*Usuario: </label><input type="text" id="txtUsuario" name="usuario" size="20" requiered autofocus><label for="contrasena">*Contraseña: </label><input type="text" size="15" id="txtContrasena" name="contrasena" requiered> </li>
-			<li><label for="perfil">*Perfil: </label><input type="text" size="20" id="txtPerfil" name="Perfil" requiered><label for="tel">*Usuario Activo:</label><input type="checkbox" id="chkActivo"name="Activo" value="0" requiered>
-			<label for="sucursal">*Sucursal: </label><input type="text" size="15" id="txtSucursal" name="sucursal" value="SIN ASIGNAR" requiered></li>
+			<li><label for="usuario">*Usuario: </label><input type="text" id="txtUsuarioNuevo" name="usuario" size="20" requiered autofocus><label for="contrasena">*Contraseña: </label><input type="text" size="15" id="txtContrasenaNuevo" name="contrasena" requiered> </li>
+			<li><label for="perfil">*Perfil: </label><input type="text" size="20" id="txtPerfilNuevo" name="Perfil" requiered><label for="tel">*Usuario Activo:</label><input type="checkbox" id="chkActivoNuevo" name="Activo" value="0" requiered>
+			<label for="sucursal">*Sucursal: </label><input type="text" size="15" id="txtSucursalNuevo" name="sucursal" value="SIN ASIGNAR" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Datos Personales</legend>
 		<ol>
-			<li><label for="persona">Nombre:</label><input type="text" id="txtNombre" name="Nombre" size="25" requiered><label for="diasCredito">*Apellido Paterno:</label><input type="text" id="txtApePat" name="Apellido Paterno" size="25" requiered></li>
-			<li><label for="apellidopat">*Apellido Materno:</label><input type="text" id="txtApeMat" name="apellidopat" size="25" requiered><label for="fechaingreso">*Fecha Ingreso:</label><input type="text" id="txtFechaIngreso" name="fechaingreso" size="25" value="00-00-0000" requiered></li>
-			<li><label for="rfc">*RFC:</label><input type="text" id="txtRFC" name="rfc" size="25" value="SIN ASIGNAR" requiered><label for="curp">*CURP:</label><input type="text" id="txtCURP" name="curp" size="25" value="SIN ASIGNAR" requiered></li>
-			<li><label for="turno">*Turno:</label><input type="text" id="txtTurno" name="turno" size="25" value="SIN ASIGNAR" requiered><label for="email">*Email:</label><input type="text" id="txtEmail" name="email" size="25" value="SIN ASIGNAR" requiered></li>
-			<li><label for="telfijo">*Telefono Fijo:</label><input type="text" id="txtTelFijo" name="telfijo" size="15" value="(000)-000-00-00" requiered><label for="telmovil">*Telefono Móvil:</label><input type="text" id="txtTelMovil" name="telmovil" size="15" value="00-00-00-00-00" requiered></li>
+			<li><label for="nombre">Nombre:</label><input type="text" id="txtNombreNuevo" name="Nombre" size="25" requiered><label for="apellidoPat">*Apellido Paterno:</label><input type="text" id="txtApePatNuevo" name="Apellido Paterno" size="25" requiered></li>
+			<li><label for="apellidoMat">*Apellido Materno:</label><input type="text" id="txtApeMatNuevo" name="apellidoMat" size="25" requiered><label for="fechaingreso">*Fecha Ingreso:</label><input type="text" id="txtFechaIngresoNuevo" name="fechaingreso" size="25" value="00-00-0000" requiered></li>
+			<li><label for="rfc">*RFC:</label><input type="text" id="txtRFCNuevo" name="rfc" size="25" value="SIN ASIGNAR" requiered><label for="curp">*CURP:</label><input type="text" id="txtCURPNuevo" name="curp" size="25" value="SIN ASIGNAR" requiered></li>
+			<li><label for="turno">*Turno:</label><input type="text" id="txtTurnoNuevo" name="turno" size="25" value="SIN ASIGNAR" requiered><label for="email">*Email:</label><input type="text" id="txtEmailNuevo" name="email" size="25" value="SIN ASIGNAR" requiered></li>
+			<li><label for="telfijo">*Telefono Fijo:</label><input type="text" id="txtTelFijoNuevo" name="telfijo" size="15" value="(000)-000-00-00" requiered><label for="telmovil">*Telefono Móvil:</label><input type="text" id="txtTelMovilNuevo" name="telmovil" size="15" value="00-00-00-00-00" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Direccion</legend>
 		<ol>
 			<li><label for="calle">*Calle: </label><input type="text" id="txtCalleNuevo" name="txtCalleNuevo" value="SIN ASIGNAR" requiered><label for="noExt">*Num.Ext.: </label><input type="text" id="txtNoExtNuevo" name="txtNoExtNuevo" size="5" value="00" requiered><label for="noInt">*Num.Int.: </label><input type="text" id="txtNoIntNuevo" name="txtNoIntNuevo" size="5" value="00" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColoniaNuevo" name="txtColoniaNuevo" value="SIN ASIGNAR" requiered><label for="estado">*Estado: </label><input type="text" id="txtEstadoNuevo" name="txtEstadoNuevo" size="15" value="SIN ASIGNAR" requiered><li>
-			<li><label for="cp">*C.P: </label><input type="text" id="txtCpNuevo" name="txtCpNuevo" size="5" value="00000" requiered></li>
+			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColoniaNuevo" name="txtColoniaNuevo" value="SIN ASIGNAR" requiered><label for="ciudad">*Ciudad: </label><input type="text" id="txtCiudadNuevo" name="txtCiudadNuevo" size="15" value="SIN ASIGNAR" requiered><li>
+			<li><label for="estado">*Estado: </label><input type="text" id="txtEstadoNuevo" name="txtEstadoNuevo" size="15" value="SIN ASIGNAR" requiered><label for="cp">*C.P: </label><input type="text" id="txtCpNuevo" name="txtCpNuevo" size="5" value="00000" requiered></li>
 		</ol>
 	</fieldset>
 	</form>
@@ -786,56 +806,58 @@
 				<button id="btnAgregar">Agregar</button>
 				<button id="btnExcel">Excel</button>
 			</div>
-			<table id="search" class="display"cellspacing="0" width="1024px">
+			<table id="search" class="display"cellspacing="0" width="1280px">
 				
 				<thead>
 					<tr>
-						<th style="width: 10%">Usuario</th>
-						<th style="width: 10%">Contraseña</th>
+						<th style="width: 5%">Usuario</th>
+						<th style="width: 5%">Contraseña</th>
 						<th style="width: 5%">Perfil</th>
-						<th style="width: 5%">Activo</th>
-						<th style="width: 10%">Sucursal</th>
+						<th style="width: 2%">Activo</th>
+						<th style="width: 5%">Sucursal</th>
 						<th style="width: 10%">Nombre</th>
 						<th style="width: 10%">Apellido Paterno</th>
 						<th style="width: 10%">Apellido Materno</th>
 						<th style="width: 3%">Ingreso</th>
-						<th style="width: 20%">RFC</th>
-						<th style="width: 20%">CURP</th>
+						<th style="width: 10%">RFC</th>
+						<th style="width: 10%">CURP</th>
 						<th style="width: 7%">Turno</th>
 						<th style="width: 7%">Email</th>
-						<th style="width: 15%">Telefono Fijo</th>
-						<th style="width: 15%">Telefono Movil.</th>
-						<th style="width: 20%">Calle</th>
-						<th style="width: 3%">No.Int.</th>
+						<th style="width: 5%">Telefono Fijo</th>
+						<th style="width: 5%">Telefono Movil.</th>
+						<th style="width: 10%">Calle</th>
 						<th style="width: 3%">No.Ext.</th>
+						<th style="width: 3%">No.Int.</th>
 						<th style="width: 10%">Colonia</th>
+						<th style="width: 10%">Ciudad</th>
 						<th style="width: 5%">Estado</th>
 						<th style="width: 5%">CP</th>
 				    </tr>								
 				</thead>
 				<thead>	
 				<tr>
-						<th><input class="boxinit" style="width: 60px" type="text" placeholder="Usuario" /></th>
-						<th><input class="boxinit" style="width: 60px" type="text" placeholder="Contraseña" /></th>
-						<th><input class="boxinit" style="width: 60px" type="text" placeholder="Perfil" /></th>
-						<th></th>
-						<th></th>
-						<th><input class="boxinit" style="width: 70px" type="text" placeholder="Nombre" /></th>
-						<th><input class="boxinit" style="width: 70px" type="text" placeholder="ApePat" /></th>
-						<th><input class="boxinit" style="width: 70px" type="text" placeholder="ApeMat" /></th>
-						<th><input class="boxinit" style="width: 60px" type="text" placeholder="Ingreso" /></th>
-						<th></th>
-						<th></th>
-						<th><input class="boxinit" style="width: 60px" type="text" placeholder="Turno" /></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>					
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="Usuario" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="Contraseña" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="Perfil" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="Activo" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="Sucursal" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="Nombre" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="ApePat" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="ApeMat" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="Ingreso" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="RFC" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="CURP" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="Turno" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="Email" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="TelFijo" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="TelMovil" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="Calle" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="No.Ext." /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="No.Int." /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="Colonia" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="Ciudad" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="Estado" /></th>
+						<th><input class="boxinit" style="width: 30px" type="text" placeholder="CP" /></th>					
 					</tr>
 				</thead>
 				<tbody>

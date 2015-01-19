@@ -48,14 +48,14 @@ public class UsuarioController extends HttpServlet{
 			String fechaingreso =request.getParameter("txtFechaIn").trim();
 			String rfc =  request.getParameter("txtRFC").trim().toUpperCase();
 			String curp = request.getParameter("txtCURP").trim().toUpperCase();
-			String turno = request.getParameter("txtTurno").trim();
+			String turno = request.getParameter("txtTurno").trim().toUpperCase();
 			String email = request.getParameter("txtEmail").trim();
 			String telfijo = request.getParameter("txtTelFijo").trim();
 			String telmovil = request.getParameter("txtTelMovil").trim();
 			// Direccion
 			String calle =   request.getParameter("txtCalle").trim().toUpperCase();
-			String noext = request.getParameter("txtNoExt").trim();
-			String noint = request.getParameter("txtNoInt").trim();
+			String noext = request.getParameter("txtNoExt").trim().toUpperCase();
+			String noint = request.getParameter("txtNoInt").trim().toUpperCase();
 			String colonia = request.getParameter("txtColonia").trim().toUpperCase();
 			String ciudad = request.getParameter("txtCiudad").trim().toUpperCase();
 			String estado = request.getParameter("txtEstado").trim().toUpperCase();
@@ -129,14 +129,14 @@ public class UsuarioController extends HttpServlet{
 			String fechaingreso =request.getParameter("txtFechaIn").trim();
 			String rfc =  request.getParameter("txtRFC").trim().toUpperCase();
 			String curp = request.getParameter("txtCURP").trim().toUpperCase();
-			String turno = request.getParameter("txtTurno").trim();
+			String turno = request.getParameter("txtTurno").trim().toUpperCase();
 			String email = request.getParameter("txtEmail").trim();
 			String telfijo = request.getParameter("txtTelFijo").trim();
 			String telmovil = request.getParameter("txtTelMovil").trim();
 			// Direccion
 			String calle =   request.getParameter("txtCalle").trim().toUpperCase();
-			String noext = request.getParameter("txtNoExt").trim();
-			String noint = request.getParameter("txtNoInt").trim();
+			String noext = request.getParameter("txtNoExt").trim().toUpperCase();
+			String noint = request.getParameter("txtNoInt").trim().toUpperCase();
 			String colonia = request.getParameter("txtColonia").trim().toUpperCase();
 			String ciudad = request.getParameter("txtCiudad").trim().toUpperCase();
 			String estado = request.getParameter("txtEstado").trim().toUpperCase();

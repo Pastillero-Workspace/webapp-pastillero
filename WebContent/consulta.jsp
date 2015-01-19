@@ -49,18 +49,15 @@
 		$(document).ready(function() 
 		{			
 		    // Algoritmo de filtrado
-			$("#search thead input").on( 'keypress changed', function (e) 
-			{  
+			$("#search thead input").on( 'keypress changed', function (e){  
 					 table
 					.column( $(this).parent().index()+':visible' )
 					.search(this.value)
-					.draw();
-				    //alert("valor" + $(this).parent().index());					
-                  
-		});
+					.draw();				                  
+			});			
 			
 		// botones adicionales para limpiar campos de textos
-		$('<input type="button" id="refresh" style="width: 25%" value="Limpiar datos"/>').appendTo('div.dataTables_filter');
+		/*$('<input type="button" id="refresh" style="width: 25%" value="Limpiar datos"/>').appendTo('div.dataTables_filter');
 			$('#refresh').click(function(e) 
 				{					
 					var elem = document.getElementsByClassName("boxinit");
@@ -74,7 +71,7 @@
 									elem[i].focus();									
 								}
 							}					     			
-				});	
+				});*/	
 		});
 		
 		/*Salir*/
@@ -95,14 +92,25 @@
 	    	var table = $('#search').DataTable( {
 				//data:           data,
 				//deferRender:    true,
-				dom:            "frtiS",
-				//dom:			"rtiS",
-				scrollY:        500,
+	    		dom : "rtiS",
 				"stateSave" : true,
-				"bSort": false,
-				scrollCollapse: true,
-				pagingType: "full_numbers"
+			    "bSort": false,
+				scrollY : 900,
+				scrollX : 1400,
+				scrollCollapse : true
 			} );
+	    	
+	    	// datatable configuration
+		    $('#search tbody').on( 'click', 'tr', function () {
+		        if ( $(this).hasClass('selected') ) {
+		            $(this).removeClass('selected');
+		        }
+		        else {
+		            table.$('tr.selected').removeClass('selected');
+		            $(this).addClass('selected');
+		        }
+		    });	
+	    	
 	    	$('#txtCodigo').keypress(function(event) {
 				if (event.which == 13) {
 					 //buscar($('#txtCodigo').val(),$('#txtDescripcion').val());
@@ -135,7 +143,7 @@
 			        dataType: 'json',
 			        data://txtcodigo+':'+txtdescripcion,
 			        	{
-			        	workout:'consulta',
+			        	workout:'producto',
 			        	txtCodigo: txtcodigo,
 			        	txtDescripcion: txtdescripcion
 			        	},
@@ -147,10 +155,13 @@
 						  table.clear().draw();
 						  
 						  $.each(listaConsulta, function(i, producto){
-							  table.row.add([producto[1],producto[2],producto[3],producto[4]
-							  			,producto[5],producto[6],producto[7],producto[8]
-							  			,producto[9],producto[10],producto[11],producto[12]
-							  			,producto[13]]);
+							  table.row.add([
+							             producto[0],producto[1],producto[2],producto[3],producto[4],producto[5],producto[6],producto[7],producto[8],
+							             producto[9],producto[10],producto[11],producto[12],producto[13],producto[14],producto[15],producto[16],producto[17],
+							             producto[18],producto[19],producto[20],producto[21],producto[22],producto[23],producto[24],producto[25],producto[26],
+							             producto[27],producto[28],producto[29],producto[30],producto[31],producto[32],producto[33],producto[34],producto[35],
+							             producto[36],producto[37],producto[38],producto[39],producto[40]
+							  ]);
 						  });
 						  table.draw();
 						  $.unblockUI();
@@ -209,24 +220,96 @@
 				</form>
 				
 			</div>
-			<table id="search" class="display" cellspacing="0" width="1024px">
+			<table id="search" class="display" cellspacing="0" width="1400px">
 				<thead>	
 					<tr>
-						<th style="width: 10%">Codigo</th>
-						<th style="width: 2%">EXST</th>
-						<th style="width: 28%">Descripcion</th>
-						<th style="width: 10%">FAM</th>
-						<th style="width: 12%">LAB</th>
-						<th style="width: 4%">CLS</th>
-						<th style="width: 4%">SSA</th>
-						<th style="width: 2%">IVA</th>
-						<th style="width: 2%" >IEPS</th>
-						<th style="width: 4%" >CAT</th>
-						<th style="width: 4%" >PAR</th>
-						<th style="width: 8%">PRECP</th>
-						<th >PRECD</th>
-				    </tr>	
-				   					
+						<th style="width: 10%">Proveedor</th>
+						<th style="width: 20%">Clave</th>
+						<th style="width: 20%">Codigo</th>
+						<th style="width: 50%">Descripcion</th>
+						<th style="width: 5%">Existencias</th>
+						<th style="width: 10%">Familia</th>
+						<th style="width: 5%">Precio Pub</th>
+						<th style="width: 5%">Precio Desc</th>
+						<th style="width: 5%">Precio Farm</th>
+						<th style="width: 5%" >IVA</th>
+						<th style="width: 5%" >Linea</th>
+						<th style="width: 5%" >Referencia</th>
+						<th style="width: 5%">SSA</th>
+						<th style="width: 20%">Laboratorio</th>
+						<th style="width: 7%">Departamento</th>
+						<th style="width: 5%">Categoria</th>
+						<th style="width: 5%">Actualizable</th>
+						<th style="width: 5%">Descuento</th>
+						<th style="width: 10%">Costo</th>
+						<th style="width: 7%">Equivalencia</th>
+						<th style="width: 7%">Superfamilia</th>
+						<th style="width: 7%">CLS</th>
+						<th style="width: 5%">Zona</th>
+						<th style="width: 5%">Pareto</th>
+						<th style="width: 5%">IEPS</th>
+						<th style="width: 5%">IEPS2</th>
+						<th style="width: 10%">Limitado</th>
+						<th style="width: 10%">Kit</th>
+						<th style="width: 5%">Comision</th>
+						<th style="width: 7%">Max Descuento</th>
+						<th style="width: 5%">Grupo</th>
+						<th style="width: 5%">Descuento Base</th>
+						<th style="width: 5%">Politica Ofer</th>
+						<th style="width: 5%">Antibiotico</th>
+						<th style="width: 5%">Especial</th>
+						<th style="width: 5%">Fam Actualizar</th>
+						<th style="width: 5%">Com Inmediata</th>
+						<th style="width: 10%">U. Proveedor</th>
+						<th style="width: 10%">U. Costo</th>
+						<th style="width: 10%">Costo Promedio</th>
+						<th style="width: 10%">Costo Real</th>
+				    </tr>								
+				</thead>	
+				<thead>	
+					<tr>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+						<th></th>
+					</tr>				
 				</thead>
 				<tbody>
 				</tbody>

@@ -47,18 +47,18 @@ public class CfgController extends HttpServlet {
 		 
 		sucursal.setIdSistema(1);
 		sucursal.setRazonSocial(request.getParameter("name_rs").trim().toUpperCase());
-		sucursal.setRfc(request.getParameter("rfc").trim());
-		sucursal.setSucursal(request.getParameter("sucursal").trim());
-		sucursal.setCalle(request.getParameter("street_data").trim());
-		sucursal.setColonia(request.getParameter("place_data").trim());
-		sucursal.setNumeroExt(request.getParameter("numext_data").trim());
-		sucursal.setNumeroInt(request.getParameter("numint_data").trim());
-		sucursal.setMunicipio(request.getParameter("mtown_data").trim());
-		sucursal.setEstado(request.getParameter("state_data").trim());
-		sucursal.setCp(request.getParameter("cp_data").trim());
-		sucursal.setTelefono(request.getParameter("tel_data").trim());
-		sucursal.setEmail(request.getParameter("email_data").trim());
-		sucursal.setWeb(request.getParameter("web_data").trim());
+		sucursal.setRfc(request.getParameter("rfc").trim().toUpperCase());
+		sucursal.setSucursal(request.getParameter("sucursal").trim().toUpperCase());
+		sucursal.setCalle(request.getParameter("street_data").trim().toUpperCase());
+		sucursal.setColonia(request.getParameter("place_data").trim().toUpperCase());
+		sucursal.setNumeroExt(request.getParameter("numext_data").trim().toUpperCase());
+		sucursal.setNumeroInt(request.getParameter("numint_data").trim().toUpperCase());
+		sucursal.setMunicipio(request.getParameter("mtown_data").trim().toUpperCase());
+		sucursal.setEstado(request.getParameter("state_data").trim().toUpperCase());
+		sucursal.setCp(request.getParameter("cp_data").trim().toUpperCase());
+		sucursal.setTelefono(request.getParameter("tel_data").trim().toUpperCase());
+		sucursal.setEmail(request.getParameter("email_data").trim().toUpperCase());
+		sucursal.setWeb(request.getParameter("web_data").trim().toUpperCase());
 		
 		
 		System.out.println(sucursal.toString());

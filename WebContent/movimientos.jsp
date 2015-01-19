@@ -129,6 +129,7 @@
 					}, function(f){
 					});
 					window.open("reporte.jsp", "Impresion", "height=600,width=400");
+					console.log("tipo: "+t[205].Movimiento+" Folio: "+t[205].Folio);
 	        	});
 	        	
 	    });

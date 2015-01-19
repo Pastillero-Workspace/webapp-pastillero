@@ -12,6 +12,7 @@
          <generator class="native"/>
       </id>
       <property name="nombre" column="nombre" type="string"/>
+      <property name="razonSocial" column="razon_social" type="string" />
       <property name="email" column="email" type="string"/>
       <property name="fax" column="fax" type="string"/>
       <property name="rfc" column="RFC" type="string"/>

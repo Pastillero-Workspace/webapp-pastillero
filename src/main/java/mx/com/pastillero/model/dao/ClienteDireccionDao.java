@@ -74,6 +74,7 @@ public class ClienteDireccionDao extends GenericoDAO{
 	}
 	
 	public boolean guardarCliente(Cliente c){
+		logger.info("Guardando Cliente Nuevo...");
 		boolean resultado = true;
 		Session session = null;
 		Transaction tx = null;
@@ -82,9 +83,10 @@ public class ClienteDireccionDao extends GenericoDAO{
 			tx = session.beginTransaction();
 			session.save(c);
 			tx.commit();
+			logger.info("Cliente Guardado con Exito!");
 		}catch(Exception ex){
 			resultado = false;
-			System.out.println("Error al guardar Cliente");
+			logger.info("Error al Guardar Cliente.");
 			ex.printStackTrace();
 			tx.rollback();
 		}finally{
@@ -99,6 +101,7 @@ public class ClienteDireccionDao extends GenericoDAO{
 		return resultado;
 	}
 	public boolean actualizarCliente(Cliente c, Direccion d){
+		logger.info("Actualizando Cliente...");
 		boolean resultado = true;
 		Session session = null;
 		Transaction tx = null;
@@ -117,7 +120,7 @@ public class ClienteDireccionDao extends GenericoDAO{
 			cliente.setSaldo(c.getSaldo());
 			cliente.setDescuentoExtra(c.getDescuentoExtra());
 			cliente.setVentaMensual(c.getVentaMensual());
-						
+			cliente.setInsen(c.getInsen());			
 			session.update(cliente);
 			
 			Direccion direccion = (Direccion) session.get(Direccion.class, d.getIdDireccion());
@@ -132,9 +135,10 @@ public class ClienteDireccionDao extends GenericoDAO{
 			session.update(direccion);
 			
 			tx.commit();
+			logger.info("Cliente Actualizado con Exito!");
 		}catch(Exception ex){
 			resultado = false;
-			System.out.println("Error al actualizar");
+			logger.info("Error al Actualizar Cliente.");
 			ex.printStackTrace();
 			tx.rollback();			
 		}
@@ -151,6 +155,7 @@ public class ClienteDireccionDao extends GenericoDAO{
 	}
 	
 	public boolean eliminarCliente(int idCliente){
+		logger.info("Eliminando Cliente...");
 		boolean resultado = true;
 		Session session =null;
 		Transaction tx= null;
@@ -160,9 +165,10 @@ public class ClienteDireccionDao extends GenericoDAO{
 			Cliente cliente = (Cliente) session.get(Cliente.class, idCliente);
 			session.delete(cliente);
 			tx.commit();
+			logger.info("Cliente Eliminado con Exito!");
 		}catch(Exception ex){
 			resultado = false;
-			System.out.println("Error al eliminar proveedor");
+			logger.info("Error al Eliminar Cliente.");
 			ex.printStackTrace();
 			tx.rollback();
 		}

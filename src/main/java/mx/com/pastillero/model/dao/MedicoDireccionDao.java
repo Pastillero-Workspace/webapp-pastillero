@@ -106,8 +106,7 @@ public class MedicoDireccionDao extends GenericoDAO{
 			medico.setTelMovil(m.getTelMovil());
 			medico.setEmail(m.getEmail());
 			session.update(medico);
-			Direccion direccion = (Direccion) session.get(Direccion.class,
-					d.getIdDireccion());
+			Direccion direccion = (Direccion) session.get(Direccion.class, d.getIdDireccion());
 			direccion.setCalle(d.getCalle());
 			direccion.setNoInt(d.getNoInt());
 			direccion.setNoExt(d.getNoExt());

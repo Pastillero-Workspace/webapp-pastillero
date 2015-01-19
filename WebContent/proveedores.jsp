@@ -72,15 +72,17 @@
 			   	            '<%=datos.get(i)[3]%>',
 			   	            '<%=datos.get(i)[4]%>',
 			   	            '<%=datos.get(i)[5]%>',		   	               
-			   	            '<%=datos.get(i)[7]%>',
+			   	            '<%=datos.get(i)[6]%>',
 			   	            '<%=datos.get(i)[8]%>',
 			   	            '<%=datos.get(i)[9]%>',
 			   	            '<%=datos.get(i)[10]%>',
-			   	            '<%=datos.get(i)[12]%>',
-					        '<%=datos.get(i)[11]%>',
+			   	            '<%=datos.get(i)[11]%>',
+					        '<%=datos.get(i)[12]%>',
 					        '<%=datos.get(i)[13]%>',
 					        '<%=datos.get(i)[14]%>',
-					        '<%=datos.get(i)[15]%>'];
+					        '<%=datos.get(i)[15]%>',
+					        '<%=datos.get(i)[16]%>',
+					        '<%=datos.get(i)[17]%>'];
 		<%}%>	
 	         
 			// Se establece el control de datos al destino
@@ -186,42 +188,48 @@
 								nombreRespaldo = value;
 							}
 							if(date==1){
-								$("#txtEmail").val(value);
+								$("#txtRazonSocial").val(value);
 							}
 							if(date==2){
-								$("#txtFax").val(value);
+								$("#txtEmail").val(value);
 							}
 							if(date==3){
-								$("#txtRfc").val(value);
+								$("#txtFax").val(value);
 							}
 							if(date==4){
-								$("#txtDiasCredito").val(value);
+								$("#txtRfc").val(value);
 							}
 							if(date==5){
-								$("#txtDescGeneral").val(value);
+								$("#txtDiasCredito").val(value);
 							}
 							if(date==6){
-								$("#txtDesc2").val(value);
+								$("#txtDescGeneral").val(value);
 							}
 							if(date==7){
-								$("#txtDesc3").val(value);
+								$("#txtDesc2").val(value);
 							}
 							if(date==8){
-								$("#txtCalle").val(value);
+								$("#txtDesc3").val(value);
 							}
 							if(date==9){
-								$("#txtNoExt").val(value);
+								$("#txtCalle").val(value);
 							}
 							if(date==10){
-								$("#txtNoInt").val(value);
+								$("#txtNoExt").val(value);
 							}
 							if(date==11){
-								$("#txtColonia").val(value);
+								$("#txtNoInt").val(value);
 							}
 							if(date==12){
-								$("#txtEstado").val(value);
+								$("#txtColonia").val(value);
 							}
 							if(date==13){
+								$("#txtCiudad").val(value);
+							}
+							if(date==14){
+								$("#txtEstado").val(value);
+							}
+							if(date==15){
 								$("#txtCp").val(value);
 							}
 							
@@ -244,15 +252,16 @@
 						text: "Actualizar",
 						id:		"btnActualizar",
 						click:	function(){
-							if($('#txtNombre').val().trim()!=""&&$('#txtEmail').val().trim()!=""&&$('#txtFax').val().trim()!=""&&
+							if($('#txtNombre').val().trim()!=""&&$('#txtRazonSocial').val().trim()!=""&&$('#txtEmail').val().trim()!=""&&$('#txtFax').val().trim()!=""&&
 									$('#txtRfc').val().trim()!=""&&$('#txtDiasCredito').val().trim()!=""&&$('#txtCalle').val().trim()!=""&&
 									$('#txtNoInt').val().trim()!=""&&$('#txtNoExt').val().trim()!=""&&$('#txtColonia').val().trim()!=""&&
-									$('#txtEstado').val().trim()!=""&&$('#txtCp').val().trim()!=""&&$('#txtDescGeneral').val().trim()!=""&&
-									$('#txtDesc2').val().trim()!=""&&$('#txtDesc3').val().trim()!=""){
+									$('#txtCiudad').val().trim()!=""&&$('#txtEstado').val().trim()!=""&&$('#txtCp').val().trim()!=""&&
+									$('#txtDescGeneral').val().trim()!=""&&$('#txtDesc2').val().trim()!=""&&$('#txtDesc3').val().trim()!=""){
 									$.post('proveedor.jr',{
 										tarea: 'actualizar',
 										nombreRespaldo: nombreRespaldo,
 										txtNombre: $('#txtNombre').val(),
+										txtRazonSocial: $('#txtRazonSocial').val(),
 										txtEmail: $('#txtEmail').val(),
 										txtFax: $('#txtFax').val(),
 										txtRfc: $('#txtRfc').val(),
@@ -261,6 +270,7 @@
 										txtNoInt: $('#txtNoInt').val(),
 										txtNoExt: $('#txtNoExt').val(),
 										txtColonia: $('#txtColonia').val(),
+										txtCiudad: $('#txtCiudad').val(),
 										txtEstado: $('#txtEstado').val(),
 										txtCp: $('#txtCp').val(),
 										txtDescGeneral: $('#txtDescGeneral').val(),
@@ -274,6 +284,7 @@
 									table.row(index).data([
 											            
 										$('#txtNombre').val(),
+										$('#txtRazonSocial').val(),
 										$('#txtEmail').val(),
 										$('#txtFax').val(),						
 										$('#txtRfc').val(),
@@ -285,25 +296,28 @@
 										$('#txtNoExt').val(),
 										$('#txtNoInt').val(),						
 										$('#txtColonia').val(),
+										$('#txtCiudad').val(),
 										$('#txtEstado').val(),
 										$('#txtCp').val()
 									]);
 									
 									$(this).dialog("close");
 									$('#txtNombre').val('');
-									$('#txtEmail').val('');
-									$('#txtFax').val('');
-									$('#txtRfc').val('');
-									$('#txtDiasCredito').val('');
-									$('#txtCalle').val('');
-									$('#txtNoInt').val('');
-									$('#txtNoExt').val('');
-									$('#txtColonia').val('');
-									$('#txtEstado').val('');
-									$('#txtCp').val('');
-									$('#txtDescGeneral').val('');
-									$('#txtDesc2').val('');
-									$('#txtDesc3').val('');
+									$('#txtRazonSocial').val('SIN ASIGNAR'),
+									$('#txtEmail').val('SIN ASIGNAR');
+									$('#txtFax').val('000 00 00 00');
+									$('#txtRfc').val('SIN ASIGNAR');
+									$('#txtDiasCredito').val('0');
+									$('#txtCalle').val('SIN ASIGNAR');
+									$('#txtNoInt').val('0');
+									$('#txtNoExt').val('0');
+									$('#txtColonia').val('SIN ASIGNAR');
+									$('#txtCiudad').val('SIN ASIGNAR');
+									$('#txtEstado').val('SIN ASIGNAR');
+									$('#txtCp').val('00000');
+									$('#txtDescGeneral').val('0');
+									$('#txtDesc2').val('0');
+									$('#txtDesc3').val('0');
 									
 								}else{
 									window.alert("No puede dejar campos vacios");
@@ -328,14 +342,15 @@
 						text: "Agregar",
 						id:		"btnAgregarNuevo",
 						click:	function(){
-							if($('#txtNombreNuevo').val().trim()!=""&&$('#txtEmailNuevo').val().trim()!=""&&$('#txtFaxNuevo').val().trim()!=""&&
+							if($('#txtNombreNuevo').val().trim()!=""&&$('#txtRazonSocialNuevo').val().trim()!=""&&$('#txtEmailNuevo').val().trim()!=""&&$('#txtFaxNuevo').val().trim()!=""&&
 									$('#txtRfcNuevo').val().trim()!=""&&$('#txtDiasCreditoNuevo').val().trim()!=""&&$('#txtCalleNuevo').val().trim()!=""&&
 									$('#txtNoIntNuevo').val().trim()!=""&&$('#txtNoExtNuevo').val().trim()!=""&&$('#txtColoniaNuevo').val().trim()!=""&&
-									$('#txtEstadoNuevo').val().trim()!=""&&$('#txtCpNuevo').val().trim()!=""&&$('#txtDescGeneralNuevo').val().trim()!=""&&
-									$('#txtDesc2Nuevo').val().trim()!=""&&$('#txtDesc3Nuevo').val().trim()!=""){
+									$('#txtCiudadNuevo').val().trim()!=""&&$('#txtEstadoNuevo').val().trim()!=""&&$('#txtCpNuevo').val().trim()!=""&&
+									$('#txtDescGeneralNuevo').val().trim()!=""&&$('#txtDesc2Nuevo').val().trim()!=""&&$('#txtDesc3Nuevo').val().trim()!=""){
 									$.post('proveedor.jr',{
 										tarea: 'agregar',
 										txtNombre: $('#txtNombreNuevo').val(),
+										txtRazonSocial: $('#txtRazonSocialNuevo').val(),
 										txtEmail: $('#txtEmailNuevo').val(),
 										txtFax: $('#txtFaxNuevo').val(),
 										txtRfc: $('#txtRfcNuevo').val(),
@@ -344,6 +359,7 @@
 										txtNoInt: $('#txtNoIntNuevo').val(),
 										txtNoExt: $('#txtNoExtNuevo').val(),
 										txtColonia: $('#txtColoniaNuevo').val(),
+										txtCiudad: $('#txtCiudadNuevo').val(),
 										txtEstado: $('#txtEstadoNuevo').val(),
 										txtCp: $('#txtCpNuevo').val(),
 										txtDescGeneral: $('#txtDescGeneralNuevo').val(),
@@ -357,6 +373,7 @@
 									table.row.add([
 											            
 										$('#txtNombreNuevo').val(),
+										$('#txtRazonSocialNuevo').val(),
 										$('#txtEmailNuevo').val(),
 										$('#txtFaxNuevo').val(),						
 										$('#txtRfcNuevo').val(),
@@ -368,25 +385,28 @@
 										$('#txtNoExtNuevo').val(),
 										$('#txtNoIntNuevo').val(),						
 										$('#txtColoniaNuevo').val(),
+										$('#txtCiudadNuevo').val(),
 										$('#txtEstadoNuevo').val(),
 										$('#txtCpNuevo').val()
 									]).draw();
 									
 									$(this).dialog("close");
 									$('#txtNombreNuevo').val('');
-									$('#txtEmailNuevo').val('');
-									$('#txtFaxNuevo').val('');
-									$('#txtRfcNuevo').val('');
-									$('#txtDiasCreditoNuevo').val('');
-									$('#txtCalleNuevo').val('');
-									$('#txtNoIntNuevo').val('');
-									$('#txtNoExtNuevo').val('');
-									$('#txtColoniaNuevo').val('');
-									$('#txtEstadoNuevo').val('');
-									$('#txtCpNuevo').val('');
-									$('#txtDescGeneralNuevo').val('');
-									$('#txtDesc2Nuevo').val('');
-									$('#txtDesc3Nuevo').val('');
+									$('#txtRazonSocialNuevo').val('SIN ASIGNAR'),
+									$('#txtEmailNuevo').val('SIN ASIGNAR');
+									$('#txtFaxNuevo').val('000 00 00 00');
+									$('#txtRfcNuevo').val('SIN ASIGNAR');
+									$('#txtDiasCreditoNuevo').val('0');
+									$('#txtCalleNuevo').val('SIN ASIGNAR');
+									$('#txtNoIntNuevo').val('0');
+									$('#txtNoExtNuevo').val('0');
+									$('#txtColoniaNuevo').val('SIN ASIGNAR');
+									$('#txtCiudadNuevo').val('SIN ASIGNAR');
+									$('#txtEstadoNuevo').val('SIN ASIGNAR');
+									$('#txtCpNuevo').val('00000');
+									$('#txtDescGeneralNuevo').val('0');
+									$('#txtDesc2Nuevo').val('0');
+									$('#txtDesc3Nuevo').val('0');
 									
 								}else{
 									window.alert("No puede dejar campos vacios");
@@ -406,6 +426,11 @@
 			$("#txtNombre").keypress(function(e){
 				if(e.which == 13){
 					console.log("enter");
+					$("#txtRazonSocial").select();
+				}
+			});
+			$("#txtRazonSocial").keypress(function(e){
+				if(e.which == 13){
 					$("#txtEmail").select();
 				}
 			});
@@ -447,6 +472,11 @@
 			});
 			$("#txtColonia").keypress(function(e){
 				if(e.which == 13){
+					$("#txtCiudad").select();
+				}
+			});
+			$("#txtCiudad").keypress(function(e){
+				if(e.which == 13){
 					$("#txtEstado").select();
 				}
 			});
@@ -479,6 +509,11 @@
 			$("#txtNombreNuevo").keypress(function(e){
 				if(e.which == 13){
 					console.log("enter");
+					$("#txtRazonSocialNuevo").select();
+				}
+			});
+			$("#txtRazonSocialNuevo").keypress(function(e){
+				if(e.which == 13){
 					$("#txtEmailNuevo").select();
 				}
 			});
@@ -519,6 +554,11 @@
 				}
 			});
 			$("#txtColoniaNuevo").keypress(function(e){
+				if(e.which == 13){
+					$("#txtCiudadNuevo").select();
+				}
+			});
+			$("#txtCiudadNuevo").keypress(function(e){
 				if(e.which == 13){
 					$("#txtEstadoNuevo").select();
 				}
@@ -592,65 +632,9 @@
 <body>
 
 <!--Fomulario para dar de alta un medico, este formulario se mostrara en un Dialog de JQuery, se activara al hacer click en el menu "Alta medico" dentro de la pagina principal-->
-	<div id="formAltaMedico" title="Alta de nuevo Médico" class="text-form">
-		<form action="" id="formMedico">
-			<legend>* Campos Obligatorios</legend>
-			<fieldset>
-				<legend>Generales</legend>
-				<ol>
-					<li><label for="clave">* Clave:</label><input type="text" name="clave" id="clave" placeholder="Ingrese Clave de Médico" requiered autofocus> <label for="cedula">* Cédula:</label><input type="text" name="cedula" id="cedula" requiered></li>
-					<li><label for="nombre">* Nombre:</label><input type="text" name="nombre" id="nombre" size="54" requiered></li>
-				</ol>
-			</fieldset>
-			<fieldset>
-				<legend>Datos de Domicilio</legend>
-				<ol>
-					<li><label for="calle">Calle:</label><input type="text" name="calle" id="calle"><label for="numero">Número:</label><input type="text" name="numero" id="numero"></li>
-					<li><label for="municipio">Municipio:</label><input type="text" name="municipio" id="municipio"><label for="estado">Estado:</label><input type="text" name="estado" id="estado"></li>
-					<li><label for="cp">C.P:</label><input type="text" name="cp" id="cp"></li>
-				</ol>
-			</fieldset>
-			<fieldset>
-				<legend>Datos de Contacto</legend>
-				<ol>
-					<li><label for="telefono">Telefono:</label><input type="text" name="telefono" id="telefono"><label for="email">E-Mail:</label><input type="text" name="email" id="email"></li>
-				</ol>
-			</fieldset>
-		</form>
-	</div>	
 	<!--Insersion de la imagen de marca de agua en la parte del centro del sistema-->
 	<!--Fomulario para dar de alta a un cliente, este formulario se mostrara en un Dialog de JQuery, se activara al hacer click en el menu "Alta cliente" dentro de la pagina principal-->
-	<div id="formAltaCliente" title="Alta de nuevo Cliente" class="text-form">
-		<form action="" id="formCliente">
-			<legend>* Campos Obligatorios</legend>
-			<fieldset>
-				<legend>Generales</legend>
-				<ol>
-					<li><label for="clave">* Clave:</label><input type="text" name="clave" id="clave" placeholder="Ingrese Clave de Cliente" requiered autofocus> <label for="rfc">* RFC:</label><input type="text" name="rfc" id="rfc" requiered></li>
-					<li><label for="nombre">* Nombre:</label><input type="text" name="nombre" id="nombre" size="54" requiered></li>
-				</ol>
-			</fieldset>
-			<fieldset>
-				<legend>Datos de Domicilio</legend>
-				<ol>
-					<li><label for="calle">Calle:</label><input type="text" name="calle" id="calle"><label for="numero">Número:</label><input type="text" name="numero" id="numero"></li>
-					<li><label for="municipio">Municipio:</label><input type="text" name="municipio" id="municipio"><label for="estado">Estado:</label><input type="text" name="estado" id="estado"></li>
-					<li><label for="cp">C.P:</label><input type="text" name="cp" id="cp"></li>
-				</ol>
-			</fieldset>
-			<fieldset>
-				<legend>Datos de Contacto</legend>
-				<ol>
-					<li><label for="telefono">Telefono:</label><input type="text" name="telefono" id="telefono"><label for="email">E-Mail:</label><input type="text" name="email" id="email"></li>
-				</ol>
-			</fieldset>
-		</form>
-	</div>
-	<!-- ...... -->
-
-
-
-
+	
 
 <div id="formProveedor" title="Editar Proveedor" class="text-form">
 	<form id="proveedor">
@@ -659,24 +643,25 @@
 		<legend>Proveedor</legend>
 		<ol>
 			<li><label for="nombre">*Nombre: </label><input type="text" size="56" id="txtNombre" name="txtNombre" requiered autofocus >  </li>
+			<li><label for="razon">*Razon Social: </label><input type="text" size="56" id="txtRazonSocial" name="txtRazonSocial" value="SIN ASIGNAR" requiered >  </li>
 			<li><label for="email">*Email: </label><input type="text" size="25" id="txtEmail" name="txtEmail" value="SIN ASIGNAR" requiered><label for="fax">*Fax: </label><input type="text" size="18" id="txtFax" name="txtFax" value="000 00 00 00" requiered></li>
-			<li><label for="rfc">*RFC: </label><input type="text" size="25" id="txtRfc" name="txtRfc" value="SIN ASIGNAR" requiered><label for="diasCredito">* Dias Credito: </label><input type="text" size="10" id="txtDiasCredito" name="txtDiasCredito" value="00" requiered></li>
+			<li><label for="rfc">*RFC: </label><input type="text" size="25" id="txtRfc" name="txtRfc" value="SIN ASIGNAR" requiered><label for="diasCredito">* Dias Credito: </label><input type="text" size="10" id="txtDiasCredito" name="txtDiasCredito" value="0" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Direccion</legend>
 		<ol>
-			<li><label for="calle">*Calle: </label><input type="text" id="txtCalle" name="txtCalle" value="SIN ASIGNAR" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExt" name="txtNoExt" size="5" value="00" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoInt" name="txtNoInt" size="5" value="00" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColonia" name="txtColonia" value="SIN ASIGNAR" requiered><label for="estado">*Estado: </label><input type="text" id="txtEstado" name="txtEstado" size="23" value="SIN ASIGNAR" requiered><li>
-			<li><label for="cp">*C.P: </label><input type="text" id="txtCp" name="txtCp" size="7" value="00000" requiered></li>
+			<li><label for="calle">*Calle: </label><input type="text" id="txtCalle" name="txtCalle" value="SIN ASIGNAR" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExt" name="txtNoExt" size="5" value="0" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoInt" name="txtNoInt" size="5" value="0" requiered><li>
+			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColonia" name="txtColonia" value="SIN ASIGNAR" requiered><label for="colonia">*Ciudad: </label><input type="text" id="txtCiudad" name="txtCiudad" value="SIN ASIGNAR" requiered><li>
+			<li><label for="estado">*Estado: </label><input type="text" id="txtEstado" name="txtEstado" size="23" value="SIN ASIGNAR" requiered><label for="cp">*C.P: </label><input type="text" id="txtCp" name="txtCp" size="7" value="00000" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Descuentos</legend>
 		<ol>
-			<li><label for="descGeneral">*Descuento General: </label><input type="text" size="5" id="txtDescGeneral" name="txtDescGeneral" value="0.00" requiered></li>
-			<li><label for="desc2">*Descuento 2: </label><input type="text" size="5" id="txtDesc2" name="txtDesc2" value="0.00" requiered></li>
-			<li><label for="desc3">*Descuento 3</label><input type="text" size="5" id="txtDesc3" name="txtDesc3" value="0.00" requiered></li>
+			<li><label for="descGeneral">*Descuento General: </label><input type="text" size="5" id="txtDescGeneral" name="txtDescGeneral" value="0" requiered></li>
+			<li><label for="desc2">*Descuento 2: </label><input type="text" size="5" id="txtDesc2" name="txtDesc2" value="0" requiered></li>
+			<li><label for="desc3">*Descuento 3</label><input type="text" size="5" id="txtDesc3" name="txtDesc3" value="0" requiered></li>
 		</ol>
 	</fieldset>
 	</form>
@@ -689,24 +674,25 @@
 		<legend>Proveedor</legend>
 		<ol>
 			<li><label for="nombre">*Nombre: </label><input type="text" size="56" id="txtNombreNuevo" name="txtNombreNuevo" requiered autofocus >  </li>
+			<li><label for="razon">*Razon Social: </label><input type="text" size="56" id="txtRazonSocialNuevo" name="txtRazonSocialNuevo" value="SIN ASIGNAR" requiered >  </li>
 			<li><label for="email">*Email: </label><input type="text" size="25" id="txtEmailNuevo" name="txtEmailNuevo" value="SIN ASIGNAR" requiered><label for="fax">*Fax: </label><input type="text" size="18" id="txtFaxNuevo" name="txtFaxNuevo" value="000 00 00 00" requiered></li>
-			<li><label for="rfc">*RFC: </label><input type="text" size="25" id="txtRfcNuevo" name="txtRfcNuevo" value="SIN ASIGNAR" requiered><label for="diasCredito">* Dias Credito: </label><input type="text" size="10" id="txtDiasCreditoNuevo" name="txtDiasCreditoNuevo" value="00" requiered></li>
+			<li><label for="rfc">*RFC: </label><input type="text" size="25" id="txtRfcNuevo" name="txtRfcNuevo" value="SIN ASIGNAR" requiered><label for="diasCredito">* Dias Credito: </label><input type="text" size="10" id="txtDiasCreditoNuevo" name="txtDiasCreditoNuevo" value="0" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Direccion</legend>
 		<ol>
-			<li><label for="calle">*Calle: </label><input type="text" id="txtCalleNuevo" name="txtCalleNuevo" value="SIN ASIGNAR" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExtNuevo" name="txtNoExtNuevo" size="5" value="00" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoIntNuevo" name="txtNoIntNuevo" size="5" value="00" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColoniaNuevo" name="txtColoniaNuevo" value="SIN ASIGNAR" requiered><label for="estado">*Estado: </label><input type="text" id="txtEstadoNuevo" name="txtEstadoNuevo" size="23" value="SIN ASIGNAR" requiered><li>
-			<li><label for="cp">*C.P: </label><input type="text" id="txtCpNuevo" name="txtCpNuevo" size="7" value="00000" requiered></li>
+			<li><label for="calle">*Calle: </label><input type="text" id="txtCalleNuevo" name="txtCalleNuevo" value="SIN ASIGNAR" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExtNuevo" name="txtNoExtNuevo" size="5" value="0" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoIntNuevo" name="txtNoIntNuevo" size="5" value="0" requiered><li>
+			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColoniaNuevo" name="txtColoniaNuevo" value="SIN ASIGNAR" requiered><label for="colonia">*Ciudad: </label><input type="text" id="txtCiudadNuevo" name="txtCiudadNuevo" value="SIN ASIGNAR" requiered><li>
+			<li><label for="estado">*Estado: </label><input type="text" id="txtEstadoNuevo" name="txtEstadoNuevo" size="23" value="SIN ASIGNAR" requiered><label for="cp">*C.P: </label><input type="text" id="txtCpNuevo" name="txtCpNuevo" size="7" value="00000" requiered></li>
 		</ol>
 	</fieldset>
 	<fieldset>
 		<legend>Descuentos</legend>
 		<ol>
-			<li><label for="descGeneral">*Descuento General: </label><input type="text" size="5" id="txtDescGeneralNuevo" name="txtDescGeneralNuevo" value="0.00" requiered></li>
-			<li><label for="desc2">*Descuento 2: </label><input type="text" size="5" id="txtDesc2Nuevo" name="txtDesc2Nuevo" value="0.00" requiered></li>
-			<li><label for="desc3">*Descuento 3</label><input type="text" size="5" id="txtDesc3Nuevo" name="txtDesc3Nuevo" value="0.00" requiered></li>
+			<li><label for="descGeneral">*Descuento General: </label><input type="text" size="5" id="txtDescGeneralNuevo" name="txtDescGeneralNuevo" value="0" requiered></li>
+			<li><label for="desc2">*Descuento 2: </label><input type="text" size="5" id="txtDesc2Nuevo" name="txtDesc2Nuevo" value="0" requiered></li>
+			<li><label for="desc3">*Descuento 3</label><input type="text" size="5" id="txtDesc3Nuevo" name="txtDesc3Nuevo" value="0" requiered></li>
 		</ol>
 	</fieldset>
 	</form>
@@ -761,7 +747,8 @@
 			<table id="search" class="display"cellspacing="0" width="1024px">
 				<thead>	
 					<tr>
-						<th style="width: 30%">Nombre</th>
+						<th style="width: 20%">Nombre</th>
+						<th style="width: 30%">RazonSocial</th>
 						<th style="width: 20%">Email</th>
 						<th style="width: 5%">Fax</th>
 						<th style="width: 10%">RFC</th>
@@ -773,6 +760,7 @@
 						<th style="width: 2%" >No.Ext.</th>
 						<th style="width: 2%" >No.Int.</th>
 						<th style="width: 15%">Colonia</th>
+						<th style="width: 15%">Ciudad</th>
 						<th style="width: 10%">Estado</th>
 						<th style="width: 5%">CP</th>
 				    </tr>
@@ -780,6 +768,7 @@
 				    <thead>							
 				    <tr>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Nombre" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="RazonSocial" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Email" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Fax" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="RFC" /></th>
@@ -791,6 +780,7 @@
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="No.Ext" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="No.Int" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Colonia" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Ciudad" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Estado" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="CP" /></th>	
 					</tr>	

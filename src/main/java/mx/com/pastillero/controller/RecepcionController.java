@@ -70,7 +70,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 		r.setNotaFactura(0);
 		r.setSubtotal((float)0);
 		r.setEstado(0);
-		r.setIdUsuario(2);
+		r.setIdUsuario(rDao.idUsuario(request.getParameter("txtUsuario").trim()));
 		r.setIdProveedor(1);
 		
 		idRecepcion = rDao.guardarRecepcion(r);
@@ -111,21 +111,22 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 		Date date = new Date();
 		DateFormat hora = new SimpleDateFormat("HH:mm:ss");
 		Recepcion recepcion = new Recepcion();
-		recepcion.setNumFactura(request.getParameter("txtFactura").trim());
+		recepcion.setNumFactura(request.getParameter("txtFactura").trim().toUpperCase());
 		recepcion.setFecha(request.getParameter("txtFecha").trim());
 		recepcion.setHora(hora.format(date));
 		recepcion.setDesc1(Float.parseFloat(request.getParameter("txtDescuento1").trim()));
 		recepcion.setDesc2(Float.parseFloat(request.getParameter("txtDescuento2").trim()));
 		recepcion.setFolioElectronico(Integer.parseInt(request.getParameter("txtFolioE").trim()));
 		recepcion.setNotaFactura(Integer.parseInt(request.getParameter("chBoxNota")));
-		String lblSubtotal = request.getParameter("lblSubtotal");
+		String lblSubtotal = request.getParameter("lblSubtotal").trim();
 		//String lblSubtotal = lblSubtotal1.substring(2);
 		recepcion.setSubtotal(Float.parseFloat(lblSubtotal));
 		//recepcion.setSubtotal(Float.parseFloat(request.getParameter("lblSubtotal")));
 		recepcion.setEstado(1);
 		RecepcionDao r = new RecepcionDao();
 		recepcion.setIdUsuario(r.idUsuario(request.getParameter("txtUsuario").trim()));
-		recepcion.setIdProveedor(r.idProveedor(request.getParameter("txtProveedor").trim()));
+		//recepcion.setIdProveedor(r.idProveedor(request.getParameter("txtProveedor").trim().toUpperCase()));
+		recepcion.setIdProveedor(Integer.parseInt(request.getParameter("txtProveedor")));
 			
 		r.actualizarRecepcion(recepcion);
 		logger.info("Recepcion Guardada!");
@@ -149,9 +150,9 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 
 				movimientoRecepcion.setTipo("RECEPCION");
 				movimientoRecepcion.setIdNota(Integer.parseInt(request.getParameter("txtNota").trim()));
-				movimientoRecepcion.setDocumento(request.getParameter("txtFactura").trim());
+				movimientoRecepcion.setDocumento(request.getParameter("txtFactura").trim().toUpperCase());
 				movimientoRecepcion.setClave(pr.get("Codigo").toString().trim());
-				movimientoRecepcion.setDescripcion(pr.get("Descripcion").toString().trim());
+				movimientoRecepcion.setDescripcion(pr.get("Descripcion").toString().trim().toUpperCase());
 				movimientoRecepcion.setAdquiridos(Integer.parseInt(pr.get("Cant").toString().trim()));
 				movimientoRecepcion.setVendidos(0);
 				movimientoRecepcion.setValor(Float.parseFloat(pr.get("Costo").toString().trim()));

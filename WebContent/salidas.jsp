@@ -50,8 +50,8 @@
 						var counter = 0;
 						
 						$(window).load(function(){
-							$( "#txtFecha" ).datepicker({ dateFormat: "dd-mm-yy"});		
-							$( "#txtCaducidad" ).datepicker({ dateFormat: "dd-mm-yy"});
+							$( "#txtFecha" ).datepicker({ dateFormat: "yy-mm-dd"});		
+							$( "#txtCaducidad" ).datepicker({ dateFormat: "yy-mm-dd"});
 							$.post('salida.jr',{
 								tarea: "cargar"
 							},function(data){
@@ -414,7 +414,7 @@
 				<label id="box-caja">Fecha</label>
 				<%
 					Date date = new Date();
-					DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy");
+					DateFormat fecha = new SimpleDateFormat("yyyy-MM-dd");
 					out.println("<input type=\"text\" id=\"txtFecha\" name=\"txtFecha\" value="+fecha.format(date)+">");
 				%>
 					

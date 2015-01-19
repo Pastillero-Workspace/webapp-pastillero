@@ -3,6 +3,7 @@ package mx.com.pastillero.model.formBeans;
 public class Proveedor {
 	private int idProveedor;
 	private String nombre;
+	private String razonSocial;
 	private String email;
 	private String fax;
 	private String rfc;
@@ -11,9 +12,9 @@ public class Proveedor {
 	private int descGeneral;
 	private int desc2;
 	private int desc3;
-	
+
 	public Proveedor() {
-		
+
 	}
 
 	public int getIdProveedor() {
@@ -30,6 +31,14 @@ public class Proveedor {
 
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
+	}
+
+	public String getRazonSocial() {
+		return razonSocial;
+	}
+
+	public void setRazonSocial(String razonSocial) {
+		this.razonSocial = razonSocial;
 	}
 
 	public String getEmail() {
@@ -99,10 +108,11 @@ public class Proveedor {
 	@Override
 	public String toString() {
 		return "Proveedor [idProveedor=" + idProveedor + ", nombre=" + nombre
-				+ ", email=" + email + ", fax=" + fax + ", rfc=" + rfc
-				+ ", diasCredito=" + diasCredito + ", idDireccion="
-				+ idDireccion + ", descGeneral=" + descGeneral + ", desc2="
-				+ desc2 + ", desc3=" + desc3 + "]";
+				+ ", razonSocial=" + razonSocial + ", email=" + email
+				+ ", fax=" + fax + ", rfc=" + rfc + ", diasCredito="
+				+ diasCredito + ", idDireccion=" + idDireccion
+				+ ", descGeneral=" + descGeneral + ", desc2=" + desc2
+				+ ", desc3=" + desc3 + "]";
 	}
 
 	@Override
@@ -118,6 +128,8 @@ public class Proveedor {
 		result = prime * result + idDireccion;
 		result = prime * result + idProveedor;
 		result = prime * result + ((nombre == null) ? 0 : nombre.hashCode());
+		result = prime * result
+				+ ((razonSocial == null) ? 0 : razonSocial.hashCode());
 		result = prime * result + ((rfc == null) ? 0 : rfc.hashCode());
 		return result;
 	}
@@ -158,6 +170,11 @@ public class Proveedor {
 				return false;
 		} else if (!nombre.equals(other.nombre))
 			return false;
+		if (razonSocial == null) {
+			if (other.razonSocial != null)
+				return false;
+		} else if (!razonSocial.equals(other.razonSocial))
+			return false;
 		if (rfc == null) {
 			if (other.rfc != null)
 				return false;
@@ -165,4 +182,7 @@ public class Proveedor {
 			return false;
 		return true;
 	}
+	
+	
+
 }

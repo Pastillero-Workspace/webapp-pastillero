@@ -2,6 +2,7 @@ package mx.com.pastillero.model.dao;
 
 import java.util.List;
 
+import mx.com.pastillero.model.formBeans.Proveedor;
 import mx.com.pastillero.model.formBeans.Recepcion;
 
 import org.hibernate.HibernateException;
@@ -37,12 +38,12 @@ public class RecepcionDao extends GenericoDAO{
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<Object> muestraProveedores(){
+	public List<Proveedor> muestraProveedores(){
 		Session session = null;
-		List<Object> proveedores = null;
+		List<Proveedor> proveedores = null;
 		try{
 			session = factory.openSession();
-			proveedores = session.createQuery("select nombre from Proveedor").list();
+			proveedores = session.createQuery("from Proveedor").list();
 		}catch(HibernateException e){
 			proveedores = null;
 			logger.error("ERROR: No se puede mostrar el nombre del proveedor.");
@@ -116,8 +117,7 @@ public class RecepcionDao extends GenericoDAO{
 		int idProveedor = -1;
 		try{
 			session = factory.openSession();
-			proveedores = session.createQuery("select idProveedor from Proveedor where nombre='"+proveedor+"'")
-									.list();
+			proveedores = session.createQuery("select idProveedor from Proveedor where nombre='"+proveedor+"'").list();
 			idProveedor =(int) proveedores.get(0); 
 		}catch(HibernateException e){
 			idProveedor = -1;

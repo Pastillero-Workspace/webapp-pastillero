@@ -114,9 +114,12 @@ public class ProductosDao extends GenericoDAO
 			producto.setAplicapo(p.getAplicapo());
 			producto.setAntibiotico(p.getAntibiotico());
 			producto.setExistencias(p.getExistencias());
+			producto.setEspecial(p.getEspecial());
+			producto.setFamactualizar(p.getFamactualizar());
+			producto.setCominmediata(p.getCominmediata());
 			producto.setUltimoproveedor(p.getUltimoproveedor());
 			producto.setUltimocosto(p.getUltimocosto());
-			producto.setCostopromedio(p.getCostoreal());
+			producto.setCostopromedio(p.getCostopromedio());
 			producto.setCostoreal(p.getCostoreal());			
 			// update product			
 			session.update(producto);	
@@ -264,10 +267,10 @@ public class ProductosDao extends GenericoDAO
 		List<Object[]> list = null;
 		try{
 			session = factory.openSession();
-			list = session.createQuery("select p.proveedor, p.clave, p.codBar, p.descripcion, f.nombre, p.precioPub, p.precioDesc, p.precioFarmacia,"
+			list = session.createQuery("select p.proveedor, p.clave, p.codBar, p.descripcion, p.existencias, f.nombre, p.precioPub, p.precioDesc, p.precioFarmacia,"
 					+"p.iva, p.linea, p.referencia, p.SSA, p.laboratorio, p.departamento, p.categoria, p.actualizable, p.descuento, p.costo,"
 					+"p.equivalencia, p.superfamilia, p.cls, p.zona, p.pareto, p.ieps, p.ieps2, p.limitado, p.kit, p.comision, p.maxdescuento,"
-					+"p.grupo, p.aplicadescbase, p.aplicapo, p.antibiotico, p.existencias, p.ultimoproveedor, p.ultimocosto, p.costopromedio, p.costoreal "
+					+"p.grupo, p.aplicadescbase, p.aplicapo, p.antibiotico, p.especial, p.famactualizar, p.cominmediata, p.ultimoproveedor, p.ultimocosto, p.costopromedio, p.costoreal "
 					+ " from Productos as p, Familia as f "
 					+ "where p.idFamilia = f.idFamilia and p.codBar like '%"+codigo+"'").list();
 		}catch(HibernateException e){
@@ -293,10 +296,10 @@ public class ProductosDao extends GenericoDAO
 		List<Object[]> list = null;
 		try{
 			session = factory.openSession();
-			list = session.createQuery("select p.proveedor, p.clave, p.codBar, p.descripcion, f.nombre, p.precioPub, p.precioDesc, p.precioFarmacia,"
+			list = session.createQuery("select p.proveedor, p.clave, p.codBar, p.descripcion, p.existencias, f.nombre, p.precioPub, p.precioDesc, p.precioFarmacia,"
 					+"p.iva, p.linea, p.referencia, p.SSA, p.laboratorio, p.departamento, p.categoria, p.actualizable, p.descuento, p.costo,"
 					+"p.equivalencia, p.superfamilia, p.cls, p.zona, p.pareto, p.ieps, p.ieps2, p.limitado, p.kit, p.comision, p.maxdescuento,"
-					+"p.grupo, p.aplicadescbase, p.aplicapo, p.antibiotico, p.existencias, p.ultimoproveedor, p.ultimocosto, p.costopromedio, p.costoreal "
+					+"p.grupo, p.aplicadescbase, p.aplicapo, p.antibiotico, p.especial, p.famactualizar, p.cominmediata, p.ultimoproveedor, p.ultimocosto, p.costopromedio, p.costoreal "
 					+ " from Productos as p, Familia as f "
 					+ "where p.idFamilia = f.idFamilia and p.descripcion like '%"+descripcion+"%'").list();
 		}catch(HibernateException e){

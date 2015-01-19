@@ -30,8 +30,8 @@ public class ClienteDireccionController extends HttpServlet{
 		
 		if(request.getParameter("tarea").equals("agregar")){
 			d.setCalle(request.getParameter("txtCalle").trim().toUpperCase());
-			d.setNoInt(request.getParameter("txtNoInt").trim());
-			d.setNoExt(request.getParameter("txtNoExt").trim());
+			d.setNoInt(request.getParameter("txtNoInt").trim().toUpperCase());
+			d.setNoExt(request.getParameter("txtNoExt").trim().toUpperCase());
 			d.setColonia(request.getParameter("txtColonia").trim().toUpperCase());
 			d.setCiudad(request.getParameter("txtCiudad").trim().toUpperCase());
 			d.setEstado(request.getParameter("txtEstado").trim().toUpperCase());
@@ -39,7 +39,7 @@ public class ClienteDireccionController extends HttpServlet{
 			
 			int idDireccion = clienteDireccion.guardarDireccion(d);
 			
-			c.setClave(request.getParameter("txtClave").trim());
+			c.setClave(request.getParameter("txtClave").trim().toUpperCase());
 			c.setNombre(request.getParameter("txtNombre").trim().toUpperCase());
 			c.setEmail(request.getParameter("txtEmail").trim());
 			c.setRfc(request.getParameter("txtRfc").trim().toUpperCase());
@@ -78,9 +78,7 @@ public class ClienteDireccionController extends HttpServlet{
 			c.setInsen(insen);
 			
 			clienteDireccion.guardarCliente(c);
-			
-			System.out.println(d.toString());
-			System.out.println(c.toString());
+	
 		}
 		
 		if(request.getParameter("tarea").equals("actualizar")){
@@ -126,18 +124,16 @@ public class ClienteDireccionController extends HttpServlet{
 			c.setInsen(insen);
 			
 			d.setIdDireccion(Integer.parseInt(idCliente.get(0)[1].toString()));
-			d.setCalle(request.getParameter("txtCalle").toUpperCase());
-			d.setNoExt(request.getParameter("txtNoExt"));
-			d.setNoInt(request.getParameter("txtNoInt"));
+			d.setCalle(request.getParameter("txtCalle").trim().toUpperCase());
+			d.setNoExt(request.getParameter("txtNoExt").trim().toUpperCase());
+			d.setNoInt(request.getParameter("txtNoInt").trim().toUpperCase());
 			d.setColonia(request.getParameter("txtColonia").trim().toUpperCase());
 			d.setCiudad(request.getParameter("txtCiudad").trim().toUpperCase());
 			d.setEstado(request.getParameter("txtEstado").trim().toUpperCase());
-			d.setCp(Integer.parseInt(request.getParameter("txtCp")));
+			d.setCp(Integer.parseInt(request.getParameter("txtCp").trim()));
 			
 			clienteDireccion.actualizarCliente(c, d);
-			System.out.println(c.toString());
-			System.out.println(d.toString());
-		
+				
 		}
 		if(request.getParameter("tarea").equals("eliminar")){
 			c.setClave(request.getParameter("txtClave").trim());

@@ -67,8 +67,8 @@ public class TicketController extends HttpServlet{
 	    	String fecha = dateFormat.format(date);
 	    	
 	    	// Setting up user for ticket information
-	    	String varUser = request.getParameter("varUser");
-	    	String varCantidad = request.getParameter("varCantidad");
+	    	String varUser = request.getParameter("varUser").trim();
+	    	String varCantidad = request.getParameter("varCantidad").trim();
 	    	TicketServiceDeposito tsd = new TicketServiceDeposito();
 	    	
 	    	// cretae user data and person infromation.

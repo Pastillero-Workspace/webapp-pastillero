@@ -50,7 +50,7 @@ public class DevolucionesController extends HttpServlet{
 		Date date = new Date();
 		DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
 		String hora = hourFormat.format(date);
-		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 		String fecha = dateFormat.format(date);
 		
 		DevolucionesDao devolucion = new DevolucionesDao();
@@ -60,7 +60,7 @@ public class DevolucionesController extends HttpServlet{
 		ProductosDao pDao = new ProductosDao();
 		if(request.getParameter("devolucion").trim().equals("verificaCompra")){
 			String codigo = request.getParameter("txtCodigo").trim();
-			String documento = request.getParameter("txtDocumento").trim();
+			String documento = request.getParameter("txtDocumento").trim().toUpperCase();
 			List<Object[]> verificar = devolucion.verificarDevCompra(codigo, documento);
 			if(verificar.isEmpty()){
 				response.getWriter().write("0");
@@ -75,9 +75,9 @@ public class DevolucionesController extends HttpServlet{
 		else if(request.getParameter("devolucion").trim().equals("compra")){
 			devCompra.setFecha(fecha);
 			devCompra.setHora(hora);
-			devCompra.setMotivo(request.getParameter("txtMotivo").trim());
+			devCompra.setMotivo(request.getParameter("txtMotivo").trim().toUpperCase());
 			devCompra.setEstado("COMPLETA");
-			devCompra.setIdUsuario(devolucion.buscarUsuario(request.getParameter("txtUsuario").trim().toString()));
+			devCompra.setIdUsuario(devolucion.buscarUsuario(request.getParameter("txtUsuario").trim().toString().toUpperCase()));
 			devCompra.setNotaReferencia(Integer.parseInt(request.getParameter("txtFolio").trim()));
 			devCompra.setNotaActual(1);
 			
@@ -86,9 +86,9 @@ public class DevolucionesController extends HttpServlet{
 			
 			movimientoDev.setTipo("DEVOLUCION S/COMPRA");
 			movimientoDev.setIdNota(idDev);
-			movimientoDev.setDocumento(request.getParameter("txtDocumento").trim());
+			movimientoDev.setDocumento(request.getParameter("txtDocumento").trim().toUpperCase());
 			movimientoDev.setClave(request.getParameter("txtCodigo").trim());
-			movimientoDev.setDescripcion(request.getParameter("txtDescripcion").trim());
+			movimientoDev.setDescripcion(request.getParameter("txtDescripcion").trim().toUpperCase());
 			movimientoDev.setAdquiridos(0);
 			movimientoDev.setVendidos(Integer.parseInt(request.getParameter("txtCantidad").trim()));
 			movimientoDev.setValor(Float.parseFloat(request.getParameter("txtCosto").trim()));
@@ -112,7 +112,7 @@ public class DevolucionesController extends HttpServlet{
 		else if(request.getParameter("devolucion").trim().equals("venta")){
 			System.out.println("Devolucion venta");
 			nota = Integer.parseInt(request.getParameter("nota"));
-			List<Object[]> detalleDev = devolucion.mostrarVentaDetalle(Integer.parseInt(request.getParameter("nota")));
+			List<Object[]> detalleDev = devolucion.mostrarVentaDetalle(Integer.parseInt(request.getParameter("nota").trim()));
 			
 			//Gson gson = new Gson();
 			//String jsonVenta = gson.toJson(detalleDev);
@@ -145,9 +145,9 @@ public class DevolucionesController extends HttpServlet{
 			DevolucionVenta dVenta = new DevolucionVenta();
 			dVenta.setFecha(fecha);
 			dVenta.setHora(hora);
-			dVenta.setMotivo(request.getParameter("txtMotivo").trim());
+			dVenta.setMotivo(request.getParameter("txtMotivo").trim().toUpperCase());
 			dVenta.setEstado("COMPLETA");
-			dVenta.setIdUsuario(devolucion.buscarUsuario(request.getParameter("txtUsuario").toString()));
+			dVenta.setIdUsuario(devolucion.buscarUsuario(request.getParameter("txtUsuario").toString().toUpperCase()));
 			dVenta.setNotaReferencia(nota);
 			dVenta.setNotaActual(1);
 			System.out.println(dVenta.toString());
@@ -174,7 +174,7 @@ public class DevolucionesController extends HttpServlet{
 					
 					ItemVenta dev = new ItemVenta();
 					dev.setCodigo(pr.get("Clave").toString());
-					dev.setDescripcion(pr.get("Descripcion").toString());
+					dev.setDescripcion(pr.get("Descripcion").toString().toUpperCase());
 					dev.setCantidad(Integer.parseInt(pr.get("Cantidad").toString()));
 					dev.setPreciopub(Float.parseFloat(pr.get("PrecioUnit").toString()));
 					//Falta reafirmar precio des
@@ -197,7 +197,7 @@ public class DevolucionesController extends HttpServlet{
 					movimientoDevVenta.setIdNota(idDev);
 					movimientoDevVenta.setDocumento("0");
 					movimientoDevVenta.setClave(dev.getCodigo());
-					movimientoDevVenta.setDescripcion(dev.getDescripcion());
+					movimientoDevVenta.setDescripcion(dev.getDescripcion().toUpperCase());
 					movimientoDevVenta.setAdquiridos(dev.getCantidad());
 					movimientoDevVenta.setVendidos(0);
 					movimientoDevVenta.setValor(dev.getSubtotal());

@@ -120,8 +120,8 @@ public class CobroController extends HttpServlet {
 		date = new Date();
 		if (request.getParameter("workout").equals("getNota")) {
 			logger.info("Obteniendo nota...");
-			logger.info(request.getParameter("varUsuario"));
-			String Usuario = request.getParameter("varUsuario");
+			logger.info(request.getParameter("varUsuario").trim().toUpperCase());
+			String Usuario = request.getParameter("varUsuario").trim().toUpperCase();
 			sessionid = Integer.parseInt(request.getParameter("context"));
 			List<Usuario> cajeros = new UsuarioDao().readUserActive();
 			
@@ -174,7 +174,7 @@ public class CobroController extends HttpServlet {
 		
 		/* Obtiene el nombre dle cliente */
 		else if (request.getParameter("workout").equals("getCliente")) {
-			String claveCliente = request.getParameter("varCCliente");
+			String claveCliente = request.getParameter("varCCliente").trim().toUpperCase();
 			ClienteDao getClientes = new ClienteDao();
 			String out = "";
 			
@@ -211,14 +211,14 @@ public class CobroController extends HttpServlet {
 			String data_3 = request.getParameter("data_3");
 			
 			// other recipes for cook ticket
-			String TotalCobro = request.getParameter("varTotalCobro");
-			String TotalPago = request.getParameter("varTotalPago");
-			String Cambio = request.getParameter("varCambio");
+			String TotalCobro = request.getParameter("varTotalCobro").trim();
+			String TotalPago = request.getParameter("varTotalPago").trim();
+			String Cambio = request.getParameter("varCambio").trim();
 			
 			// data for antibioticos
-			String nombreMedico = request.getParameter("varMedico");
-			String receta = request.getParameter("varReceta");
-			String sello = request.getParameter("varSello");
+			String nombreMedico = request.getParameter("varMedico").trim().toUpperCase();
+			String receta = request.getParameter("varReceta").trim().toUpperCase();
+			String sello = request.getParameter("varSello").trim().toUpperCase();
 			
 			if(nombreMedico.length() != 0){
 				logger.info("medico recibido: " + nombreMedico);
@@ -266,7 +266,7 @@ public class CobroController extends HttpServlet {
 					
 					/* ------------------------------------------ */
 					iv.setCodigo(codigo.toString());
-					iv.setDescripcion(objitem.get("Descripcion").toString());
+					iv.setDescripcion(objitem.get("Descripcion").toString().toUpperCase());
 					iv.setCantidad(Integer.parseInt(objitem.get("Cantidad").toString()));
 					iv.setPreciodesc(Float.parseFloat(objitem.get("PrecioDes").toString()));
 					iv.setPreciopub(Float.parseFloat(objitem.get("PrecioPub").toString()));
@@ -283,7 +283,7 @@ public class CobroController extends HttpServlet {
 						if (nombreMedico.length() != 0	&& antibDao.isAntibiotico(iv.getCodigo())) {
 							Antibioticos antibiotico = new Antibioticos();
 							antibiotico.setAdquiridos(0);
-							antibiotico.setDocumento(objnota.get("idnt").toString()); // id de la nota
+							antibiotico.setDocumento(objnota.get("idnt").toString().toUpperCase()); // id de la nota
 							antibiotico.setFecha(dateFormat.format(date));
 							antibiotico.setIdMedico(idMedico);
 							antibiotico.setIdProducto(iv.getIdproducto());
@@ -327,9 +327,9 @@ public class CobroController extends HttpServlet {
 			// getting data
 			if (objnota != null) {
 				mapCliente = cd.getSearchClientebyClave(objnota.get("cliente").toString());
-				lu = ud.getUsuario(objnota.get("usuario").toString());
+				lu = ud.getUsuario(objnota.get("usuario").toString().toUpperCase());
 				lp = pd.getPersonabyId(lu.get(0).getIdPersona());
-				listaCajero = ud.getUsuario(objnota.get("cajero").toString());
+				listaCajero = ud.getUsuario(objnota.get("cajero").toString().toUpperCase());
 			}
 			
 			// date and hour
@@ -365,7 +365,7 @@ public class CobroController extends HttpServlet {
 				itemNota.setIdNota(n.getIdNota());
 				itemNota.setDocumento("");
 				itemNota.setClave(pr.getCodigo());
-				itemNota.setDescripcion(pr.getDescripcion());
+				itemNota.setDescripcion(pr.getDescripcion().toUpperCase());
 				itemNota.setAdquiridos(0);
 				itemNota.setVendidos(pr.getCantidad());
 				float valor = (itemNota.getVendidos() * pr.getPreciodesc());

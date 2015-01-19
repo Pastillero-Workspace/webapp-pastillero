@@ -186,6 +186,7 @@
 					var registro = table.row('.selected').data();
 					
 					if(index>=0){
+						var clienteFrec= [], opcInsen = [];
 						$.each(registro, function(date,value){
 							if(date==0){
 								$("#txtClave").val(value);
@@ -216,24 +217,15 @@
 								$("#txtSaldo").val(value);
 							}
 							if(date==9){//insen
-								console.log('insen: '+value);
-							    var opcInsen = value.split(".");
-								if(value != '0.0'){
-									console.log("insen: "+opcInsen[0]);
-									//$('#opcDesc option[value="'+opcInsen[0]+'"]:selected');
-									switch(opcInsen[0]){
-										case '2':$('#opcDesc option[value="2"]:selected');break;
-										case '3':$('#opcDesc option[value="3"]:selected');break;
-										case '4':$('#opcDesc option[value="4"]:selected');break;
-										case '5':$('#opcDesc option[value="5"]:selected');break;
-									}
+								opcInsen = value.split(".");
+								if(opcInsen[0] != 0){
+									$('#opcDesc').val(opcInsen[0]);
 								}
 							}
 							if(date==10){//cltefrec
-								console.log('clteFrec: '+value);
-								if(value != '0.0'){
-									console.log("frec");
-									$('#opcDesc option[value="1"]:selected');	
+								clienteFrec = value.split(".");
+								if(clienteFrec[0] != 0){
+									$('#opcDesc').val(1);	
 								}
 							}
 							if(date==11){
@@ -260,8 +252,10 @@
 							if(date==18){
 								$("#txtCp").val(value);
 							}
-							
 						});
+						if(opcInsen[0] == 0 && clienteFrec[0] == 0){
+							$('#opcDesc').val(0);
+						}
 						$("#formCliente").dialog("open");
 						$("#txtClave").select();
 					}
@@ -856,7 +850,7 @@
 						<th style="width: 2%">Venta Anual</th>
 						<th style="width: 2%">Saldo</th>
 						<th style="width: 2%">INSEN</th>
-						<th style="width: 2%">Desc.Extra</th>
+						<th style="width: 2%">Cliente Frec</th>
 						<th style="width: 2%">Venta Mensual</th>
 						<th style="width: 25%" >Calle</th>
 						<th style="width: 2%" >No.Ext.</th>
@@ -869,25 +863,25 @@
 				    </thead>
 				    <thead>
 				    <tr>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Clave" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Nombre" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Email" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="RFC" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Credito" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="DiasCred" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Limite" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="VtaAnual" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Saldo" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="INSEN" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="DesExtra" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="VtaMes" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Calle" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="NoExt" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="NoInt" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Colonia" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Ciudad" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Estado" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="CP" /></th>	
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>	
 					</tr>								
 				</thead>
 				<tbody>

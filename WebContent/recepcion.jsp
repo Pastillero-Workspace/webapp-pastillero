@@ -1,3 +1,4 @@
+<%@page import="mx.com.pastillero.model.formBeans.Proveedor"%>
 <%@page import="java.util.List"%>
 <%@page import="mx.com.pastillero.model.dao.RecepcionDao"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -54,7 +55,7 @@
 						var productos2 = [];
 						$(window).load(function(){
 							
-							$( "#txtFecha" ).datepicker({ dateFormat: "dd-mm-yy"});
+							$( "#txtFecha" ).datepicker({ dateFormat: "yy-mm-dd"});
 							
 							console.log(localStorage.getItem('recepcion'));
 							if(localStorage.getItem('recepcion') != null){
@@ -136,7 +137,8 @@
 							}else{
 								console.log("no hay datos");
 								$.post('recepcion.jr',{
-									tarea:'cargar'
+									tarea:'cargar',
+									txtUsuario: $('#usuario').val()
 								},function(date){
 									$('#txtFolioE').val(date);
 									folio = date;
@@ -725,8 +727,7 @@
 							//var filas = t.length;
 							var table = $("#example").tableToJSON();
 							
-							console.log("Contenido de la tabla: "+table);
-							console.log(JSON.stringify(table));
+							console.log("nombre Proveedor: "+proveedor);
 							
 							if(fecha.trim()!=""&&factura.trim()!=""&&usuario.trim()!=""&&proveedor.trim()!=""&&desc1.trim()!=""&&desc2.trim()!=""&&folioE.trim()!=""&&subtotal.trim()!=""){
 								$.post('recepcion.jr',{
@@ -1193,7 +1194,7 @@
 				<label id="box-caja">Fecha</label>
 				<%
 					Date date = new Date();
-					DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy");
+					DateFormat fecha = new SimpleDateFormat("yyyy-MM-dd");
 					out.println("<input type=\"text\" id=\"txtFecha\" name=\"txtFecha\" value="+fecha.format(date)+">");
 				%>
 					
@@ -1228,9 +1229,9 @@
 				 <select name="proveedor" id="proveedor">
 					<%
 						RecepcionDao recepcion = new RecepcionDao();
-						List<Object> proveedores = recepcion.muestraProveedores();
-						for (Object proveedor:proveedores)
-							out.println("<option value="+proveedor+">"+proveedor+"</option>");			
+						List<Proveedor> proveedores = recepcion.muestraProveedores();
+						for (Proveedor proveedor:proveedores)
+							out.println("<option value="+proveedor.getIdProveedor()+">"+proveedor.getNombre()+"</option>");			
 					%>
 				</select>
 			</div>

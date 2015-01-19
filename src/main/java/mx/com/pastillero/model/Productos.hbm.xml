@@ -45,6 +45,9 @@
       <property name="aplicapo" column="aplicapo" type="int"/>
       <property name="antibiotico" column="antibiotico" type="int"/>
       <property name="existencias" column="existencias" type="int"/>
+      <property name="especial" column="especial" type="string" />
+      <property name="famactualizar" column="fam_actualizar" type="int"/>
+      <property name="cominmediata" column="com_inmediata" type="int"/>
       <property name="ultimoproveedor" column="ultimoproveedor" type="string"/>
       <property name="ultimocosto" column="ultimocosto" type="float"/>
       <property name="costopromedio" column="costopromedio" type="float"/>
