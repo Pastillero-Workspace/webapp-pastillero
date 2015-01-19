@@ -252,6 +252,7 @@ function EnviarFormulario() {
 			$.unblockUI();
 			popPrinter = window.open("ticketcobro.jsp", "Impresion","height=600,width=400");
 			popPrinter.focus();
+			
 		}
 	});
 }

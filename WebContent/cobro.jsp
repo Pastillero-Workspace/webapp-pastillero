@@ -26,9 +26,14 @@
 <script type="text/javascript">
 	/*Funcion que muestra el formulario de "Alta Cobro"*/
 	var op = false;
-	$(document)
-			.ready(
-					function() {
+	$(document).ready(function() {
+						//deshabilitar la funcion f5 del teclado
+						document.onkeydown = function(e){ 
+							tecla = (document.all) ? e.keyCode : e.which;
+							//alert('F5 : '+tecla)
+							if (tecla = 116) return false;
+						}
+		
 						// open the dialog for buy the sale. with F9 key
 						$(document).keydown(
 								function(e) {
@@ -93,33 +98,6 @@
 		        	});
 				$("#formAltaAntibiotico").dialog('open');
 			});
-			/*$.ajax({
-		        url: "/webapp-pastillero/consulta.jr",
-		        type: 'POST',
-		        dataType: 'json',
-		        data://txtcodigo+':'+txtdescripcion,
-		        	{
-		        	workout: 'getMedicos'
-		        	},
-		        contentType: 'application/json',
-		        mimeType: 'application/json', 
-		        success: function (medicos) {
-		        	//
-		        	alert(medicos);
-		        	$("#selMedico").empty();
-		        	var nombreMedicos = [];
-		        	$.each(medicos, function(i, medico){
-		        		nombreMedicos.push(medico);
-					  });
-		        	$( "#selMedico" ).autocomplete({
-		        	      source: nombreMedicos
-		        	});
-		        	$("#formAltaAntibiotico").dialog('open');
-		        },
-		        error:function(data,status,er) {
-		            alert("error: "+data+" status: "+status+" er:"+er);
-		        }
-		    });*/
 		}
 	}
 </script>

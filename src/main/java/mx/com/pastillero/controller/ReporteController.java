@@ -103,6 +103,16 @@ public class ReporteController extends HttpServlet{
 			ReporteExcel.setReporte(titulo);
 			ReporteExcel.setDatos(table);
 		}
+		else if(request.getParameter("reporte").equals("antibioticos")){
+			String titulo = request.getParameter("txtTitulo");
+			String table = request.getParameter("tblAntibioticos");
+			
+			System.out.println(titulo);
+			System.out.println(table);
+			
+			ReporteExcel.setReporte(titulo);
+			ReporteExcel.setDatos(table);
+		}
 	}
 	
 }

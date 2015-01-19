@@ -357,6 +357,38 @@
 							out.println("</tr>");
 						}
 					}
+					
+					if(ReporteExcel.getReporte().equals("Reporte de Antibioticos")){
+						out.println("<tr>");
+						out.println("<td>Antibiotico</td>");
+						out.println("<td>Fecha</td>");
+						out.println("<td>Nota</td>");
+						out.println("<td>Receta</td>");
+						out.println("<td>Sello</td>");
+						out.println("<td>Adquiridos</td>");
+						out.println("<td>Vendidos</td>");
+						out.println("<td>Quedan</td>");
+						out.println("<td>Medico</td>");
+						out.println("<td>Proveedor</td>");
+						out.println("</tr>");
+						
+						for(int i=0; i<arrayDatos.size();i++){
+							JSONObject pr = (JSONObject)arrayDatos.get(i);
+							
+							out.println("<tr>");
+							out.println("<td>"+pr.get("Antibiotico")+"</td>");
+							out.println("<td>"+pr.get("Fecha")+"</td>");
+							out.println("<td>"+pr.get("Nota")+"</td>");
+							out.println("<td>"+pr.get("Receta")+"</td>");
+							out.println("<td>"+pr.get("Sello")+"</td>");
+							out.println("<td>"+pr.get("Adquiridos")+"</td>");
+							out.println("<td>"+pr.get("Vendidos")+"</td>");
+							out.println("<td>"+pr.get("Quedan")+"</td>");
+							out.println("<td>"+pr.get("Medico")+"</td>");
+							out.println("<td>"+pr.get("Proveedor")+"</td>");
+							out.println("</tr>");
+						}
+					}
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
