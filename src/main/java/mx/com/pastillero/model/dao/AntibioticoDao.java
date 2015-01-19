@@ -39,6 +39,7 @@ public class AntibioticoDao extends GenericoDAO {
 					}
 				}
 			}
+			
 			return usuarios;
 		}
 	
