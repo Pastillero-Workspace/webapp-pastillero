@@ -32,6 +32,7 @@
 		<mapping resource="mx/com/pastillero/model/Medico.hbm.xml" />
 		<mapping resource="mx/com/pastillero/model/CfgSucursal.hbm.xml" />
 		<mapping resource="mx/com/pastillero/model/Antibioticos.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/AntibioticosCopy.hbm.xml" />
 		<mapping resource="mx/com/pastillero/model/Salida.hbm.xml" />
 		<mapping resource="mx/com/pastillero/model/DevolucionCompra.hbm.xml" />
 		<mapping resource="mx/com/pastillero/model/MovimientoDevolucionCompra.hbm.xml" />

@@ -19,9 +19,12 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import mx.com.pastillero.model.dao.AntibioticoDao;
 import mx.com.pastillero.model.dao.MovimientoRecepcionDao;
 import mx.com.pastillero.model.dao.ProductosDao;
 import mx.com.pastillero.model.dao.RecepcionDao;
+import mx.com.pastillero.model.formBeans.Antibioticos;
+import mx.com.pastillero.model.formBeans.AntibioticosCopy;
 import mx.com.pastillero.model.formBeans.MovimientoRecepcion;
 import mx.com.pastillero.model.formBeans.Productos;
 import mx.com.pastillero.model.formBeans.Recepcion;
@@ -140,6 +143,7 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 			JSONArray arrayProductos = (JSONArray) productos;
 			MovimientoRecepcionDao movRecpDao = new MovimientoRecepcionDao();
 			ProductosDao prDao = new ProductosDao();
+			AntibioticoDao antibDao = new AntibioticoDao();
 			
 			for(int i=0; i<arrayProductos.size();i++){
 				JSONObject pr = (JSONObject)arrayProductos.get(i);
@@ -164,6 +168,41 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 				movimientoRecepcion.setFecha(request.getParameter("txtFecha").trim());
 				movimientoRecepcion.setHora(hora.format(date));
 				movimientoRecepcion.setUtilidad((float)(0));
+				
+				//
+				if (antibDao.isAntibiotico(movimientoRecepcion.getClave())) {
+					AntibioticosCopy antibioticoCopy = new AntibioticosCopy();
+					Antibioticos antibiotico = new Antibioticos();
+					antibioticoCopy.setAdquiridos(movimientoRecepcion.getAdquiridos());
+					antibioticoCopy.setDocumento(Integer.toString(movimientoRecepcion.getIdNota())); // id de la nota
+					antibioticoCopy.setFecha(movimientoRecepcion.getFecha());
+					antibioticoCopy.setIdMedico(1);													// id por default *temporal
+					antibioticoCopy.setIdProducto(p.get(0).getIdProducto());
+					antibioticoCopy.setQuedan(movimientoRecepcion.getQuedan());
+					antibioticoCopy.setReceta(0);
+					antibioticoCopy.setSello(0);
+					antibioticoCopy.setVendidos(0);
+					antibioticoCopy.setHabian(movimientoRecepcion.getHabian());
+					antibioticoCopy.setIdProveedor(recepcion.getIdProveedor());
+					
+					antibiotico.setAdquiridos(movimientoRecepcion.getAdquiridos());
+					antibiotico.setDocumento(Integer.toString(movimientoRecepcion.getIdNota())); // id de la nota
+					antibiotico.setFecha(movimientoRecepcion.getFecha());
+					antibiotico.setIdMedico(1);													// id por default *temporal
+					antibiotico.setIdProducto(p.get(0).getIdProducto());
+					antibiotico.setQuedan(movimientoRecepcion.getQuedan());
+					antibiotico.setReceta(0);
+					antibiotico.setSello(0);
+					antibiotico.setVendidos(0);
+					antibiotico.setHabian(movimientoRecepcion.getHabian());
+					antibiotico.setIdProveedor(recepcion.getIdProveedor());
+
+					antibDao.guardarAntibiotico(antibiotico,antibioticoCopy);
+					
+					logger.info("Antibiotico guardado: "+antibiotico.getIdProducto());
+					antibiotico = null;
+				}
+				//
 				
 				altaProducto.add(movimientoRecepcion);
 				

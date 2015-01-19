@@ -3,8 +3,8 @@
 "-//Hibernate/Hibernate Mapping DTD//EN"
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<class name="mx.com.pastillero.model.formBeans.Antibioticos"
-		table="Antibioticos">
+	<class name="mx.com.pastillero.model.formBeans.AntibioticosCopy"
+		table="AntibioticosCopy">
 		<meta attribute="class-description">
 			This class contains the employee detail.
 		</meta>

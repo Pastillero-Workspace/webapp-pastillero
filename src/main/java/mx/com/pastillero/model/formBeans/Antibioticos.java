@@ -11,6 +11,8 @@ public class Antibioticos {
 	private int vendidos;
 	private int quedan;
 	private int idMedico;
+	private int idProveedor;
+	private int habian;
 
 	public Antibioticos() {
 	}
@@ -95,6 +97,32 @@ public class Antibioticos {
 		this.idMedico = idMedico;
 	}
 
+	public int getIdProveedor() {
+		return idProveedor;
+	}
+
+	public void setIdProveedor(int idProveedor) {
+		this.idProveedor = idProveedor;
+	}
+
+	public int getHabian() {
+		return habian;
+	}
+
+	public void setHabian(int habian) {
+		this.habian = habian;
+	}
+
+	@Override
+	public String toString() {
+		return "Antibioticos [idAntibiotico=" + idAntibiotico + ", idProducto="
+				+ idProducto + ", fecha=" + fecha + ", documento=" + documento
+				+ ", receta=" + receta + ", sello=" + sello + ", adquiridos="
+				+ adquiridos + ", vendidos=" + vendidos + ", quedan=" + quedan
+				+ ", idMedico=" + idMedico + ", idProveedor=" + idProveedor
+				+ ", habian=" + habian + "]";
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -103,9 +131,11 @@ public class Antibioticos {
 		result = prime * result
 				+ ((documento == null) ? 0 : documento.hashCode());
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
+		result = prime * result + habian;
 		result = prime * result + idAntibiotico;
 		result = prime * result + idMedico;
 		result = prime * result + idProducto;
+		result = prime * result + idProveedor;
 		result = prime * result + quedan;
 		result = prime * result + receta;
 		result = prime * result + sello;
@@ -134,11 +164,15 @@ public class Antibioticos {
 				return false;
 		} else if (!fecha.equals(other.fecha))
 			return false;
+		if (habian != other.habian)
+			return false;
 		if (idAntibiotico != other.idAntibiotico)
 			return false;
 		if (idMedico != other.idMedico)
 			return false;
 		if (idProducto != other.idProducto)
+			return false;
+		if (idProveedor != other.idProveedor)
 			return false;
 		if (quedan != other.quedan)
 			return false;
@@ -151,12 +185,6 @@ public class Antibioticos {
 		return true;
 	}
 
-	@Override
-	public String toString() {
-		return "Antibioticos [idAntibiotico=" + idAntibiotico + ", idProducto="
-				+ idProducto + ", fecha=" + fecha + ", documento=" + documento
-				+ ", receta=" + receta + ", sello=" + sello + ", adquiridos="
-				+ adquiridos + ", vendidos=" + vendidos + ", quedan=" + quedan
-				+ ", idMedico=" + idMedico + "]";
-	}
+	
+	
 }

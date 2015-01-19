@@ -29,6 +29,7 @@ import mx.com.pastillero.model.dao.PersonaDao;
 import mx.com.pastillero.model.dao.ProductosDao;
 import mx.com.pastillero.model.dao.UsuarioDao;
 import mx.com.pastillero.model.formBeans.Antibioticos;
+import mx.com.pastillero.model.formBeans.AntibioticosCopy;
 import mx.com.pastillero.model.formBeans.Cliente;
 import mx.com.pastillero.model.formBeans.Familia;
 import mx.com.pastillero.model.formBeans.ItemVenta;
@@ -281,6 +282,24 @@ public class CobroController extends HttpServlet {
 						logger.info("Id producto y codigo : "+ iv.getIdproducto() + "|" + iv.getCodigo());
 						
 						if (nombreMedico.length() != 0	&& antibDao.isAntibiotico(iv.getCodigo())) {
+							AntibioticosCopy antibioticoCopy = new AntibioticosCopy();
+							antibioticoCopy.setAdquiridos(0);
+							antibioticoCopy.setDocumento(objnota.get("idnt").toString()); // id de la nota
+							antibioticoCopy.setFecha(dateFormat.format(date));
+							antibioticoCopy.setIdMedico(idMedico);
+							antibioticoCopy.setIdProducto(iv.getIdproducto());
+							antibioticoCopy.setQuedan(mapProducts.get(0).getExistencias() - iv.getCantidad());
+							antibioticoCopy.setHabian(iv.getHabian());
+							
+							int recetaByte2 = 0;
+							if (receta.compareTo("SI") == 0) {
+								recetaByte2 = 1;
+							}
+							antibioticoCopy.setReceta(recetaByte2);
+							antibioticoCopy.setSello(Integer.parseInt(sello));
+							antibioticoCopy.setVendidos(iv.getCantidad());
+							antibioticoCopy.setIdProveedor(1);
+							
 							Antibioticos antibiotico = new Antibioticos();
 							antibiotico.setAdquiridos(0);
 							antibiotico.setDocumento(objnota.get("idnt").toString()); // id de la nota
@@ -288,18 +307,20 @@ public class CobroController extends HttpServlet {
 							antibiotico.setIdMedico(idMedico);
 							antibiotico.setIdProducto(iv.getIdproducto());
 							antibiotico.setQuedan(mapProducts.get(0).getExistencias() - iv.getCantidad());
+							antibiotico.setHabian(iv.getHabian());
 							
-							int recetaByte = 0;
+							int recetaByte1 = 0;
 							if (receta.compareTo("SI") == 0) {
-								recetaByte = 1;
+								recetaByte1 = 1;
 							}
-							antibiotico.setReceta(recetaByte);
+							antibiotico.setReceta(recetaByte1);
 							antibiotico.setSello(Integer.parseInt(sello));
 							antibiotico.setVendidos(iv.getCantidad());
+							antibiotico.setIdProveedor(1);
 							
-							antibDao.guardarAntibiotico(antibiotico);
+							antibDao.guardarAntibiotico(antibiotico, antibioticoCopy);
 							logger.info("Antibiotico guardado: "+antibiotico.getIdProducto());
-							antibiotico = null;
+							antibioticoCopy = null;
 							
 						}
 					}
