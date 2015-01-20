@@ -95,6 +95,7 @@
 				              }]				
 			});
 			
+		
 			//var table = $('#example').DataTable();
 			 
 		    $('#search tbody').on( 'click', 'tr', function () {
