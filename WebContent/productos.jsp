@@ -53,12 +53,20 @@
 		$(document).ready(function() {
 		
 		    // Algoritmo de filtrado
-			$("#search thead input").on( 'keypress changed', function (e){  
+			/*$("#search thead input").on( 'keypress changed', function (e){  
 					 table
 					.column( $(this).parent().index()+':visible' )
 					.search(this.value)
 					.draw();				                  
-			});			
+			});*/
+			$("#filtros input").on( 'keypress changed', function (e){  
+				 table
+				//.column(5)
+				.column( $(this).parent().index()+':visible' )
+				.search(this.value)
+				.draw();				                  
+			});
+			
  	         
 			// Se establece el control de datos al destino
 			var table = $('#search').DataTable({
@@ -68,8 +76,15 @@
 			    "bSort": false,
 				scrollY : 900,
 				scrollX : 1400,
-				scrollCollapse : true
-				
+				scrollCollapse : true,
+				"columnDefs": [{
+					"targets": [ 1 ],
+	                "visible": false
+	              },
+	              {
+					"targets": [ 2 ],
+		            "visible": false
+		              }]
 			});
 			
 			$('#txtCodigo').keypress(function(event) {
@@ -95,39 +110,42 @@
 				
 			});
 			function buscar(txtcodigo, txtdescripcion){
-				console.log('buscar...');
 				blockpage();
+				var table = $('#search').DataTable();
 				$.ajax({
 					url: "consulta.jr",
 			        type: 'POST',
 			        dataType: 'json',
+			        contentType: 'application/json',
+			        mimeType: 'application/json',
 			        data:{
 			        	workout:'producto',
 			        	txtCodigo: txtcodigo,
 			        	txtDescripcion: txtdescripcion
-			        	},
-			        contentType: 'application/json',
-			        mimeType: 'application/json', 
-			        success: function (listaConsulta) {
-						  table.clear().draw();
-						  
-						  $.each(listaConsulta, function(i, producto){
-							  table.row.add([
-							             producto[0],producto[1],producto[2],producto[3],producto[4],producto[5],producto[6],producto[7],producto[8],
-							             producto[9],producto[10],producto[11],producto[12],producto[13],producto[14],producto[15],producto[16],producto[17],
-							             producto[18],producto[19],producto[20],producto[21],producto[22],producto[23],producto[24],producto[25],producto[26],
-							             producto[27],producto[28],producto[29],producto[30],producto[31],producto[32],producto[33],producto[34],producto[35],
-							             producto[36],producto[37],producto[38],producto[39],producto[40]
-							  ]);
-						  });
-						  table.draw();
-						  $.unblockUI();
-			        },
-			        error:function(data,status,er) {
+			        	}
+				}).done(function(listaConsulta){
+					if(listaConsulta.length > 0){
+					  table.clear().draw();
+					  
+					  $.each(listaConsulta, function(i, producto){
+						  table.row.add([
+						             producto[0],producto[1],producto[2],producto[3],producto[4],producto[5],producto[6],producto[7],producto[8],
+						             producto[9],producto[10],producto[11],producto[12],producto[13],producto[14],producto[15],producto[16],producto[17],
+						             producto[18],producto[19],producto[20],producto[21],producto[22],producto[23],producto[24],producto[25],producto[26],
+						             producto[27],producto[28],producto[29],producto[30],producto[31],producto[32],producto[33],producto[34],producto[35],
+						             producto[36],producto[37],producto[38],producto[39],producto[40],producto[41],producto[42],producto[43],producto[44]
+						  ]);
+					  });
+					  table.draw();
+					  $.unblockUI();
+					}else{
+						$.unblockUI();
+						alert("No se encontraron productos, intente con otra busqueda.");
+					}
+				}).fail(function(data,status,er) {
+			        	$.unblockUI();
 			            alert("error: "+data+" status: "+status+" er:"+er);
-			            $.unblockUI();
-			        }
-			    });
+			   });
 			}
 			
 			// datatable configuration
@@ -154,14 +172,10 @@
 					index = table.row('.selected').index();
 					var registro = table.row('.selected').data();
 					var nombreProducto='';
-					if (window.confirm("Desea eliminar este producto seleccionado")) 
-					{ 
-							
-						if(index>=0)
-						       {
+					if (window.confirm("Desea eliminar este producto seleccionado")){ 
+						if(index>=0){
 							$.each(registro, function(data, value){
-							 if(data==2)
-								{
+							 	if(data==2){
 									nombreProducto = value;
 								}
 							});
@@ -169,12 +183,10 @@
 								tarea: 'eliminar',
 								txtNombre: nombreProducto
 							},function(){
-								
 							});
 							table.row(index).remove().draw(true);
 						}
-						else
-						{
+						else{
 							window.alert("Seleccione un producto de la lista para poder eliminarlo");
 						}
 					}
@@ -195,8 +207,10 @@
 						$("#atxtProveedor").select();
 						$('input[type="text"]').val('');
 						$("#atxtProveedor").val("PASTILLERO");
-						$("#atxtClave").val("0000000000000000");
-						$("#atxtCodBar").val("0000000000000000");
+						$("#atxtProveedor2").val("PASTILLERO");
+						$("#atxtProveedor3").val("PASTILLERO");
+						$("#atxtClave").val("");
+						$("#atxtCodBar").val("");
 						$("#atxtDescripcion").val("SIN DESCRIPCION");
 						$("#atxtFamilia").val("SIN FAMILIA");
 						$("#atxtLinea").val("SINLINEA");
@@ -212,6 +226,7 @@
 						$("#atxtCls").val("SINCLASF");
 						$("#atxtZona").val("SINZONA");
 						$("#atxtPareto").val("SINPAR");
+						$("#atxtPareto2").val("SINPAR");
 						$("#atxtReferencia").val("SINREF");
 						$("#atxtKit").val("SINKIT");
 						$("#atxtGrupo").val("SINGRUPO");
@@ -237,6 +252,7 @@
 						$("#atxtUltimoCosto").val("0.00");
 						$("#atxtCostoPromedio").val("0.00");
 						$("#atxtCostoReal").val("0.00");
+						$("#atxtFechaPcio").val("2015-01-01");
 						$("#formAlta").dialog("open");						
 				});
 				
@@ -253,124 +269,136 @@
 								$("#txtProveedor").val(value);
 							}
 							if(date==1){
-								$("#txtClave").val(value);
+								$("#txtProveedor2").val(value);
 							}
 							if(date==2){
+								$("#txtProveedor3").val(value);
+							}
+							if(date==3){
+								$("#txtClave").val(value);
+							}
+							if(date==4){
 								$("#txtCodBar").val(value);
 								codBarRespaldo = value;
 							}
-							if(date==3){
+							if(date==5){
 								$("#txtDescripcion").val(value);
 							}
-							if(date==4){
+							if(date==6){
 								$("#txtExistencias").val(value);
 							}
-							if(date==5){
+							if(date==7){
 								$("#txtFamilia").val(value);
 							}
-							if(date==6){
+							if(date==8){
 								$("#txtPrecPub").val(value);
 							}
-							if(date==7){
+							if(date==9){
 								$("#txtPrecDesc").val(value);
 							}
-							if(date==8){
+							if(date==10){
 								$("#txtFarmacia").val(value);
 							}
-							if(date==9){
-								$("#txtIva").val(value);
-							}
-							if(date==10){
-								$("#txtLinea").val(value);
-							}
 							if(date==11){
-								$("#txtReferencia").val(value);
+								$("#txtFechaPcio").val(value);
 							}
 							if(date==12){
-								$("#txtssa").val(value);
+								$("#txtIva").val(value);
 							}
 							if(date==13){
-								$("#txtLaboratorio").val(value);
+								$("#txtLinea").val(value);
 							}
 							if(date==14){
-								$("#txtDepartamento").val(value);
+								$("#txtReferencia").val(value);
 							}
 							if(date==15){
-								$("#txtCategoria").val(value);
+								$("#txtssa").val(value);
 							}
 							if(date==16){
-								$("#txtActualizable").val(value);
+								$("#txtLaboratorio").val(value);
 							}
 							if(date==17){
-								$("#txtDescuento").val(value);
+								$("#txtDepartamento").val(value);
 							}
 							if(date==18){
-								$("#txtCosto").val(value);
+								$("#txtCategoria").val(value);
 							}
 							if(date==19){
-								$("#txtEquivalencia").val(value);
+								$("#txtActualizable").val(value);
 							}
 							if(date==20){
-								$("#txtSuperfamilia").val(value);
+								$("#txtDescuento").val(value);
 							}
 							if(date==21){
-								$("#txtCls").val(value);
+								$("#txtCosto").val(value);
 							}
 							if(date==22){
-								$("#txtZona").val(value);
+								$("#txtEquivalencia").val(value);
 							}
 							if(date==23){
-								$("#txtPareto").val(value);
+								$("#txtSuperfamilia").val(value);
 							}
 							if(date==24){
-								$("#txtIeps").val(value);
+								$("#txtCls").val(value);
 							}
 							if(date==25){
-								$("#txtIeps2").val(value);
+								$("#txtZona").val(value);
 							}
 							if(date==26){
-								$("#txtLimitado").val(value);
+								$("#txtPareto").val(value);
 							}
 							if(date==27){
-								$("#txtKit").val(value);
+								$("#txtPareto2").val(value);
 							}
 							if(date==28){
-								$("#txtComision").val(value);
+								$("#txtIeps").val(value);
 							}
 							if(date==29){
-								$("#txtmaxDescuento").val(value);
+								$("#txtIeps2").val(value);
 							}
 							if(date==30){
-								$("#txtGrupo").val(value);
+								$("#txtLimitado").val(value);
 							}
 							if(date==31){
-								$("#txtDescBase").val(value);
+								$("#txtKit").val(value);
 							}
 							if(date==32){
-								$("#txtPoliticaOferta").val(value);
+								$("#txtComision").val(value);
 							}
 							if(date==33){
-								$("#txtAntibiotico").val(value);
+								$("#txtmaxDescuento").val(value);
 							}
 							if(date==34){
-								$("#txtEspecial").val(value);
+								$("#txtGrupo").val(value);
 							}
 							if(date==35){
-								$("#txtfamActualizar").val(value);
+								$("#txtDescBase").val(value);
 							}
 							if(date==36){
-								$("#txtcomInmediata").val(value);
+								$("#txtPoliticaOferta").val(value);
 							}
 							if(date==37){
-								$("#txtUProveedor").val(value);
+								$("#txtAntibiotico").val(value);
 							}
 							if(date==38){
-								$("#txtUltimoCosto").val(value);
+								$("#txtEspecial").val(value);
 							}
 							if(date==39){
-								$("#txtCostoPromedio").val(value);
+								$("#txtfamActualizar").val(value);
 							}
 							if(date==40){
+								$("#txtcomInmediata").val(value);
+							}
+							if(date==41){
+								$("#txtUProveedor").val(value);
+							}
+							if(date==42){
+								$("#txtUltimoCosto").val(value);
+							}
+							if(date==43){
+								$("#txtCostoPromedio").val(value);
+							}
+							if(date==44){
 								$("#txtCostoReal").val(value);
 							}						
 						});
@@ -416,6 +444,8 @@
 														        {
 																	tarea: 'Agregar',					
 																	txtProveedor: $('#atxtProveedor').val(),
+																	txtProveedor2: $('#atxtProveedor2').val(),
+																	txtProveedor3: $('#atxtProveedor3').val(),
 																	txtClave: $('#atxtClave').val(),
 																	txtCodBar: $('#atxtCodBar').val(),
 																	txtDescripcion: $('#atxtDescripcion').val(),
@@ -423,6 +453,7 @@
 																	txtPrecioPub: $('#atxtPrecPub').val(),
 																	txtPrecDesc: $('#atxtPrecDesc').val(),
 																	txtFarmacia: $('#atxtFarmacia').val(),
+																	txtFechaPcio: $('#atxtFechaPcio').val(),
 																	txtIva: $('#atxtIva').val(),
 																	txtLinea: $('#atxtLinea').val(),
 																	txtReferencia: $('#atxtReferencia').val(),
@@ -438,6 +469,7 @@
 																	txtCls: $('#atxtCls').val(),
 																	txtZona: $('#atxtZona').val(),
 																	txtPareto: $('#atxtPareto').val(),
+																	txtPareto2: $('#atxtPareto2').val(),
 																	txtIeps: $('#atxtIeps').val(),
 																	txtIeps2: $('#atxtIeps2').val(),
 																	txtLimitado: $('#atxtLimitado').val(),
@@ -457,58 +489,61 @@
 																	txtCostoPromedio: $('#atxtCostoPromedio').val(),
 																	txtCostoReal: $('#atxtCostoReal').val()
 																					
-																	},function(data)
-																	{
-																	if(data == 'Create')
-																	{
-																	table.row(index).data
-																	([										            
-																		$('#atxtProveedor').val(),
-																		$('#atxtClave').val(),
-																		$('#atxtCodBar').val(),
-																		$('#atxtDescripcion').val(),
-																		$('#atxtExistencias').val(),
-																	    $('#atxtFamilia').val(),
-																		$('#atxtPrecPub').val(),
-																		$('#atxtPrecDesc').val(),
-																		$('#atxtFarmacia').val(),
-																		$('#atxtIva').val(),
-																		$('#atxtLinea').val(),
-																		$('#atxtReferencia').val(),
-																	    $('#atxtssa').val(),
-																		$('#atxtLaboratorio').val(),
-																		$('#atxtDepartamento').val(),
-																		$('#atxtcategoria').val(),
-																		$('#atxtActualizable').val(),
-																		$('#atxtDescuento').val(),
-																		$('#atxtCosto').val(),
-																		$('#atxtEquivalencia').val(),
-																		$('#atxtSuperfamilia').val(),
-																		$('#atxtCls').val(),
-																		$('#atxtZona').val(),
-																		$('#atxtPareto').val(),
-																		$('#atxtIeps').val(),
-																		$('#atxtIeps2').val(),
-																		$('#atxtLimitado').val(),
-																		$('#atxtKit').val(),
-																		$('#atxtComision').val(),
-																		$('#atxtmaxDescuento').val(),
-																		$('#atxtGrupo').val(),
-																		$('#atxtDescBase').val(),
-																		$('#atxtPoliticaOferta').val(),
-																		$('#atxtAntibiotico').val(),
-																		$('#atxtEspecial').val(),
-																		$('#atxtfamActualizar').val(),
-																		$('#atxtcomInmediata').val(),
-																		$('#atxtUProveedor').val(),
-																		$('#atxtUltimoCosto').val(),
-																		$('#atxtCostoPromedio').val(),
-																		$('#atxtCostoReal').val()										
-																	]);
-																	   window.alert("Actualizacion existosa");														  
-																	}									
+																	},function(data){
+																	//if(data == 'Create')
+																	//{}									
 																  });
-																  $(this).dialog("close");
+														table.row.add
+														([										            
+															$('#atxtProveedor').val(),
+															$('#atxtProveedor2').val(),
+															$('#atxtProveedor3').val(),
+															$('#atxtClave').val(),
+															$('#atxtCodBar').val(),
+															$('#atxtDescripcion').val(),
+															$('#atxtExistencias').val(),
+														    $('#atxtFamilia').val(),
+															$('#atxtPrecPub').val(),
+															$('#atxtPrecDesc').val(),
+															$('#atxtFarmacia').val(),
+															$('#atxtFechaPcio').val(),
+															$('#atxtIva').val(),
+															$('#atxtLinea').val(),
+															$('#atxtReferencia').val(),
+														    $('#atxtssa').val(),
+															$('#atxtLaboratorio').val(),
+															$('#atxtDepartamento').val(),
+															$('#atxtCategoria').val(),
+															$('#atxtActualizable').val(),
+															$('#atxtDescuento').val(),
+															$('#atxtCosto').val(),
+															$('#atxtEquivalencia').val(),
+															$('#atxtSuperfamilia').val(),
+															$('#atxtCls').val(),
+															$('#atxtZona').val(),
+															$('#atxtPareto').val(),
+															$('#atxtPareto2').val(),
+															$('#atxtIeps').val(),
+															$('#atxtIeps2').val(),
+															$('#atxtLimitado').val(),
+															$('#atxtKit').val(),
+															$('#atxtComision').val(),
+															$('#atxtmaxDescuento').val(),
+															$('#atxtGrupo').val(),
+															$('#atxtDescBase').val(),
+															$('#atxtPoliticaOferta').val(),
+															$('#atxtAntibiotico').val(),
+															$('#atxtEspecial').val(),
+															$('#atxtfamActualizar').val(),
+															$('#atxtcomInmediata').val(),
+															$('#atxtUProveedor').val(),
+															$('#atxtUltimoCosto').val(),
+															$('#atxtCostoPromedio').val(),
+															$('#atxtCostoReal').val()										
+														]).draw();
+														$("#formAlta").dialog("close");	
+														window.alert("Se agrego nuevo producto con exito");															
+															
 													}else{
 														window.alert("El codigo ya existe, coloque otro codigo nuevo");
 														$("#atxtCodBar").select();
@@ -559,6 +594,8 @@
 									tarea: 'actualizar',	
 									codBarRespaldo: codBarRespaldo,
 									txtProveedor: $('#txtProveedor').val(),
+									txtProveedor2: $('#txtProveedor2').val(),
+									txtProveedor3: $('#txtProveedor3').val(),
 									txtClave: $('#txtClave').val(),
 									txtCodBar: $('#txtCodBar').val(),
 									txtDescripcion: $('#txtDescripcion').val(),
@@ -566,6 +603,7 @@
 									txtPrecioPub: $('#txtPrecPub').val(),
 									txtPrecDesc: $('#txtPrecDesc').val(),
 									txtFarmacia: $('#txtFarmacia').val(),
+									txtFechaPcio: $('#txtFechaPcio').val(),
 									txtIva: $('#txtIva').val(),
 									txtLinea: $('#txtLinea').val(),
 									txtReferencia: $('#txtReferencia').val(),
@@ -581,6 +619,7 @@
 									txtCls: $('#txtCls').val(),
 									txtZona: $('#txtZona').val(),
 									txtPareto: $('#txtPareto').val(),
+									txtPareto2: $('#txtPareto2').val(),
 									txtIeps: $('#txtIeps').val(),
 									txtIeps2: $('#txtIeps2').val(),
 									txtLimitado: $('#txtLimitado').val(),
@@ -607,6 +646,8 @@
 									  {
 										table.row(index).data([	
 										$('#txtProveedor').val(),
+										$('#txtProveedor2').val(),
+										$('#txtProveedor3').val(),
 										$('#txtClave').val(),
 										$('#txtCodBar').val(),
 										$('#txtDescripcion').val(),
@@ -615,6 +656,7 @@
 										$('#txtPrecPub').val(),
 										$('#txtPrecDesc').val(),
 										$('#txtFarmacia').val(),
+										$('#txtFechaPcio').val(),
 										$('#txtIva').val(),
 										$('#txtLinea').val(),
 										$('#txtReferencia').val(),
@@ -630,6 +672,7 @@
 									    $('#txtCls').val(),
 										$('#txtZona').val(),
 										$('#txtPareto').val(),
+										$('#txtPareto2').val(),
 										$('#txtIeps').val(),
 									    $('#txtIeps2').val(),
 										$('#txtLimitado').val(),
@@ -668,7 +711,17 @@
 			//Tecla enter en todos los campos
 			$("#txtProveedor").keypress(function(e){
 				if(e.which == 13){
-					$("#txtDescripcion").select();
+					$("#txtProveedor2").select();
+				}
+			});
+			$("#txtProveedor2").keypress(function(e){
+				if(e.which == 13){
+					$("#txtProveedor3").select();
+				}
+			});
+			$("#txtProveedor3").keypress(function(e){
+				if(e.which == 13){
+					$("#txtClave").select();
 				}
 			});
 			$("#txtClave").keypress(function(e){
@@ -707,6 +760,11 @@
 				}
 			});
 			$("#txtFarmacia").keypress(function(e){
+				if(e.which == 13){
+					$("#txtFechaPcio").select();
+				}
+			});
+			$("#txtFechaPcio").keypress(function(e){
 				if(e.which == 13){
 					$("#txtIva").select();
 				}
@@ -782,6 +840,11 @@
 				}
 			});
 			$("#txtPareto").keypress(function(e){
+				if(e.which == 13){
+					$("#txtPareto2").select();
+				}
+			});
+			$("#txtPareto2").keypress(function(e){
 				if(e.which == 13){
 					$("#txtIeps").select();
 				}
@@ -876,6 +939,16 @@
 			//Campos formulario para agregar nuevo producto
 			$("#atxtProveedor").keypress(function(e){
 				if(e.which == 13){
+					$("#atxtProveedor2").select();
+				}
+			});
+			$("#atxtProveedor2").keypress(function(e){
+				if(e.which == 13){
+					$("#atxtProveedor3").select();
+				}
+			});
+			$("#atxtProveedor3").keypress(function(e){
+				if(e.which == 13){
 					$("#atxtClave").select();
 				}
 			});
@@ -915,6 +988,11 @@
 				}
 			});
 			$("#atxtFarmacia").keypress(function(e){
+				if(e.which == 13){
+					$("#atxtFechaPcio").select();
+				}
+			});
+			$("#atxtFechaPcio").keypress(function(e){
 				if(e.which == 13){
 					$("#atxtIva").select();
 				}
@@ -990,6 +1068,11 @@
 				}
 			});
 			$("#atxtPareto").keypress(function(e){
+				if(e.which == 13){
+					$("#atxtPareto2").select();
+				}
+			});
+			$("#atxtPareto2").keypress(function(e){
 				if(e.which == 13){
 					$("#atxtIeps").select();
 				}
@@ -1079,14 +1162,28 @@
 					$("#btnAdd").focus();
 				}
 			});
+			$("#txtFechaPcio").datepicker({ dateFormat: "yy-mm-dd"});
+			$("#atxtFechaPcio").datepicker({ dateFormat: "yy-mm-dd"});
 			
-		
+			$("#btnQuitarFiltros").hide();
+			
+			$("#btnFiltros").button().click(function(){
+				$("#filtros").fadeIn(600);
+				$("#btnFiltros").hide();
+				$("#btnQuitarFiltros").show();
+			});
+			$("#btnQuitarFiltros").button().click(function(){
+				$("#filtros").fadeOut(600);
+				$("#btnQuitarFiltros").hide();
+				$("#btnFiltros").show();
+			});
+			
 		});
 		
 		/*Salir*/
 	    $(document).ready(function ()
 	    {
-        	$("#close").click(
+		    $("#close").click(
             function () 
              {               
             	var r = confirm("Desea cerrar el panel ?");
@@ -1110,17 +1207,19 @@
 			<fieldset>
 				<legend>Generales</legend>
 				<ol>
-					<li><label for="proveedor">* Proveedor:</label><input type="text" name="proveedor" id="txtProveedor" requiered autofocus> 
+					<li><label for="proveedor">* Proveedor:</label><input type="text" name="proveedor" id="txtProveedor" size="55" requiered autofocus><li>
+					<li><label for="proveedor2">* Proveedor2:</label><input type="text" name="proveedor2" id="txtProveedor2" size="20" requiered><label for="proveedor3">* Proveedor3:</label><input type="text" name="proveedor3" id="txtProveedor3" size="20" requiered></li>
 					<li><label for="clave">*Clave:</label><input type="text" name="clave" id="txtClave" size="20" disabled><label for="codBar">*Codigo Barras:</label><input type="text" name="codBar" id="txtCodBar" size="20" disabled></li>
 					<li><label for="descripcion">*Descripcion:</label><input type="text" name="txtDescripcion" id="txtDescripcion" size="45" /><label for="existencias">Existencias:</label><input type="text" name="existencias" id="txtExistencias" size="10"></li>
 					<li><label for="familia">*Familia:</label><input type="text" name="familia" id="txtFamilia" size="15"><label for="preciopub">*Precio Publico:</label><input type="text" name="preciopub" id="txtPrecPub" size="15"><label for="descripcion">*Precio Descuento:</label><input type="text" name="preciodescuento" id="txtPrecDesc" size="15"></li>
-					<li><label for="preciofarmacia">*Precio Farmacia:</label><input type="text" name="preciofarmacia" id="txtFarmacia" size="15"><label for="iva">*IVA:</label><input type="text" name="iva" id="txtIva" size="15"><label for="linea">*Linea:</label><input type="text" name="iva" id="txtLinea" size="15"></li>
-					<li><label for="referencia">*Referencia:</label><input type="text" name="referencia" id="txtReferencia" size="15"><label for="ssa">*SSA:</label><input type="text" name="ssa" id="txtssa" size="15"></li>
+					<li><label for="preciofarmacia">*Precio Farmacia:</label><input type="text" name="preciofarmacia" id="txtFarmacia" size="15"><label for="fechaPcio">*Fecha Pcio:</label><input type="text" name="FechaPcio" id="txtFechaPcio" size="15"><label for="iva">*IVA:</label><input type="text" name="iva" id="txtIva" size="15"></li>
+					<li><label for="linea">*Linea:</label><input type="text" name="iva" id="txtLinea" size="15"><label for="referencia">*Referencia:</label><input type="text" name="referencia" id="txtReferencia" size="15"><label for="ssa">*SSA:</label><input type="text" name="ssa" id="txtssa" size="15"></li>
 					<li><label for="laboratorio">*Laboratorio:</label><input type="text" name="laboratorio" id="txtLaboratorio" size="57"></li>
 					<li><label for="departamento">Departamento:</label><input type="text" name="departamento" id="txtDepartamento" size="15"><label for="categoria">*Categoria:</label><input type="text" name="categoria" id="txtCategoria" size="15"><label for="actualizable">*Actualizable:</label><input type="text" name="iva" id="txtActualizable" size="10"></li>
 					<li><label for="descuento">Descuento:</label><input type="text" name="descuento" id="txtDescuento" size="15"><label for="costo">Costo:</label><input type="text" name="costo" id="txtCosto" size="15"><label for="equivalencia">Equivalencia:</label><input type="text" name="equivalencia" id="txtEquivalencia" size="15"></li>
 					<li><label for="superfamilia">Superfamilia:</label><input type="text" name="superfamilia" id="txtSuperfamilia" size="15"><label for="cls">CLS:</label><input type="text" name="cls" id="txtCls" size="15"><label for="zona">Zona:</label><input type="text" name="zona" id="txtZona" size="15"></li>
-					<li><label for="pareto">Pareto:</label><input type="text" name="pareto" id="txtPareto" size="15"><label for="ieps">*IEPS 1:</label><input type="text" name="ieps" id="txtIeps" size="15"><label for="ieps2">*IEPS 2:</label><input type="text" name="ieps2" id="txtIeps2" size="15"></li>
+					<li><label for="pareto">Pareto:</label><input type="text" name="pareto" id="txtPareto" size="15"><label for="pareto2">Pareto2:</label><input type="text" name="pareto2" id="txtPareto2" size="15"></li>
+					<li><label for="ieps">*IEPS 1:</label><input type="text" name="ieps" id="txtIeps" size="15"><label for="ieps2">*IEPS 2:</label><input type="text" name="ieps2" id="txtIeps2" size="15"></li>
 					<li><label for="lmitado">Limitado:</label><input type="text" name="limitado" id="txtLimitado" size="15"><label for="kit">Kit:</label><input type="text" name="kit" id="txtKit" size="15"><label for="comision">*Comision:</label><input type="text" name="comision" id="txtComision" size="15"></li>
 					<li><label for="maxdescuento">Descuento Maximo:</label><input type="text" name="maxdescuento" id="txtmaxDescuento" size="15"><label for="grupo">Grupo:</label><input type="text" name="grupo" id="txtGrupo" size="15"><label for="aplicades">Aplica Des Base:</label><input type="text" name="descbase" id="txtDescBase" size="15"></li>
 					<li><label for="politicaoferta">Politica Oferta:</label><input type="text" name="politicaoferta" id="txtPoliticaOferta" size="15"><label for="antibiotico">Antibiotico:</label><input type="text" name="antibiotico" id="txtAntibiotico" size="15"></li>
@@ -1137,17 +1236,19 @@
 			<fieldset>
 				<legend>Generales</legend>
 				<ol>
-					<li><label for="proveedor">* Proveedor:</label><input type="text" name="proveedor" id="atxtProveedor" requiered autofocus> 
+					<li><label for="proveedor">* Proveedor:</label><input type="text" name="proveedor" id="atxtProveedor" size="55" requiered autofocus>
+					<li><label for="proveedor2">* Proveedor2:</label><input type="text" name="proveedor2" id="atxtProveedor2" size="20" requiered><label for="proveedor3">* Proveedor3:</label><input type="text" name="proveedor3" id="atxtProveedor3" size="20" requiered></li> 
 					<li><label for="clave">*Clave:</label><input type="text" name="clave" id="atxtClave" size="20"><label for="codBar">*Codigo Barras:</label><input type="text" name="codBar" id="atxtCodBar" size="20"></li>
 					<li><label for="descripcion">*Descripcion:</label><input type="text" name="descripcion" id="atxtDescripcion" size="45"><label for="existencias">Existencias:</label><input type="text" name="existencias" id="atxtExistencias" size="10"></li>
 					<li><label for="familia">*Familia:</label><input type="text" name="familia" id="atxtFamilia" size="15"><label for="preciopub">*Precio Publico:</label><input type="text" name="preciopub" id="atxtPrecPub" size="15"><label for="descripcion">*Precio Descuento:</label><input type="text" name="preciodescuento" id="atxtPrecDesc" size="15"></li>
-					<li><label for="preciofarmacia">*Precio Farmacia:</label><input type="text" name="preciofarmacia" id="atxtFarmacia" size="15"><label for="iva">*IVA:</label><input type="text" name="iva" id="atxtIva" size="15"><label for="linea">*Linea:</label><input type="text" name="iva" id="atxtLinea" size="15"></li>
-					<li><label for="referencia">*Referencia:</label><input type="text" name="referencia" id="atxtReferencia" size="15"><label for="ssa">*SSA:</label><input type="text" name="ssa" id="atxtssa" size="15"></li>
+					<li><label for="preciofarmacia">*Precio Farmacia:</label><input type="text" name="preciofarmacia" id="atxtFarmacia" size="15"><label for="fechaPcio">*Fecha Pcio:</label><input type="text" name="FechaPcio" id="atxtFechaPcio" size="15"><label for="iva">*IVA:</label><input type="text" name="iva" id="atxtIva" size="15"></li>
+					<li><label for="linea">*Linea:</label><input type="text" name="linea" id="atxtLinea" size="15"><label for="referencia">*Referencia:</label><input type="text" name="referencia" id="atxtReferencia" size="15"><label for="ssa">*SSA:</label><input type="text" name="ssa" id="atxtssa" size="15"></li>
 					<li><label for="laboratorio">*Laboratorio:</label><input type="text" name="laboratorio" id="atxtLaboratorio" size="57"></li>
 					<li><label for="departamento">Departamento:</label><input type="text" name="departamento" id="atxtDepartamento" size="15"><label for="categoria">*Categoria:</label><input type="text" name="categoria" id="atxtCategoria" size="15"><label for="actualizable">*Actualizable:</label><input type="text" name="iva" id="atxtActualizable" size="10"></li>
 					<li><label for="descuento">Descuento:</label><input type="text" name="descuento" id="atxtDescuento" size="15"><label for="costo">Costo:</label><input type="text" name="costo" id="atxtCosto" size="15"><label for="equivalencia">Equivalencia:</label><input type="text" name="equivalencia" id="atxtEquivalencia" size="15"></li>
 					<li><label for="superfamilia">Superfamilia:</label><input type="text" name="superfamilia" id="atxtSuperfamilia" size="15"><label for="cls">CLS:</label><input type="text" name="cls" id="atxtCls" size="15"><label for="zona">Zona:</label><input type="text" name="zona" id="atxtZona" size="15"></li>
-					<li><label for="pareto">Pareto:</label><input type="text" name="pareto" id="atxtPareto" size="15"><label for="ieps">*IEPS 1:</label><input type="text" name="ieps" id="atxtIeps" size="15"><label for="ieps2">*IEPS 2:</label><input type="text" name="ieps2" id="atxtIeps2" size="15"></li>
+					<li><label for="pareto">Pareto:</label><input type="text" name="pareto" id="atxtPareto" size="15"><label for="pareto2">Pareto2:</label><input type="text" name="pareto2" id="atxtPareto2" size="15"></li>
+					<li><label for="ieps">*IEPS 1:</label><input type="text" name="ieps" id="atxtIeps" size="15"><label for="ieps2">*IEPS 2:</label><input type="text" name="ieps2" id="atxtIeps2" size="15"></li>
 					<li><label for="lmitado">Limitado:</label><input type="text" name="limitado" id="atxtLimitado" size="15"><label for="kit">Kit:</label><input type="text" name="kit" id="atxtKit" size="15"><label for="comision">*Comision:</label><input type="text" name="comision" id="atxtComision" size="15"></li>
 					<li><label for="maxdescuento">Descuento Maximo:</label><input type="text" name="maxdescuento" id="atxtmaxDescuento" size="15"><label for="grupo">Grupo:</label><input type="text" name="grupo" id="atxtGrupo" size="15"><label for="aplicades">Aplica Des Base:</label><input type="text" name="descbase" id="atxtDescBase" size="15"></li>
 					<li><label for="politicaoferta">Politica Oferta:</label><input type="text" name="politicaoferta" id="atxtPoliticaOferta" size="15"><label for="antibiotico">Antibiotico:</label><input type="text" name="antibiotico" id="atxtAntibiotico" size="15"></li>
@@ -1200,17 +1301,72 @@
 			</div>
 			<div STYLE="float: left; top:150px; left:10px; width:600px; background-color:#00cccc;  margin: 20px;">
 				<form>
-				<ul STYLE="list-style-type: none;">
-					<li><label for="codigo"><b>Codigo:</b></label><input type="text" id="txtCodigo" name="codigo" size="50"><button type="button" id="btnBuscar">Buscar.</button><br></li>
-					<li><label for="descripcion"><b>Descripcion:</b></label><input type="text" id="txtDescripcionBusqueda" name="descripcion" size="50"></li>
-				</ul>
+				  <table>
+					<tr>
+						<td><label for="codigo"><b>Codigo:</b></label></td>
+						<td><input type="text" id="txtCodigo" name="codigo" size="50"><button type="button" id="btnBuscar">Buscar.</button></td>
+					</tr>
+					<tr>
+						<td><label for="descripcion"><b>Descripcion:</b></label></td>
+						<td><input type="text" id="txtDescripcionBusqueda" name="descripcion" size="50"><button type="button" id="btnFiltros">mas filtros.</button><button type="button" id="btnQuitarFiltros">quitar filtros.</button></td>
+					</tr>
+				  </table>
 				</form>
+			</div>
+			<div id="filtros" style="-webkit-column-count: 5; -moz-column-count: 5; column-count: 5;  display: none; width:1100px; background-color:#00cccc; float: left; left:10px;margin: 5px;">
+				<ul style="list-style-type: none;">
+					<li><input type="text" class="boxinit" placeholder="Proveedor" ></li>
+					<li><input type="text" class="boxinit" placeholder="Clave" ></li>
+					<li><input type="text" class="boxinit" placeholder="Codigo" ></li>
+					<li><input type="text" class="boxinit" placeholder="Descripcion" ></li>
+					<li><select><option>Mayor a</option><option>Menor a</option><option>Igual a</option></select><input type="text" class="boxinit" placeholder="Existen." size="6"></li>
+					<li><input type="text" class="boxinit" placeholder="Familia" ></li>
+					<li><input type="text" class="boxinit" placeholder="PrecioPub" ></li>
+					<li><input type="text" class="boxinit" placeholder="PrecioDesc" ></li>
+					<li><input type="text" class="boxinit" placeholder="PrecioFarm" ></li>
+					<li><input type="text" class="boxinit" placeholder="FechaPcio" ></li>
+					<li><input type="text" class="boxinit" placeholder="IVA" ></li>
+					<li><input type="text" class="boxinit" placeholder="Linea" ></li>
+					<li><input type="text" class="boxinit" placeholder="Referencia" ></li>
+					<li><input type="text" class="boxinit" placeholder="SSA" ></li>
+					<li><input type="text" class="boxinit" placeholder="Laboratorio" ></li>
+					<li><input type="text" class="boxinit" placeholder="Departamento" ></li>
+					<li><input type="text" class="boxinit" placeholder="Categoria" ></li>
+					<li><input type="text" class="boxinit" placeholder="Actualizable" ></li>
+					<li><input type="text" class="boxinit" placeholder="Descuento" ></li>
+					<li><input type="text" class="boxinit" placeholder="Costo" ></li>
+					<li><input type="text" class="boxinit" placeholder="Equivalencia" ></li>
+					<li><input type="text" class="boxinit" placeholder="Superfamilia" ></li>
+					<li><input type="text" class="boxinit" placeholder="CLS" ></li>
+					<li><input type="text" class="boxinit" placeholder="Zona" ></li>
+					<li><input type="text" class="boxinit" placeholder="Pareto" ></li>
+					<li><input type="text" class="boxinit" placeholder="Pareto2" ></li>
+					<li><input type="text" class="boxinit" placeholder="IEPS" ></li>
+					<li><input type="text" class="boxinit" placeholder="IEPS2" ></li>
+					<li><input type="text" class="boxinit" placeholder="Limitado" ></li>
+					<li><input type="text" class="boxinit" placeholder="Kit" ></li>
+					<li><input type="text" class="boxinit" placeholder="Comision" ></li>
+					<li><input type="text" class="boxinit" placeholder="MaxDescuento" ></li>
+					<li><input type="text" class="boxinit" placeholder="Grupo" ></li>
+					<li><input type="text" class="boxinit" placeholder="DescuentoBase" ></li>
+					<li><input type="text" class="boxinit" placeholder="PoliticaOfer" ></li>
+					<li><input type="text" class="boxinit" placeholder="Antibiotico" ></li>
+					<li><input type="text" class="boxinit" placeholder="Especial" ></li>
+					<li><input type="text" class="boxinit" placeholder="FamActualiz" ></li>
+					<li><input type="text" class="boxinit" placeholder="ComInmediata" ></li>
+					<li><input type="text" class="boxinit" placeholder="U.Proveedor" ></li>
+					<li><input type="text" class="boxinit" placeholder="U.Costo"></li>
+					<li><input type="text" class="boxinit" placeholder="CostoPromedio"></li>
+					<li><input type="text" class="boxinit" placeholder="CostoReal"></li>
+				</ul>
 			</div>
 			<!-- panel de productos -->
 			<table id="search" class="display"cellspacing="0" width="1400px">
 				<thead>	
 					<tr>
 						<th style="width: 10%">Proveedor</th>
+						<th style="width: 10%">Proveedor2</th>
+						<th style="width: 10%">Proveedor3</th>
 						<th style="width: 20%">Clave</th>
 						<th style="width: 20%">Codigo</th>
 						<th style="width: 50%">Descripcion</th>
@@ -1219,6 +1375,7 @@
 						<th style="width: 5%">Precio Pub</th>
 						<th style="width: 5%">Precio Desc</th>
 						<th style="width: 5%">Precio Farm</th>
+						<th style="width: 5%">Fecha Pcio</th>
 						<th style="width: 5%" >IVA</th>
 						<th style="width: 5%" >Linea</th>
 						<th style="width: 5%" >Referencia</th>
@@ -1234,6 +1391,7 @@
 						<th style="width: 7%">CLS</th>
 						<th style="width: 5%">Zona</th>
 						<th style="width: 5%">Pareto</th>
+						<th style="width: 5%">Pareto2</th>
 						<th style="width: 5%">IEPS</th>
 						<th style="width: 5%">IEPS2</th>
 						<th style="width: 10%">Limitado</th>
@@ -1253,13 +1411,16 @@
 						<th style="width: 10%">Costo Real</th>
 				    </tr>
 				    </thead>
-				   <thead>	
+				  <!-- <thead>	
 					<tr>
+						<th></th>
+						<th></th>
 						<th></th>
 						<th></th>
 						<th><input class="boxinit" style="width: 30px" type="text" /></th>
 						<th><input class="boxinit" style="width: 70px" type="text"/></th>
 						<th><input class="boxinit" style="width: 30px" type="text"/></th>
+						<th></th>
 						<th></th>
 						<th></th>
 						<th></th>
@@ -1296,8 +1457,9 @@
 						<th></th>
 						<th></th>
 						<th></th>
+						<th></th>
 					</tr>								
-				</thead>
+				</thead> --> 
 				<tbody>
 				</tbody>
 			</table>

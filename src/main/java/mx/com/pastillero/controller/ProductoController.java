@@ -57,6 +57,8 @@ public class ProductoController extends HttpServlet{
 		 	{
 				pds.setIdProducto(lpds.get(0).getIdProducto());
 				pds.setProveedor(request.getParameter("txtProveedor").trim().toUpperCase());
+				pds.setProveedor2(request.getParameter("txtProveedor2").trim().toUpperCase());
+				pds.setProveedor3(request.getParameter("txtProveedor3").trim().toUpperCase());
 				pds.setClave(request.getParameter("txtClave").trim());
 				pds.setCodBar(codigo.toString());
 				pds.setDescripcion(request.getParameter("txtDescripcion").trim().toUpperCase());
@@ -64,6 +66,7 @@ public class ProductoController extends HttpServlet{
 				pds.setPrecioPub(Float.parseFloat(request.getParameter("txtPrecioPub").trim()));
 				pds.setPrecioDesc(Float.parseFloat(request.getParameter("txtPrecDesc").trim()));
 				pds.setPrecioFarmacia(Float.parseFloat(request.getParameter("txtFarmacia").trim()));
+				pds.setFechaPcio(request.getParameter("txtFechaPcio").trim());
 				pds.setIva(Integer.parseInt(request.getParameter("txtIva").trim()));
 				pds.setLinea(request.getParameter("txtLinea").trim().toUpperCase());
 				pds.setReferencia(request.getParameter("txtReferencia").trim().toUpperCase());
@@ -79,6 +82,7 @@ public class ProductoController extends HttpServlet{
 				pds.setCls(request.getParameter("txtCls").trim().toUpperCase());
 				pds.setZona(request.getParameter("txtZona").trim().toUpperCase());
 				pds.setPareto(request.getParameter("txtPareto").trim().toUpperCase());
+				pds.setPareto2(request.getParameter("txtPareto2").trim().toUpperCase());
 				pds.setIeps(Integer.parseInt(request.getParameter("txtIeps").trim()));
 				pds.setIeps2(Integer.parseInt(request.getParameter("txtIeps2").trim()));
 				pds.setLimitado(Float.parseFloat(request.getParameter("txtLimitado").trim()));
@@ -130,6 +134,8 @@ public class ProductoController extends HttpServlet{
 		 	if(idFamilia!= 0)	
 		 	{
 				pds.setProveedor(request.getParameter("txtProveedor").trim().toUpperCase());
+				pds.setProveedor2(request.getParameter("txtProveedor2").trim().toUpperCase());
+				pds.setProveedor3(request.getParameter("txtProveedor3").trim().toUpperCase());
 				pds.setClave(request.getParameter("txtClave").trim());
 				pds.setCodBar(codigo.toString());
 				pds.setDescripcion(request.getParameter("txtDescripcion").trim().toUpperCase());
@@ -137,6 +143,7 @@ public class ProductoController extends HttpServlet{
 				pds.setPrecioPub(Float.parseFloat(request.getParameter("txtPrecioPub").trim()));
 				pds.setPrecioDesc(Float.parseFloat(request.getParameter("txtPrecDesc").trim()));
 				pds.setPrecioFarmacia(Float.parseFloat(request.getParameter("txtFarmacia").trim()));
+				pds.setFechaPcio(request.getParameter("txtFechaPcio").trim().toUpperCase());
 				pds.setIva(Integer.parseInt(request.getParameter("txtIva").trim()));
 				pds.setLinea(request.getParameter("txtLinea").trim().toUpperCase());
 				pds.setReferencia(request.getParameter("txtReferencia").trim().toUpperCase());
@@ -152,6 +159,7 @@ public class ProductoController extends HttpServlet{
 				pds.setCls(request.getParameter("txtCls").trim().toUpperCase());
 				pds.setZona(request.getParameter("txtZona").trim().toUpperCase());
 				pds.setPareto(request.getParameter("txtPareto").trim().toUpperCase());
+				pds.setPareto2(request.getParameter("txtPareto2").trim().toUpperCase());
 				pds.setIeps(Integer.parseInt(request.getParameter("txtIeps").trim()));
 				pds.setIeps2(Integer.parseInt(request.getParameter("txtIeps2").trim()));
 				pds.setLimitado(Float.parseFloat(request.getParameter("txtLimitado").trim()));

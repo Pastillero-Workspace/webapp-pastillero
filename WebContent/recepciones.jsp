@@ -8,7 +8,7 @@
 <html lang="es">
 <head>
 	<!-- The CSS Styles for forms -->
-	<title>Consulta de Cliente | </title>
+	<title>Consulta de Recepciones | </title>
     <link href="<c:url value="/resources/css/edit.css" />" rel="stylesheet">
 	<link href="<c:url value="/resources/css/jquery-ui-1.10.4.custom.css"/>" rel="stylesheet" type="text/css">
 	<link href="<c:url value="/resources/css/jquery.dataTables.css" />" rel="stylesheet">
@@ -24,7 +24,7 @@
 	<script src="<c:url value="/resources/js/jquery.dataTables.js" />"></script>
 	<script src="<c:url value="/resources/js/dataTables.scroller.js" />"></script>
 	<script src="<c:url value="/resources/js/demo.js" />"></script>
-	
+	<script src="<c:url value="/resources/js/functions.js" />"></script>  
 	
 	<script type="text/javascript" language="javascript" class="init">
 	var op = false;
@@ -36,22 +36,19 @@
 	   String perfil = (String)session.getAttribute("perfil");
 	   Integer sesionid = (Integer)sesion.getAttribute("idSesion");
 	   Integer num = (Integer)sesion.getAttribute("numero");	
-	
-		if(num == null)
-		{
+	   Integer permiso =(Integer)sesion.getAttribute("pv");
+		if(num == null){
 				response.sendRedirect("index.jsp");
 		}
 		else 
-			if(num == 1 && perfil.equalsIgnoreCase(Types.A.getStatusCode()))
-			{
+			if(num == 1 && perfil.equalsIgnoreCase(Types.A.getStatusCode())){
 			sesion.setAttribute("numero", 2);
 			}
 	 %>
 		$(document).ready(function() {
-
+			checkEnabledRestriction('<%=usuario%>','<%=permiso%>'); 
 		    // Algoritmo de filtrado
-			$("#search thead input").on( 'keypress changed', function (e) 
-			{  
+			$("#search thead input").on( 'keypress changed', function (e){  
 					 table
 					.column( $(this).parent().index()+':visible' )
 					.search(this.value)
@@ -68,10 +65,13 @@
 		var data = [];
 		
 		<%for(int i=0; i<datos.size(); i++){%>
-		
+		<%
+			String[] fecha1 = datos.get(i)[2].toString().split("-");
+			String fecha = fecha1[2]+"-"+fecha1[1]+"-"+fecha1[0];
+		%>
 			data[<%=i%>]=[  '<%=datos.get(i)[0]%>',
 			   	            '<%=datos.get(i)[1]%>',
-			   	            '<%=datos.get(i)[2]%>',
+			   	            '<%=fecha%>',
 			   	            '<%=datos.get(i)[3]%>',
 			   	            '<%=datos.get(i)[4]%>',		   	               
 			   	            '<%=datos.get(i)[5]%>',
@@ -80,7 +80,11 @@
 			   	            '<%=datos.get(i)[8]%>',
 			   	            '<%=datos.get(i)[9]%>',
 					        '<%=datos.get(i)[10]%>',
-					        '<%=datos.get(i)[11]%>'
+					        '<%=datos.get(i)[11]%>',
+			   	            '<%=datos.get(i)[12]%>',
+					        '<%=datos.get(i)[13]%>',
+					        '<%=datos.get(i)[14]%>',
+					        '<%=datos.get(i)[15]%>'
 					        ];
 		<%}%>	
 	         
@@ -234,6 +238,10 @@
 						<th style="width: 10%">FolioE</th>
 						<th style="width: 10%">NotaFactura</th>
 						<th style="width: 10%">Subtotal</th>
+						<th style="width: 10%">IVA</th>
+						<th style="width: 10%">IEPS</th>
+						<th style="width: 10%">IEPS2</th>
+						<th style="width: 10%">Total</th>
 						<th style="width: 10%">Estado</th>
 						<th style="width: 20%">Usuario</th>
 						<th style="width: 30%" >Proveedor</th>
@@ -241,6 +249,10 @@
 				</thead>
 				<thead>	
 					<tr>
+						<th><input class="boxinit" style="width: 100%" type="text" /></th>
+						<th><input class="boxinit" style="width: 100%" type="text" /></th>
+						<th><input class="boxinit" style="width: 100%" type="text" /></th>
+						<th><input class="boxinit" style="width: 100%" type="text" /></th>
 						<th><input class="boxinit" style="width: 100%" type="text" /></th>
 						<th><input class="boxinit" style="width: 100%" type="text" /></th>
 						<th><input class="boxinit" style="width: 100%" type="text" /></th>

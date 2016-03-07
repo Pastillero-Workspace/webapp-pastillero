@@ -2,10 +2,6 @@ package mx.com.pastillero.controller;
 import java.io.IOException;
 
 
-
-
-
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -19,7 +15,6 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import mx.com.pastillero.types.Types;
 import mx.com.pastillero.model.dao.SesionDao;
 import mx.com.pastillero.model.dao.UsuarioDao;
 import mx.com.pastillero.model.formBeans.Sesion;
@@ -55,72 +50,99 @@ public class LogoutController extends HttpServlet{
 protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 			
 	        // close sesión normally
-			if(request.getParameter("workout").equals("exits"))
+			if(request.getParameter("workout").equals("exitnr"))
 			{
-				HttpSession sesion = request.getSession(false);				
-				// Getting data from user:					
-				String usuario = (String)sesion.getAttribute("usuario");
-			//	String nombre = (String)sesion.getAttribute("nombre");
-				Integer idSesion = (Integer)sesion.getAttribute("idSesion");
-			//	String perfil = (String)sesion.getAttribute("perfil");
-				Integer iduser    = (Integer)sesion.getAttribute("iduser");
+				String usuario = "";
+				Integer idSesion = 0;
+				Integer idUser = 0;
+				boolean trxsession = false;
 				
-				int idLocalSesion = Integer.parseInt(request.getParameter("idLocalSesion"));
-				logger.info("sesion id: "+idLocalSesion);
-				Usuario u = new Usuario();
-				UsuarioDao ud = new UsuarioDao();
-				
-				// setting user cajero value 0 status				
-				u = ud.getUniqueUsuario(usuario);
-				if(u.getPerfil().compareTo(Types.C.getStatusCode())== 0)
-				{
-					u.setActivo(0);
-					boolean res = ud.updateUsuario(u);
-					if(res)
-						logger.info("Estado de usuario actualizado!");
-				}
-				
-				// setiing time and date				
-				Date date = new Date();
-		        DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
-		    	String hora = hourFormat.format(date);
-		    	DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-		    	String fecha = dateFormat.format(date);
-		    	
-				if(iduser != null && usuario !=null)
-				{
-					Sesion ss = new Sesion();
-					SesionDao sd = new SesionDao();                 
-
-					// get object from db
-					if(idSesion != null && idSesion.intValue() > 0)			    	
-						ss = sd.readSesion(idSesion.intValue());			    	
-					else
-						ss = sd.readSesion(idLocalSesion);
-					
-					if(ss.getIdSesion() != 0)
+				int idLocalSesion = 0;
+				HttpSession sesion = request.getSession(false);
+				if(sesion != null && !sesion.isNew()){
+						usuario  = (String)sesion.getAttribute("usuario");
+						idSesion = (Integer)sesion.getAttribute("idSesion");
+						idUser   = (Integer)sesion.getAttribute("iduser");
+						trxsession = true;
+						sesion.invalidate();
+						
+					}
+				else{	
+					if(request.getParameter("idLocalSesion")!=null && request.getParameter("usuario")!=null)
 					{
-						ss.setFechaSalida(fecha);
-						ss.setHoraSalida(hora);
-						sd.updateSession(ss);					
-						sesion.invalidate();	
+						idLocalSesion = Integer.parseInt((request.getParameter("idLocalSesion")));		
+						usuario   =   (String)request.getParameter("usuario");	
+						trxsession = true;
+					}
+					else{
+						response.setContentType("text/plain");          
+					  	response.setCharacterEncoding("UTF-8"); 
+					 	response.getWriter().write("ExitError");
+					}
+						
+					    
+				   }
+			     
+				if(trxsession){
+					// setting time and date				
+					Date date = new Date();
+			        DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");
+			    	String hora = hourFormat.format(date);
+			    	DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+			    	String fecha = dateFormat.format(date);
+			    	
+					if(idUser != null && usuario !=null && !usuario.isEmpty())
+					{   
+						Usuario u = new Usuario();
+						UsuarioDao ud = new UsuarioDao();		
+						u = ud.getUniqueUsuario(usuario);		
+						u.setActivo(0);
+						boolean res = ud.updateUsuario(u);
+						if(res)
+							logger.info("Estado de usuario actualizado!");
+						Sesion ss = new Sesion();
+						SesionDao sd = new SesionDao();                 
+	
+						// get object from db
+						if(idSesion != null && idSesion.intValue() > 0)			    	
+							ss = sd.readSesion(idSesion.intValue());			    	
+						else
+							ss = sd.readSesion(idLocalSesion);
+						
+						if(ss.getIdSesion() != 0)
+						{
+							ss.setFechaSalida(fecha);
+							ss.setHoraSalida(hora);
+							sd.updateSession(ss);						
+							response.setContentType("text/plain");          
+						  	response.setCharacterEncoding("UTF-8"); 
+						 	response.getWriter().write("Exit");
+						 	logger.info("Sesion de usuario cerrada con exito! "+usuario);
+						}
+	
+					}
+					else
+					{						
 						response.setContentType("text/plain");          
 					  	response.setCharacterEncoding("UTF-8"); 
 					 	response.getWriter().write("Exit");
-					 	logger.info("Sesion de usuario cerrada con exito! "+usuario);
+					 	logger.info("Sesion eliminada: "+usuario);
 					}
-
-				}
+					
+					
+			   } // trxsession
 				
 				// Update data in database				
 			}
 			
-			else if(request.getParameter("workout").equals("exitws"))
+			else if(request.getParameter("workout").equals("exitfr"))
 			{
+				int idLocalSesion = 0;
+				if(!request.getParameter("idLocalSesion").isEmpty() && request.getParameter("idLocalSesion") != null)
+					idLocalSesion = Integer.parseInt(request.getParameter("idLocalSesion"));
 				
-				int idLocalSesion = Integer.parseInt(request.getParameter("idLocalSesion"));
-				String usuario = (String)request.getParameter("user");
-				String password = (String)request.getParameter("password");
+				String usuario = (String)request.getParameter("u");
+				String password = (String)request.getParameter("p");
 				logger.info("sesion cerrada de manera forzada id: "+idLocalSesion);
 				
 				// create new user
@@ -129,16 +151,13 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 				
 				// setting user cajero value 0 status				
 				u = ud.getUniqueUsuario(usuario, password);
-				if(u.getIdUsuario() > 0 && u != null)
+				if(u != null)
 				{
-					logger.info("perfil :"+u.getPerfil());
-					if(u.getPerfil().compareTo(Types.C.getStatusCode())== 0)
-					{
+					    logger.info("perfil :"+u.getPerfil());			
 						u.setActivo(0);
 						boolean res = ud.updateUsuario(u);
 						if(res)
-							logger.info("Estado de usuario actualizado! "+usuario);
-					}					
+						logger.info("Estado de usuario actualizado! "+usuario);					
 					// setiing time and date				
 					   Date date = new Date();
 			           DateFormat hourFormat = new SimpleDateFormat("HH:mm:ss");

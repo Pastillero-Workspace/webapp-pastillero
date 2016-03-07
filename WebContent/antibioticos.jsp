@@ -24,18 +24,15 @@
 	<script src="<c:url value="/resources/js/dataTables.scroller.js" />"></script>
 	<script src="<c:url value="/resources/js/demo.js" />"></script>
 	<script src="<c:url value="/resources/js/jquery.tabletojson.min.js" />"></script>
-	
+	<script src="<c:url value="/resources/js/functions.js" />"></script>  
 	<script type="text/javascript" language="javascript" class="init">
 	var op = false;
 	<% HttpSession sesion = request.getSession(false);
 	  String usuario = (String)sesion.getAttribute("usuario");
-	   String nombre = (String)sesion.getAttribute("nombre");
-	   String apepat = (String)sesion.getAttribute("apepat");
-	   String apemat = (String)sesion.getAttribute("apemat");
 	   String perfil = (String)session.getAttribute("perfil");
 	   Integer sesionid = (Integer)sesion.getAttribute("idSesion");
 	   Integer num = (Integer)sesion.getAttribute("numero");	
-	
+	   Integer permiso =(Integer)sesion.getAttribute("pv");
 		if(num == null)
 		{
 				response.sendRedirect("index.jsp");
@@ -47,7 +44,7 @@
 			}
 	 %>
 		$(document).ready(function() {
-		
+			checkEnabledRestriction('<%=usuario%>','<%=permiso%>');
 		    // Algoritmo de filtrado
 			$("#search thead input").on( 'keypress changed', function (e) 
 			{  
@@ -65,10 +62,13 @@
 		// Se crea array de datos aleatorios
 		var data = [];
 		
-		<%for(int i=0; i<datos.size(); i++){%>
+		<%for(int i=0; i<datos.size(); i++){
+			String[] fecha1 = datos.get(i)[1].toString().split("-");
+			String fecha = fecha1[2]+"-"+fecha1[1]+"-"+fecha1[0];
+		%>
 			
 			data[<%=i%>]=[  '<%=datos.get(i)[0]%>',
-			                '<%=datos.get(i)[1]%>',
+			                '<%=fecha%>',
 			   	            '<%=datos.get(i)[2]%>',
 			   	         	'<%=datos.get(i)[3]%>',
 			   	            '<%=datos.get(i)[4]%>',
@@ -79,8 +79,7 @@
 			   	            '<%=datos.get(i)[9]%>',
 			   	            '<%=datos.get(i)[10]%>',
 			   	         	'<%=datos.get(i)[11]%>'];
-		<%}%>	
-	         
+		<%}%>		         
 			// Se establece el control de datos al destino
 			var table = $('#search').DataTable({
 				data:	data,
@@ -179,7 +178,7 @@
 						$('#idAnt').val(registro[11]);
 						
 						$("#formAntibiotico").dialog("open");
-						$("#txtAntibiotico").select();
+						$("#txtMedico").select();
 					}
 					else{
 						window.alert("Seleccione a un Antibiotico");
@@ -191,7 +190,7 @@
 				autoOpen: false,
 				closeOnEscape: true,
 				width: 700,
-				height: 370,
+				height: 470,
 				buttons:{
 					"Actualizar": {
 						text: "Actualizar",
@@ -221,10 +220,10 @@
 									
 									table.row(index).data([											            
 										$('#txtAntibiotico').val(),
-										$('#txtNota').val(),
 										$('#txtFecha').val(),
-										$('#opcSello option:selected').val(),
+										$('#txtNota').val(),
 										$('#opcReceta option:selected').val(),
+										$('#opcSello option:selected').val(),
 										$('#txtAdquiridos').val(),						
 										$('#txtVendidos').val(),
 										$('#txtHabian').val(),
@@ -256,38 +255,12 @@
 			});
 			
 			//Tecla enter en todos los campos
-			$("#txtAntibiotico").keypress(function(e){
-				if(e.which == 13){
-					$("#txtMedico").select();
-				}
-			});
 			$("#txtMedico").keypress(function(e){
-				if(e.which == 13){
-					$("#txtProveedor").select();
-				}
-			});
-			$("#txtProveedor").keypress(function(e){
 				if(e.which == 13){
 					$("#txtNota").select();
 				}
 			});
 			$("#txtNota").keypress(function(e){
-				if(e.which == 13){
-					$("#txtFecha").select();
-				}
-			});
-			
-			$("#txtFecha").keypress(function(e){
-				if(e.which == 13){
-					$("#opcSello").select();
-				}
-			});
-			$("#opcSello").keypress(function(e){
-				if(e.which == 13){
-					$("#opcReceta").select();
-				}
-			});
-			$("#opcReceta").keypress(function(e){
 				if(e.which == 13){
 					$("#txtAdquiridos").select();
 				}
@@ -307,9 +280,14 @@
 					$("#txtQuedan").select();
 				}
 			});
+			$("#txtQuedan").keypress(function(e){
+				if(e.which == 13){
+					$("#btnActualizar").focus();
+				}
+			});
 			
 			$(function() {
-			    $("#txtFecha").datepicker();
+			    $("#txtFecha").datepicker({ dateFormat: "dd-mm-yy"});
 			});
 		
 		});
@@ -330,42 +308,16 @@
 	</script>	
 </head>
 <body>
-
-<div id="formAntibiotico" title="Editar Antibiotico" class="text-form">
-	<form id="antibiotico">
-	<legend>* Campos Obligatorios</legend>
-	<fieldset>
-		<legend>Antibiotico</legend>
-		<ol>
-			<label id="idAnt" hidden="true">x</label>
-			<li><label for="antibiotico">*Antibiotico: </label><input type="text" size="45" id="txtAntibiotico" name="txtAntibiotico" requiered autofocus></li>
-			<li><label for="proveedor">*Proveedor: </label><input type="text" size="15" id="txtProveedor" name="txtProveedor" requiered><label for="medico">*Medico: </label><input type="text" size="15" id="txtMedico" name="txtMedico" requiered></li>
-			<li><label for="nota">*Num. de Nota: </label><input type="text" size="15" id="txtNota" name="txtNota" requiered><label for="fecha">*Fecha: </label><input type="text" size="15" id="txtFecha" name="txtFecha" requiered></li>
-			<li><!--label for="receta">*Receta: </label><input type="text" size="15" id="txtReceta" name="txtReceta" requiered-->
-			<label for="receta">*Receta: </label><select name="opcReceta" id="opcReceta">
-													<option value='0'>NO</option>
-													<option value='1'>SI</option>
-												</select>
-			<label for="sello">*Sello: </label><select name="opcSello" id="opcSello">
-							<option value="0">0</option><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4">4</option>
-							<option value="5">5</option><option value="6">6</option><option value="7">7</option><option value="8">8</option><option value="9">9</option>
-					</select></li>
-			<li><label for="adquiridos">*Adquiridos: </label><input type="text" size="15" id="txtAdquiridos" name="txtAdquiridos" requiered><label for="vendidos">*Vendidos: </label><input type="text" size="15" id="txtVendidos" name="txtVendidos" requiered></li>
-			<li><label for="habian">*Habian: </label><input type="text" size="15" id="txtHabian" name="txtHabian" requiered><label for="quedan">*Quedan: </label><input type="text" size="15" id="txtQuedan" name="txtQuedan" requiered></li>
-		</ol>
-	</fieldset>
-	</form>
-</div>
-
-
+	<c:url value="Templates/formantibiotico.jsp" var="myURL"></c:url> <c:import url="${myURL}"/>
 <div>
 			<div id="header">
 				<!--div id="logo"></div-->
 			</div>
 	
 			<div id="sucursal">
-			    <p>Cajero  : <label id="lblname"><%=nombre%> <%=apepat%> <%=apemat%></label></p>
-		        <p>Usuario : <label id="lbluser"><%=usuario%></label><label> | Sucursal: San Martín Texmelucan</label></p>
+			    <p><c:out value="${sessionScope.perfil}"/> : <label id="lblname"><c:out value="${sessionScope.nombre}"/>
+			    <c:out value="${sessionScope.apepat}"/> <c:out value="${sessionScope.apemat}"/></label></p>
+		        <p>Usuario : <label id="lbluser"><%=usuario%></label><label> | Sucursal: <c:out value="${sessionScope.scr}"/></label></p>
 			</div>
 
 	<!--Barra de Navegacion de la pagina principal-->

@@ -12,6 +12,8 @@
          <generator class="native"/>
       </id>
       <property name="proveedor" column="proveedor" type="string"/>
+      <property name="proveedor2" column="proveedor2" type="string"/>
+      <property name="proveedor3" column="proveedor3" type="string"/>
       <property name="clave" column="clave" type="string"/>
       <property name="codBar" column="cod_bar" type="string"/>
       <property name="descripcion" column="descripcion" type="string"/>
@@ -19,6 +21,7 @@
       <property name="precioPub" column="precio_pub" type="float"/>
       <property name="precioDesc" column="precio_desc" type="float"/>
       <property name="precioFarmacia" column="precio_farmacia" type="float"/>
+      <property name="fechaPcio" column="fecha_pcio" type="string"/>
       <property name="iva" column="IVA" type="int"/>
       <property name="linea" column="linea" type="string"/>
       <property name="referencia" column="referencia" type="string"/>
@@ -34,6 +37,7 @@
       <property name="cls" column="CLS" type="string"/>
       <property name="zona" column="zona" type="string"/>
       <property name="pareto" column="pareto" type="string"/>    
+      <property name="pareto2" column="pareto2" type="string"/>
       <property name="ieps" column="IEPS" type="int"/>
       <property name="ieps2" column="IEPS2" type="int"/>
       <property name="limitado" column="limitado" type="float"/>

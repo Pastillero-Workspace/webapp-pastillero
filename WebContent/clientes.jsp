@@ -1,8 +1,8 @@
 <%@page import="mx.com.pastillero.model.dao.ClienteDireccionDao"%>
 <%@page import="mx.com.pastillero.types.Types"%>
 <%@page import="java.util.List"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="es">
 <head>
@@ -11,31 +11,27 @@
     <link href="<c:url value="/resources/css/edit.css" />" rel="stylesheet">
 	<link href="<c:url value="/resources/css/jquery-ui-1.10.4.custom.css"/>" rel="stylesheet" type="text/css">
 	<link href="<c:url value="/resources/css/jquery.dataTables.css" />" rel="stylesheet">
-	<link href="<c:url value="/resources/css/demo.css" />" rel="stylesheet">
-	
+	<link href="<c:url value="/resources/css/demo.css" />" rel="stylesheet">	
 	<!-- The Javascript config -->
 	<script src="<c:url value="/resources/js/jquery-1.10.2.js" />"></script>
 	<script src="<c:url value="/resources/js/jquery-ui-1.10.4.custom.js" />"></script>
-	<script src="<c:url value="/resources/js/jquery-ui-dialog.js" />"></script>
-	
+	<script src="<c:url value="/resources/js/jquery-ui-dialog.js" />"></script>	
 	<!-- The Javascript config datatables-->
 	<script src="<c:url value="/resources/js/jquery.dataTables.js" />"></script>
 	<script src="<c:url value="/resources/js/dataTables.scroller.js" />"></script>
 	<script src="<c:url value="/resources/js/demo.js" />"></script>
 	<script src="<c:url value="/resources/js/jquery.tabletojson.min.js" />"></script>
+	<script src="<c:url value="/resources/js/functions.js" />"></script>  
 	
 	<script type="text/javascript" language="javascript" class="init">
 	var op = false;
 	var claveRespaldo = "";
 	<% HttpSession sesion = request.getSession(false);
-	  String usuario = (String)sesion.getAttribute("usuario");
-	   String nombre = (String)sesion.getAttribute("nombre");
-	   String apepat = (String)sesion.getAttribute("apepat");
-	   String apemat = (String)sesion.getAttribute("apemat");
+	   String usuario = (String)sesion.getAttribute("usuario");
 	   String perfil = (String)session.getAttribute("perfil");
 	   Integer sesionid = (Integer)sesion.getAttribute("idSesion");
-	   Integer num = (Integer)sesion.getAttribute("numero");	
-	
+	   Integer num = (Integer)sesion.getAttribute("numero");
+	   Integer permiso =(Integer)sesion.getAttribute("pv");
 		if(num == null)
 		{
 				response.sendRedirect("index.jsp");
@@ -46,17 +42,15 @@
 			sesion.setAttribute("numero", 2);
 			}
 	 %>
+	 checkEnabledRestriction('<%=usuario%>','<%=permiso%>'); 
+	 	
 		$(document).ready(function() {
-
-		    // Algoritmo de filtrado
-			$("#search thead input").on( 'keypress changed', function (e) 
-			{  
-					 table
-					.column( $(this).parent().index()+':visible' )
-					.search(this.value)
-					.draw();
-				    //alert("valor" + $(this).parent().index());					
-                  
+		   // Algoritmo de filtrado
+			$("#search thead input").on( 'keypress changed', function (e){  
+				 table
+				.column( $(this).parent().index()+':visible' )
+				.search(this.value)
+				.draw();                  
 			} );
 						
 	<% 		 		 	
@@ -118,8 +112,7 @@
 		// Unsafe function on delete posteriori
 		$('<input type="button" id="refresh" style="width: 25%" value="Limpiar datos"/>').appendTo('div.dataTables_filter');
 			$('#refresh').click(function(e) 
-				{	
-								
+				{								
 					var elem = document.getElementsByClassName("boxinit");
 						var names = [];
 							for(var i = 0; i < 13; ++i) 
@@ -151,9 +144,11 @@
 						$.post('cliente.jr',{
 							tarea: 'eliminar',
 							txtClave: claveCliente
-						},function(){
-							
-						});
+						}).done(function(){
+							alert("Se elimino cliente con exito");
+						}).fail(function(xhr,textStatus, errorThrown){
+							alert("Error al eliminar el cliente: "+textStatus +", "+errorThrown + "," +xhr);
+						});;
 						table.row(index).remove().draw(true);
 					}
 					else				
@@ -176,8 +171,6 @@
 					}, function(f){
 					});
 					
-					//$(location).attr('href', '${pageContext.request.contextPath}/reporte.jsp');
-					//window.alert("Módulo en desarrollo");
 					window.open("reporte.jsp", "Impresion", "height=600,width=400");
 				});
 				
@@ -225,7 +218,13 @@
 							if(date==10){//cltefrec
 								clienteFrec = value.split(".");
 								if(clienteFrec[0] != 0){
-									$('#opcDesc').val(1);	
+									$('#opcDesc').val(1);
+									$('#txtClienteFrec').val(value);
+									$('#txtClienteFrec').prop('disabled',false);
+									
+								}else{
+									$('#txtClienteFrec').val("0.0");
+									$('#txtClienteFrec').prop('disabled',true);
 								}
 							}
 							if(date==11){
@@ -276,95 +275,115 @@
 						text: "Actualizar",
 						id:		"btnActualizar",
 						click:	function(){
-							if($('#txtNombre').val().trim()!=""){
-								
-								var cltefrec = 0.00;
-								var insen = 0.00;
-								
-								switch($("#opcDesc option:selected").val()){
-								    case '1':cltefrec=5.00;break;
-								    case '2':insen = 2.00;break;
-								    case '3':insen = 3.00;break;
-								    case '4':insen = 4.00;break;
-								    case '5':insen = 5.00;break;
-								    default: cltefrec = 0.00;insen = 0.00;break;
+							$.ajax({
+								async:false,
+								cache:false,
+								type: 'POST',  
+								url: "cliente.jr",
+								data: {
+									tarea: 'verifica',
+									txtClave: $('#txtClave').val().trim()
 								}
-								
-									$.post('cliente.jr',{
-									tarea: 'actualizar',
-									claveRespaldo: claveRespaldo,
-									txtClave: $('#txtClave').val(),
-									txtNombre: $('#txtNombre').val(),
-									txtEmail: $('#txtEmail').val(),
-									txtRfc: $('#txtRfc').val(),
-									txtCredito: $('#txtCredito').val(),
-									txtDiasCred: $('#txtDiasCred').val(),
-									txtLimiteCred: $('#txtLimiteCred').val(),
-									txtVentaAnual: $('#txtVentaAnual').val(),
-									txtSaldo: $('#txtSaldo').val(),
-									txtDescExtra: $('#txtDescExtra').val(),
-									txtVentaMensual: $('#txtVentaMensual').val(),
-									txtCalle: $('#txtCalle').val(),
-									txtNoExt: $('#txtNoExt').val(),
-									txtNoInt: $('#txtNoInt').val(),
-									txtColonia: $('#txtColonia').val(),
-									txtCiudad: $('#txtCiudad').val(),
-									txtEstado: $('#txtEstado').val(),
-									txtCp: $('#txtCp').val(),
-									opcDesc: $("#opcDesc option:selected").val()
-									},function()
-									{
+							}).done(function(result){
+								if(result == 'noExiste' || result == claveRespaldo){
+									if($('#txtNombre').val().trim()!=""){
 										
-									});
-									
-									table.row(index).data([											            
-										$('#txtClave').val(),
-										$('#txtNombre').val(),
-										$('#txtEmail').val(),						
-										$('#txtRfc').val(),
-										$('#txtCredito').val(),
-										$('#txtDiasCred').val(),
-										$('#txtLimiteCred').val(),						
-										$('#txtVentaAnual').val(),
-										$('#txtSaldo').val(),
-										//$('#opcDesc option:selected').val(),
-										//$('#txtDescExtra').val(),
-										insen,
-										cltefrec,
-										$('#txtVentaMensual').val(),						
-										$('#txtCalle').val(),
-										$('#txtNoExt').val(),
-										$('#txtNoInt').val(),
-										$('#txtColonia').val(),
-										$('#txtCiudad').val(),
-										$('#txtEstado').val(),
-										$('#txtCp').val()
-									]);
-									
-									$(this).dialog("close");
-									$('#txtClave').val('');
-									$('#txtNombre').val('');
-									$('#txtEmail').val('');						
-									$('#txtRfc').val('');
-									$('#txtCredito').val('');
-									$('#txtDiasCred').val('');
-									$('#txtLimiteCred').val('');						
-									$('#txtVentaAnual').val('');
-									$('#txtSaldo').val('');
-									$('#txtDescExtra').val('');
-									$('#txtVentaMensual').val('');						
-									$('#txtCalle').val('');
-									$('#txtNoExt').val('');
-									$('#txtNoInt').val('');
-									$('#txtColonia').val('');
-									$('#txtCiudad').val();
-									$('#txtEstado').val('');
-									$('#txtCp').val('');
-									$('#opcDesc option[value="0"]:selected');
+										var cltefrec = 0.00;
+										var insen = 0.00;
+										
+										switch($("#opcDesc option:selected").val()){
+										    case '1':cltefrec = $('#txtClienteFrec').val();break;
+										    case '2':insen = 2.00;break;
+										    case '3':insen = 3.00;break;
+										    case '4':insen = 4.00;break;
+										    case '5':insen = 5.00;break;
+										    default: cltefrec = 0.00;insen = 0.00;break;
+										}
+										
+											$.post('cliente.jr',{
+												tarea: 'actualizar',
+												claveRespaldo: claveRespaldo,
+												txtClave: $('#txtClave').val(),
+												txtNombre: $('#txtNombre').val(),
+												txtEmail: $('#txtEmail').val(),
+												txtRfc: $('#txtRfc').val(),
+												txtCredito: $('#txtCredito').val(),
+												txtDiasCred: $('#txtDiasCred').val(),
+												txtLimiteCred: $('#txtLimiteCred').val(),
+												txtVentaAnual: $('#txtVentaAnual').val(),
+												txtSaldo: $('#txtSaldo').val(),
+												txtDescExtra: $('#txtDescExtra').val(),
+												txtVentaMensual: $('#txtVentaMensual').val(),
+												txtClienteFrec: $('#txtClienteFrec').val(),
+												txtCalle: $('#txtCalle').val(),
+												txtNoExt: $('#txtNoExt').val(),
+												txtNoInt: $('#txtNoInt').val(),
+												txtColonia: $('#txtColonia').val(),
+												txtCiudad: $('#txtCiudad').val(),
+												txtEstado: $('#txtEstado').val(),
+												txtCp: $('#txtCp').val(),
+												opcDesc: $("#opcDesc option:selected").val()
+											}).done(function(){
+												alert("Se actualizo cliente con exito");
+											}).fail(function(xhr,textStatus, errorThrown){
+												alert("Error al actualizar el cliente: "+textStatus +", "+errorThrown + "," +xhr);
+											});
+											
+											table.row(index).data([											            
+												$('#txtClave').val(),
+												$('#txtNombre').val(),
+												$('#txtEmail').val(),						
+												$('#txtRfc').val(),
+												$('#txtCredito').val(),
+												$('#txtDiasCred').val(),
+												$('#txtLimiteCred').val(),						
+												$('#txtVentaAnual').val(),
+												$('#txtSaldo').val(),
+												//$('#opcDesc option:selected').val(),
+												//$('#txtDescExtra').val(),
+												parseFloat(insen).toFixed(1),
+												parseFloat(cltefrec).toFixed(1),
+												$('#txtVentaMensual').val(),						
+												$('#txtCalle').val(),
+												$('#txtNoExt').val(),
+												$('#txtNoInt').val(),
+												$('#txtColonia').val(),
+												$('#txtCiudad').val(),
+												$('#txtEstado').val(),
+												$('#txtCp').val()
+											]);
+											
+											$("#formCliente").dialog("close");
+											$('#txtClave').val('');
+											$('#txtNombre').val('');
+											$('#txtEmail').val('');						
+											$('#txtRfc').val('');
+											$('#txtCredito').val('');
+											$('#txtDiasCred').val('');
+											$('#txtLimiteCred').val('');						
+											$('#txtVentaAnual').val('');
+											$('#txtSaldo').val('');
+											$('#txtDescExtra').val('');
+											$('#txtVentaMensual').val('');	
+											$('#txtClienteFrec').val(''),
+											$('#txtCalle').val('');
+											$('#txtNoExt').val('');
+											$('#txtNoInt').val('');
+											$('#txtColonia').val('');
+											$('#txtCiudad').val();
+											$('#txtEstado').val('');
+											$('#txtCp').val('');
+											$('#opcDesc option[value="0"]:selected');
+										}else{
+											window.alert("No puede dejar campos vacios");
+										}	
 								}else{
-									window.alert("No puede dejar campos vacios");
+									alert("La clave de cliente ya existe en otro cliente, coloque una clave diferente.");
 								}
-									
+								
+							}).fail(function(xhr,textStatus, errorThrown){
+								alert("Error: "+textStatus +", "+errorThrown + "," +xhr);
+							});	
 						}
 
 					}
@@ -382,93 +401,113 @@
 						text: "Agregar",
 						id:		"btnAgregarNuevo",
 						click:	function(){
-							if($('#txtClaveNuevo').val().trim()!=""){
-								
-								var cltefrec = 0.00;
-								var insen = 0.00;
-								
-								switch($('#opcDescNuevo option:selected').val()){
-								    case '1':cltefrec=5.00;break;
-								    case '2':insen = 2.00;break;
-								    case '3':insen = 3.00;break;
-								    case '4':insen = 4.00;break;
-								    case '5':insen = 5.00;break;
-								    default: cltefrec = 0.00;insen = 0.00;break;
+							$.ajax({
+								async:false,
+								cache:false,
+								type: 'POST',  
+								url: "cliente.jr",
+								data: {
+									tarea: 'verifica',
+									txtClave: $('#txtClaveNuevo').val().trim()
 								}
-								
-									$.post('cliente.jr',{
-										tarea: 'agregar',
-										txtClave: $('#txtClaveNuevo').val(),
-										txtNombre: $('#txtNombreNuevo').val(),
-										txtEmail: $('#txtEmailNuevo').val(),
-										txtRfc: $('#txtRfcNuevo').val(),
-										txtCredito: $('#txtCreditoNuevo').val(),
-										txtDiasCred: $('#txtDiasCredNuevo').val(),
-										txtLimiteCred: $('#txtLimiteCredNuevo').val(),
-										txtVentaAnual: $('#txtVentaAnualNuevo').val(),
-										txtSaldo: $('#txtSaldoNuevo').val(),
-										txtDescExtra: $('#txtDescExtraNuevo').val(),
-										txtVentaMensual: $('#txtVentaMensualNuevo').val(),
-										txtCalle: $('#txtCalleNuevo').val(),
-										txtNoExt: $('#txtNoExtNuevo').val(),
-										txtNoInt: $('#txtNoIntNuevo').val(),
-										txtColonia: $('#txtColoniaNuevo').val(),
-										txtCiudad: $('#txtCiudadNuevo').val(),
-										txtEstado: $('#txtEstadoNuevo').val(),
-										txtCp: $('#txtCpNuevo').val(),
-										opcDesc: $('#opcDescNuevo option:selected').val()
-									},function(){
+							}).done(function(result){
+								if(result == 'noExiste'){
+									if($('#txtClaveNuevo').val().trim()!=""){								
+										var cltefrec = 0.00;
+										var insen = 0.00;									
+										switch($('#opcDescNuevo option:selected').val()){
+										    case '1':cltefrec = $('#txtClienteFrecNuevo').val();break;
+										    case '2':insen = 2.00;break;
+										    case '3':insen = 3.00;break;
+										    case '4':insen = 4.00;break;
+										    case '5':insen = 5.00;break;
+										    default: cltefrec = 0.00;insen = 0.00;break;
+										}
 										
-									});
-									
-									table.row.add([											            
-										$('#txtClaveNuevo').val(),
-										$('#txtNombreNuevo').val(),
-										$('#txtEmailNuevo').val(),						
-										$('#txtRfcNuevo').val(),
-										$('#txtCreditoNuevo').val(),
-										$('#txtDiasCredNuevo').val(),
-										$('#txtLimiteCredNuevo').val(),						
-										$('#txtVentaAnualNuevo').val(),
-										$('#txtSaldoNuevo').val(),
-										//$('#opcDescNuevo option:selected').val(),
-										//$('#txtDescExtraNuevo').val(),
-										insen,
-										cltefrec,
-										$('#txtVentaMensualNuevo').val(),						
-										$('#txtCalleNuevo').val(),
-										$('#txtNoExtNuevo').val(),
-										$('#txtNoIntNuevo').val(),
-										$('#txtColoniaNuevo').val(),
-										$('#txtCiudadNuevo').val(),
-										$('#txtEstadoNuevo').val(),
-										$('#txtCpNuevo').val()
-									]).draw();
-									
-									$(this).dialog("close");
-									$('#txtClaveNuevo').val(),
-									$('#txtNombreNuevo').val(),
-									$('#txtEmailNuevo').val(),						
-									$('#txtRfcNuevo').val(),
-									$('#txtCreditoNuevo').val(),
-									$('#txtDiasCredNuevo').val(),
-									$('#txtLimiteCredNuevo').val(),						
-									$('#txtVentaAnualNuevo').val(),
-									$('#txtSaldoNuevo').val(),
-									$('#txtDescExtraNuevo').val(),
-									$('#txtVentaMensualNuevo').val(),						
-									$('#txtCalleNuevo').val(),
-									$('#txtNoExtNuevo').val(),
-									$('#txtNoIntNuevo').val(),
-									$('#txtColoniaNuevo').val(),
-									$('#txtCiudadNuevo').val(),
-									$('#txtEstadoNuevo').val(),
-									$('#txtCpNuevo').val(),
-									$('#opcDescNuevo option[value="0"]:selected');
-									
+											$.post('cliente.jr',{
+												tarea: 'agregar',
+												txtClave: $('#txtClaveNuevo').val(),
+												txtNombre: $('#txtNombreNuevo').val(),
+												txtEmail: $('#txtEmailNuevo').val(),
+												txtRfc: $('#txtRfcNuevo').val(),
+												txtCredito: $('#txtCreditoNuevo').val(),
+												txtDiasCred: $('#txtDiasCredNuevo').val(),
+												txtLimiteCred: $('#txtLimiteCredNuevo').val(),
+												txtVentaAnual: $('#txtVentaAnualNuevo').val(),
+												txtSaldo: $('#txtSaldoNuevo').val(),
+												txtDescExtra: $('#txtDescExtraNuevo').val(),
+												txtVentaMensual: $('#txtVentaMensualNuevo').val(),
+												txtClienteFrec: $('#txtClienteFrecNuevo').val(),
+												txtCalle: $('#txtCalleNuevo').val(),
+												txtNoExt: $('#txtNoExtNuevo').val(),
+												txtNoInt: $('#txtNoIntNuevo').val(),
+												txtColonia: $('#txtColoniaNuevo').val(),
+												txtCiudad: $('#txtCiudadNuevo').val(),
+												txtEstado: $('#txtEstadoNuevo').val(),
+												txtCp: $('#txtCpNuevo').val(),
+												opcDesc: $('#opcDescNuevo option:selected').val()
+											}).done(function(){
+													alert("Se agrego cliente con exito");
+											}).fail(function(xhr,textStatus, errorThrown){
+													alert("Error al agregar el cliente: "+textStatus +", "+errorThrown + "," +xhr);
+											});
+											
+											table.row.add([											            
+												$('#txtClaveNuevo').val(),
+												$('#txtNombreNuevo').val(),
+												$('#txtEmailNuevo').val(),						
+												$('#txtRfcNuevo').val(),
+												$('#txtCreditoNuevo').val(),
+												$('#txtDiasCredNuevo').val(),
+												$('#txtLimiteCredNuevo').val(),						
+												$('#txtVentaAnualNuevo').val(),
+												$('#txtSaldoNuevo').val(),
+												//$('#opcDescNuevo option:selected').val(),
+												//$('#txtDescExtraNuevo').val(),
+												parseFloat(insen).toFixed(1),
+												parseFloat(cltefrec).toFixed(1),
+												$('#txtVentaMensualNuevo').val(),						
+												$('#txtCalleNuevo').val(),
+												$('#txtNoExtNuevo').val(),
+												$('#txtNoIntNuevo').val(),
+												$('#txtColoniaNuevo').val(),
+												$('#txtCiudadNuevo').val(),
+												$('#txtEstadoNuevo').val(),
+												$('#txtCpNuevo').val()
+											]).draw();
+											
+											$("#formClienteNuevo").dialog("close");
+											$('#txtClaveNuevo').val(''),
+											$('#txtNombreNuevo').val(''),
+											$('#txtEmailNuevo').val(''),						
+											$('#txtRfcNuevo').val(''),
+											$('#txtCreditoNuevo').val(''),
+											$('#txtDiasCredNuevo').val(''),
+											$('#txtLimiteCredNuevo').val(''),						
+											$('#txtVentaAnualNuevo').val(''),
+											$('#txtSaldoNuevo').val(''),
+											$('#txtDescExtraNuevo').val(''),
+											$('#txtVentaMensualNuevo').val(''),	
+											$('#txtClienteFrecNuevo').val(''),
+											$('#txtCalleNuevo').val(''),
+											$('#txtNoExtNuevo').val(''),
+											$('#txtNoIntNuevo').val(''),
+											$('#txtColoniaNuevo').val(''),
+											$('#txtCiudadNuevo').val(''),
+											$('#txtEstadoNuevo').val(''),
+											$('#txtCpNuevo').val(''),
+											$('#opcDescNuevo option[value="0"]:selected');
+											
+										}else{
+											window.alert("No puede dejar campos vacios");
+										}
 								}else{
-									window.alert("No puede dejar campos vacios");
-								}	
+									alert("La clave de cliente ya existe, coloque una clave diferente.");
+								}
+							}).fail(function(xhr,textStatus, errorThrown){
+								alert("Error: "+textStatus +", "+errorThrown + "," +xhr);
+							});
+								
 						}
 					}
 				}
@@ -673,6 +712,24 @@
 					$("#btnAgregarNuevo").focus();
 				}
 			});
+			$('#opcDesc').change(function(e){
+				if($('#opcDesc').val() == 1){
+					$('#txtClienteFrec').prop('disabled',false);
+					$('#txtClienteFrec').select();
+				}else{
+					$('#txtClienteFrec').val("0.0");
+					$('#txtClienteFrec').prop('disabled',true);
+				}
+			});
+			$('#opcDescNuevo').change(function(e){
+				if($('#opcDescNuevo').val() == 1){
+					$('#txtClienteFrecNuevo').prop('disabled',false);
+					$('#txtClienteFrecNuevo').select();
+				}else{
+					$('#txtClienteFrecNuevo').val("0.0");
+					$('#txtClienteFrecNuevo').prop('disabled',true);
+				}
+			});
 		
 		});
 		
@@ -696,8 +753,7 @@
 	                return false;
 	            }
         	);
-	    });
-		
+	    });	
 	    /*Salir*/
 	    $(document).ready(function ()
 	    {
@@ -710,104 +766,22 @@
             	    window.close();
             	} 
              });
-       });	
-		
+       });		
 	</script>	
 </head>
 <body>
-
-<div id="formCliente" title="Editar Cliente" class="text-form">
-	<form id="cliente">
-	<legend>* Campos Obligatorios</legend>
-	<fieldset>
-		<legend>Cliente</legend>
-		<ol>
-			<li><label for="clave">*Clave: </label><input type="text" id="txtClave" name="txtClave" size="5" requiered autofocus><label for="nombre">*Nombre: </label><input type="text" size="45" id="txtNombre" name="txtNombre" requiered> </li>
-			<li><label for="email">*Email: </label><input type="text" size="30" id="txtEmail" name="txtEmail" value="SIN ASIGNAR" requiered><label for="tel">*Tel: </label><input type="text" size="20" id="txtTel" name="txtTel" value="00-00-00-00-00" requiered></li>
-			<li><label for="rfc">*RFC: </label><input type="text" size="15" id="txtRfc" name="txtRfc" value="SIN ASIGNAR" requiered></li>
-		</ol>
-	</fieldset>
-	<fieldset>
-		<legend>Credito</legend>
-		<ol>
-			<li><label for="credito">*Credito:</label><input type="text" id="txtCredito" name="txtCredito" size="5" value="0" requiered><label for="diasCredito">*Dias Cred:</label><input type="text" id="txtDiasCred" name="txtDiasCred" size="5" value="00" requiered>
-			<label for="limiteCredito">*Limite Cred:</label><input type="text" id="txtLimiteCred" name="txtLimiteCred" size="5" value="0.00" requiered><label for="ventaAnual">*Venta anual:</label><input type="text" id="txtVentaAnual" name="txtVentaAnual" size="5" value="0.00" requiered></li>
-			<li><label for="saldo">*Saldo:</label><input type="text" id="txtSaldo" name="txtSaldo" size="5" value="0.00" requiered>
-			<!--label for="desc">*Descuento</label><select id="opcDesc" name="opcDesc" requiered><option value="0">Sin Descuento</option><option value="5.00">Cliente Frecuente</option><option value="2.00">INSEN 2%</option><option value="3.00">INSEN 3%</option></select-->
-			
-			<label for="desc">*Descuento</label><select id="opcDesc" name="opcDesc" requiered><option value="0">Sin Descuento</option><option value="1">Cliente Frecuente</option><option value="2">INSEN 2%</option><option value="3">INSEN 3%</option><option value="4">INSEN 4%</option><option value="5">INSEN 5%</option></select>
-			
-			<!--label for="descExtra">*Desc. Extra:</label><input type="text" id="txtDescExtra" name="txtDescExtra" size="5" value="0.00" requiered-->
-			<label for="ventaMensual">*Venta Mensual:</label><input type="text" id="txtVentaMensual" name="txtVentaMensual" size="5" value="0.00" requiered></li>
-		</ol>
-	</fieldset>
-	<fieldset>
-		<legend>Direccion</legend>
-		<ol>
-			<li><label for="calle">*Calle: </label><input type="text" id="txtCalle" name="txtCalle" value="SIN ASIGNAR" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExt" name="txtNoExt" size="5" value="00" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoInt" name="txtNoInt" size="5" value="00" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColonia" name="txtColonia" value="SIN ASIGNAR" requiered><label for="ciudad">*Ciudad: </label><input type="text" id="txtCiudad" name="txtCiudad" size="30" value="SIN ASIGNAR" requiered><li>
-			<li><label for="estado">*Estado: </label><input type="text" id="txtEstado" name="txtEstado" size="30" value="SIN ASIGNAR" requiered><label for="cp">*C.P: </label><input type="text" id="txtCp" name="txtCp" size="7" value="00000" requiered></li>
-		</ol>
-	</fieldset>
-	</form>
-</div>
-
-
-
-<div id="formClienteNuevo" title="Agregar Cliente" class="text-form">
-	<form id="clienteNuevo">
-	<legend>* Campos Obligatorios</legend>
-	<fieldset>
-		<legend>Cliente</legend>
-		<ol>
-			<li><label for="clave">*Clave: </label><input type="text" id="txtClaveNuevo" name="txtClaveNuevo" size="5" requiered autofocus><label for="nombre">*Nombre: </label><input type="text" size="45" id="txtNombreNuevo" name="txtNombreNuevo" requiered> </li>
-			<li><label for="email">*Email: </label><input type="text" size="30" id="txtEmailNuevo" name="txtEmailNuevo" value="SIN ASIGNAR" requiered><label for="tel">*Tel: </label><input type="text" size="20" id="txtTelNuevo" name="txtTelNuevo" value="00-00-00-00-00" requiered></li>
-			<li><label for="rfc">*RFC: </label><input type="text" size="15" id="txtRfcNuevo" name="txtRfcNuevo" value="SIN ASIGNAR" requiered></li>
-		</ol>
-	</fieldset>
-	<fieldset>
-		<legend>Credito</legend>
-		<ol>
-			<li><label for="credito">*Credito:</label><input type="text" id="txtCreditoNuevo" name="txtCreditoNuevo" size="5" value="0" requiered><label for="diasCredito">*Dias Cred:</label><input type="text" id="txtDiasCredNuevo" name="txtDiasCredNuevo" size="5" value="00" requiered>
-			<label for="limiteCredito">*Limite Cred:</label><input type="text" id="txtLimiteCredNuevo" name="txtLimiteCredNuevo" size="5" value="0.00" requiered><label for="ventaAnual">*Venta anual:</label><input type="text" id="txtVentaAnualNuevo" name="txtVentaAnualNuevo" size="5" value="0.00" requiered></li>
-			<li><label for="saldo">*Saldo:</label><input type="text" id="txtSaldoNuevo" name="txtSaldoNuevo" size="5" value="0.00" requiered>
-			<!--label for="desc">*Descuento</label><select id="opcDescNuevo" name="opcDescNuevo" requiered><option value="0">Sin Descuento</option><option value="5.00">Cliente Frecuente</option><option value="2.00">INSEN 2%</option><option value="3.00">INSEN 3%</option><option value="4.00">INSEN 4%</option><option value="50.00">INSEN 5%</option></select-->
-			
-			<label for="desc">*Descuento</label><select id="opcDescNuevo" name="opcDescNuevo" requiered><option value="0">Sin Descuento</option><option value="1">Cliente Frecuente</option><option value="2">INSEN 2%</option><option value="3">INSEN 3%</option><option value="4">INSEN 4%</option><option value="5">INSEN 5%</option></select>
-			
-			<!--label for="descExtra">*Desc. Extra:</label><input type="text" id="txtDescExtraNuevo" name="txtDescExtraNuevo" size="5" value="0.00" disabled-->
-			
-			<label for="ventaMensual">*Venta Mensual:</label><input type="text" id="txtVentaMensualNuevo" name="txtVentaMensualNuevo" size="5" value="0.00" requiered></li>
-		</ol>
-	</fieldset>
-	<fieldset>
-		<legend>Direccion</legend>
-		<ol>
-			<li><label for="calle">*Calle: </label><input type="text" id="txtCalleNuevo" name="txtCalleNuevo" value="SIN ASIGNAR" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExtNuevo" name="txtNoExtNuevo" size="5" value="00" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoIntNuevo" name="txtNoIntNuevo" size="5" value="00" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColoniaNuevo" name="txtColoniaNuevo" value="SIN ASIGNAR" requiered><label for="ciudad">*Ciudad: </label><input type="text" id="txtCiudadNuevo" name="txtCiudadNuevo" size="23" value="SIN ASIGNAR" requiered><li>
-			<li><label for="estado">*Estado: </label><input type="text" id="txtEstadoNuevo" name="txtEstadoNuevo" size="23" value="SIN ASIGNAR" requiered><label for="cp">*C.P: </label><input type="text" id="txtCpNuevo" name="txtCpNuevo" size="7" value="00000" requiered></li>
-		</ol>
-	</fieldset>
-	</form>
-</div>	
-	<!--Insersion de la imagen de marca de agua en la parte del centro del sistema-->	
+		<c:url value="Templates/formcliente.jsp" var="myURL"></c:url>
+	    <c:import url="${myURL}"/>
 <div>
-			<div id="header">
-				<!--div id="logo"></div-->
-			</div>
-	
-			<div id="sucursal">
-			   <p>Cajero  : <label id="lblname"><%=nombre%> <%=apepat%> <%=apemat%></label></p>
-		       <p>Usuario : <label id="lbluser"><%=usuario%></label><label> | Sucursal: Sin Sucursal</label></p>
-			</div>
-
-	<!--Barra de Navegacion de la pagina principal-->
-	
-			<ul id="nav">
-					<li><a href="#">Recargar</a></li>
-			</ul>
-
-    
+	<div id="header"></div>
+	<div id="sucursal">
+	   <p><c:out value="${sessionScope.perfil}"/>  : <label id="lblname"><c:out value="${sessionScope.nombre}"/><c:out value="${sessionScope.apepat}"/><c:out value="${sessionScope.apemat}"/></label></p>
+       <p>Usuario : <label id="lbluser"><%=usuario%></label><label> | Sucursal: <c:out value="${sessionScope.scr}" /></label></p>
+	</div>
+    <!--Barra de Navegacion de la pagina principal-->
+	<ul id="nav">
+		<li><a href="#">Recargar</a></li>
+	</ul>
 	<!--Barra de Navegacion, contiene el contenido que se muestra de lado derecho-->
 	<div id="navigatorpanel">
 		<ul id="nav-right">
@@ -824,12 +798,7 @@
 			</li>
 		</ul>
 	</div>
-	
-	
-		
-			
-		<div class="container">
-			
+		<div class="container">	
 			<div id="buttons">
 				<button id="btnEditar">Editar</button>
 				<button id="btnEliminar">Eliminar</button>
@@ -837,8 +806,7 @@
 				<button id="btnExcel">Excel</button>
 			</div>
 			<table id="search" class="display"cellspacing="0" width="1024px">
-				<thead>	
-					
+				<thead>					
 					<tr>
 						<th style="width: 2%">Clave</th>
 						<th style="width: 80%">Nombre</th>
@@ -863,33 +831,32 @@
 				    </thead>
 				    <thead>
 				    <tr>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>
-						<th><input class="boxinit" style="width: 90%" type="text" placeholder="" /></th>	
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" /></th>	
 					</tr>								
 				</thead>
 				<tbody>
 				</tbody>
 				<tfoot>
 				</tfoot>
-			</table>
-					
+			</table>				
 	 	</div>
 	</div>
 </body>

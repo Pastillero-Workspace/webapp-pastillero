@@ -23,7 +23,7 @@ public class RecepcionDao extends GenericoDAO{
 			vendedores = session.createQuery("select p.nombre from Usuario as u, Persona as p where u.idPersona=p.idPersona").list();
 		}catch(HibernateException e){
 			vendedores = null;
-			logger.error("ERROR: No se pude obtener la informacion de los vendedores.");
+			logger.info("ERROR: No se pude obtener la informacion de los vendedores.");
 			e.printStackTrace();
 		}finally{
 			if (session != null && session.isOpen()) {
@@ -46,7 +46,7 @@ public class RecepcionDao extends GenericoDAO{
 			proveedores = session.createQuery("from Proveedor").list();
 		}catch(HibernateException e){
 			proveedores = null;
-			logger.error("ERROR: No se puede mostrar el nombre del proveedor.");
+			logger.info("ERROR: No se puede mostrar el nombre del proveedor. "+e);
 			e.printStackTrace();
 		}finally{
 			if (session != null && session.isOpen()) {
@@ -66,11 +66,11 @@ public class RecepcionDao extends GenericoDAO{
 		try{
 			session = factory.openSession();
 			recepciones = session.createQuery("select r.idRecepcion, r.numFactura, r.fecha, r.hora, r.desc1, r.desc2, "
-					+ "r.folioElectronico, r.notaFactura,r.subtotal, r.estado,u.usuario,p.nombre from Recepcion as r, Usuario as u, "
-					+ "Proveedor as p where r.idUsuario=u.idUsuario and r.idProveedor=p.idProveedor").list();
+					+ "r.folioElectronico, r.notaFactura,r.subtotal, r.iva, r.ieps, r.ieps2, r.total, r.estado,u.usuario,p.nombre from Recepcion as r, Usuario as u, "
+					+ "Proveedor as p where r.idUsuario=u.idUsuario and r.idProveedor=p.idProveedor order by r.idRecepcion desc").list();
 		}catch(HibernateException e){
 			recepciones = null;
-			logger.error("ERROR: No se puede recuperar la informacion de recepcion.");
+			logger.info("ERROR: No se puede recuperar la informacion de recepcion."+e);
 			e.printStackTrace();
 		}finally{
 			if (session != null && session.isOpen()) {
@@ -96,7 +96,7 @@ public class RecepcionDao extends GenericoDAO{
 			idUsuario = (int)usuarios.get(0);
 		}catch(HibernateException e){
 			idUsuario = -1;
-			logger.error("ERROR: No se pudo guardar en la tabla Antibioticos.");
+			logger.info("ERROR: No se pudo obtener usuario. "+e);
 			e.printStackTrace();
 		}finally{
 			if (session != null && session.isOpen()) {
@@ -121,7 +121,7 @@ public class RecepcionDao extends GenericoDAO{
 			idProveedor =(int) proveedores.get(0); 
 		}catch(HibernateException e){
 			idProveedor = -1;
-			logger.error("ERROR: No se pude obtener el id del proveedor.");
+			logger.info("ERROR: No se pude obtener el id del proveedor. "+e);
 			e.printStackTrace();
 		}finally{
 			if (session != null && session.isOpen()) {
@@ -144,10 +144,10 @@ public class RecepcionDao extends GenericoDAO{
 			tx=session.beginTransaction(); 
 			idRecepcion = (Integer)session.save(recepcion); 
 			tx.commit(); 
-		}catch(Exception e1){
+		}catch(Exception e){
 			idRecepcion = 0;
-			logger.info("Error al guardar recepcion ");
-			e1.printStackTrace();
+			logger.info("Error al guardar recepcion "+e);
+			e.printStackTrace();
 		}
 		finally{ 
 			if(session!=null&&session.isOpen())
@@ -177,6 +177,10 @@ public class RecepcionDao extends GenericoDAO{
 			recepcion.setFolioElectronico(r.getFolioElectronico());
 			recepcion.setNotaFactura(r.getNotaFactura());
 			recepcion.setSubtotal(r.getSubtotal());
+			recepcion.setIva(r.getIva());
+			recepcion.setIeps(r.getIeps());
+			recepcion.setIeps2(r.getIeps2());
+			recepcion.setTotal(r.getTotal());
 			recepcion.setEstado(r.getEstado());
 			recepcion.setIdUsuario(r.getIdUsuario());
 			recepcion.setIdProveedor(r.getIdProveedor());
@@ -187,10 +191,10 @@ public class RecepcionDao extends GenericoDAO{
 			resultado=true;
 			//for(LoginForm usuario: usuarios){
 				//System.out.println(usuario);}
-		}catch(HibernateException e1){
+		}catch(HibernateException e){
 			resultado=false;
-			logger.error("Error al actualizar recepcion");
-			e1.printStackTrace();
+			logger.info("Error al actualizar recepcion "+e);
+			e.printStackTrace();
 		}
 		finally{ 
 			if(session!=null&&session.isOpen())
@@ -217,7 +221,7 @@ public class RecepcionDao extends GenericoDAO{
 			resultado=true;
 		}catch(HibernateException e){
 			resultado = false;
-			logger.error("Error al eliminar recepcion");
+			logger.info("Error al eliminar recepcion "+e);
 			e.printStackTrace();
 		}
 		finally{

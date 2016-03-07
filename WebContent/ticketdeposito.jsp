@@ -91,5 +91,71 @@
 		</table>
 	</div>
     </form>
+    <div style="page-break-after: always;">-----------------------------------------------------</div>
+     <form name="form1" method="post" action="#" id="form1">
+    <div class="centerdiv">
+        <table class="mGrid">
+            <tr>
+				<td><div class="divlogo"></div><p></td>
+			</tr>
+            <tr>
+                <td><span id="lblTitulo"><%=datosSucursal.get(0).getRazonSocial() %></span></td>
+            </tr>
+            <tr>
+                <td><span id="lblNombre" class="bold-text">DEPOSITO INICIAL</span></td>
+            </tr>         
+            <tr>
+                <td>
+					<span id="lblCalle"><%=datosSucursal.get(0).getCalle() %></span>
+					<span id="lblNumero">No. <%=datosSucursal.get(0).getNumeroExt() %></span>
+                </td>
+				</td>
+            </tr>
+			
+            <tr>
+                <td >
+                    <span id="lblColonia"><%=datosSucursal.get(0).getColonia() %></span>,
+					<span id="lblEstado"><%=datosSucursal.get(0).getMunicipio() %></span>				
+                </td>
+            </tr>
+			<tr>
+			<td><span id="lblCodigoPostal">C.P : <%=datosSucursal.get(0).getCp() %></span></td>
+			</tr>
+            <tr>
+                <td><span id="lblRFC"> R.F.C: <%=datosSucursal.get(0).getRfc() %></span></td>
+            </tr>
+			<tr>
+				<td id="SegmentEnd">==================================</td>
+			</tr>
+        </table>
+	</div>
+	<div class="centerdiv">
+		<table class="mGrid">
+            <tr>
+                <td>
+                    Fecha: <span id="lblFecha"><%=tsd.getFecha()%></span>
+					Hora: <span id="lblHora"><%=tsd.getHora()%></span>
+                </td>
+            </tr>
+            <tr>
+                <td>Caja: <span id="lblAtendio"><%=tsd.getCaja() %></span></td>
+            </tr>
+			 <tr>
+                <td>Usuario: <span id="lblAtendio"><%=tsd.getUsuario()%></span></td>
+            </tr>
+			 <tr>
+                <td>Monto: <span id="lblAtendio"><%=tsd.getMonto()%></span></td>
+            </tr>
+            <tr><td id="SegmentStart">==================================</td></tr>		
+			<tr><td><p></td></tr>
+			<tr><td><p></td></tr>
+			<tr><td><p></td></tr>
+			<tr><td>_________________________________</td></tr>
+			<tr><td>CAJERO</td></tr>
+			<tr><td><span><%=tsd.getN_usuario()+" "+tsd.getN_apellidop()+""+tsd.getN_apellidom()%></span></td></tr>
+			
+		</table>
+	</div>
+    </form>
 </body>
 </html>

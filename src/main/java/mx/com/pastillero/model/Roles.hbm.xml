@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.Roles" table="Roles">
+      <meta attribute="class-description">
+         This class contains the role user detail. 
+      </meta>
+      <id name="id_rol" type="int" column="id_rol">
+         <generator class="native"/>
+      </id>
+      <property name="descripcion" column="descripcion" type="string"/>
+      <property name="clave" column="clave" type="string"/>
+      <property name="ruta" column="ruta" type="string"/>
+      </class>
+</hibernate-mapping>

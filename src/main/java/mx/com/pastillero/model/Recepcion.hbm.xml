@@ -19,6 +19,10 @@
       <property name="folioElectronico" column="folio_electronico" type="int"/>
       <property name="notaFactura" column="nota_factura" type="int"/>
       <property name="subtotal" column="subtotal" type="float"/>
+      <property name="iva" column="iva" type="float" />
+      <property name="ieps" column="ieps" type="float" />
+      <property name="ieps2" column="ieps2" type="float" />
+      <property name="total" column="total" type="float" />
       <property name="estado" column="estado" type="int"/>
       <property name="idUsuario" column="idUsuario" type="int"/>
       <property name="idProveedor" column="idProveedor" type="int"/>

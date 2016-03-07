@@ -91,11 +91,13 @@
 			int tam = detalle.size();
 			
 			for(int i=0; i<detalle.size(); i++){
+				String[] fecha1 = detalle.get(i).getFecha().toString().split("-");
+				String fecha = fecha1[2]+"-"+fecha1[1]+"-"+fecha1[0];
 				
 			
 		%>
 		
-		data[<%=i%>]=['<%=detalle.get(i).getFecha()%>',
+		data[<%=i%>]=['<%=fecha%>',
 				   '<%=detalle.get(i).getNota()%>',
 				   '<%=detalle.get(i).getClave()%>',
 				   '<%=detalle.get(i).getDescripcion()%>',

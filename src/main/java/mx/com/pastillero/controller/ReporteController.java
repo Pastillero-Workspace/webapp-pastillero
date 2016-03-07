@@ -34,8 +34,6 @@ public class ReporteController extends HttpServlet{
 			String titulo = request.getParameter("txtTitulo");
 			String table = request.getParameter("tblRecepciones");
 			System.out.println("Llamada a reporte");
-			System.out.println(titulo);
-			System.out.println(table);
 			
 			//request.setAttribute("datos", "datos de servlet");
 			//response.sendRedirect("recepcion.jsp");
@@ -47,48 +45,33 @@ public class ReporteController extends HttpServlet{
 			String titulo = request.getParameter("txtTitulo");
 			String table = request.getParameter("tblClientes");
 			
-			System.out.println(titulo);
-			System.out.println(table);
-			
 			ReporteExcel.setReporte(titulo);
 			ReporteExcel.setDatos(table);
 		}
 		else if(request.getParameter("reporte").equals("proveedores")){
 			String titulo = request.getParameter("txtTitulo");
 			String table = request.getParameter("tblProveedores");
-			
-			System.out.println(titulo);
-			System.out.println(table);
-			
+						
 			ReporteExcel.setReporte(titulo);
 			ReporteExcel.setDatos(table);
 		}
 		else if(request.getParameter("reporte").equals("movimientos")){
 			String titulo = request.getParameter("txtTitulo");
 			String table = request.getParameter("tblMovimientos");
-			
-			System.out.println(titulo);
-			System.out.println(table);
-			
+					
 			ReporteExcel.setReporte(titulo);
 			ReporteExcel.setDatos(table);
 		}
 		else if(request.getParameter("reporte").equals("usuarios")){
 			String titulo = request.getParameter("txtTitulo");
 			String table = request.getParameter("tblUsuarios");
-			
-			System.out.println(titulo);
-			System.out.println(table);
-			
+									
 			ReporteExcel.setReporte(titulo);
 			ReporteExcel.setDatos(table);
 		}
 		else if(request.getParameter("reporte").equals("medicos")){
 			String titulo = request.getParameter("txtTitulo");
 			String table = request.getParameter("tblMedicos");
-			
-			System.out.println(titulo);
-			System.out.println(table);
 			
 			ReporteExcel.setReporte(titulo);
 			ReporteExcel.setDatos(table);
@@ -97,18 +80,12 @@ public class ReporteController extends HttpServlet{
 			String titulo = request.getParameter("txtTitulo");
 			String table = request.getParameter("tblProductos");
 			
-			System.out.println(titulo);
-			System.out.println(table);
-			
 			ReporteExcel.setReporte(titulo);
 			ReporteExcel.setDatos(table);
 		}
 		else if(request.getParameter("reporte").equals("antibioticos")){
 			String titulo = request.getParameter("txtTitulo");
 			String table = request.getParameter("tblAntibioticos");
-			
-			System.out.println(titulo);
-			System.out.println(table);
 			
 			ReporteExcel.setReporte(titulo);
 			ReporteExcel.setDatos(table);

@@ -82,12 +82,6 @@ public class MovimientoGeneral {
 	public void setQuedan(int quedan) {
 		this.quedan = quedan;
 	}
-	public float getUtilidad() {
-		return utilidad;
-	}
-	public void setUtilidad(float utilidad) {
-		this.utilidad = utilidad;
-	}
 	public String getFecha() {
 		return fecha;
 	}
@@ -100,6 +94,12 @@ public class MovimientoGeneral {
 	public void setHora(String hora) {
 		this.hora = hora;
 	}
+	public float getUtilidad() {
+		return utilidad;
+	}
+	public void setUtilidad(float utilidad) {
+		this.utilidad = utilidad;
+	}
 	@Override
 	public String toString() {
 		return "MovimientoGeneral [idMovimiento=" + idMovimiento + ", tipo="
@@ -107,10 +107,9 @@ public class MovimientoGeneral {
 				+ ", clave=" + clave + ", descripcion=" + descripcion
 				+ ", adquiridos=" + adquiridos + ", vendidos=" + vendidos
 				+ ", valor=" + valor + ", habian=" + habian + ", quedan="
-				+ quedan + ", utilidad=" + utilidad + ", fecha=" + fecha
-				+ ", hora=" + hora + "]";
+				+ quedan + ", fecha=" + fecha + ", hora=" + hora
+				+ ", utilidad=" + utilidad + "]";
 	}
 	
 	
-
 }

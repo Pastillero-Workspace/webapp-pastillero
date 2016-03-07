@@ -1,12 +1,12 @@
 package mx.com.pastillero.model.formBeans;
 
-
 // master class for products
 
-public class Productos 
-{
+public class Productos {
 	private int idProducto;
 	private String proveedor;
+	private String proveedor2;
+	private String proveedor3;
 	private String clave;
 	private String codBar;
 	private String descripcion;
@@ -14,6 +14,7 @@ public class Productos
 	private float precioPub;
 	private float precioDesc;
 	private float precioFarmacia;
+	private String fechaPcio;
 	private int iva;
 	private String linea;
 	private String referencia;
@@ -29,6 +30,7 @@ public class Productos
 	private String cls;
 	private String zona;
 	private String pareto;
+	private String pareto2;
 	private int ieps;
 	private int ieps2;
 	private float limitado;
@@ -47,11 +49,13 @@ public class Productos
 	private float ultimocosto;
 	private float costopromedio;
 	private float costoreal;
+
 	
-		
+	
 	public int getIdProducto() {
 		return idProducto;
 	}
+
 
 
 	public void setIdProducto(int idProducto) {
@@ -59,9 +63,11 @@ public class Productos
 	}
 
 
+
 	public String getProveedor() {
 		return proveedor;
 	}
+
 
 
 	public void setProveedor(String proveedor) {
@@ -69,9 +75,35 @@ public class Productos
 	}
 
 
+
+	public String getProveedor2() {
+		return proveedor2;
+	}
+
+
+
+	public void setProveedor2(String proveedor2) {
+		this.proveedor2 = proveedor2;
+	}
+
+
+
+	public String getProveedor3() {
+		return proveedor3;
+	}
+
+
+
+	public void setProveedor3(String proveedor3) {
+		this.proveedor3 = proveedor3;
+	}
+
+
+
 	public String getClave() {
 		return clave;
 	}
+
 
 
 	public void setClave(String clave) {
@@ -79,9 +111,11 @@ public class Productos
 	}
 
 
+
 	public String getCodBar() {
 		return codBar;
 	}
+
 
 
 	public void setCodBar(String codBar) {
@@ -89,9 +123,11 @@ public class Productos
 	}
 
 
+
 	public String getDescripcion() {
 		return descripcion;
 	}
+
 
 
 	public void setDescripcion(String descripcion) {
@@ -99,9 +135,11 @@ public class Productos
 	}
 
 
+
 	public int getIdFamilia() {
 		return idFamilia;
 	}
+
 
 
 	public void setIdFamilia(int idFamilia) {
@@ -109,9 +147,11 @@ public class Productos
 	}
 
 
+
 	public float getPrecioPub() {
 		return precioPub;
 	}
+
 
 
 	public void setPrecioPub(float precioPub) {
@@ -119,9 +159,11 @@ public class Productos
 	}
 
 
+
 	public float getPrecioDesc() {
 		return precioDesc;
 	}
+
 
 
 	public void setPrecioDesc(float precioDesc) {
@@ -129,9 +171,11 @@ public class Productos
 	}
 
 
+
 	public float getPrecioFarmacia() {
 		return precioFarmacia;
 	}
+
 
 
 	public void setPrecioFarmacia(float precioFarmacia) {
@@ -139,9 +183,23 @@ public class Productos
 	}
 
 
+
+	public String getFechaPcio() {
+		return fechaPcio;
+	}
+
+
+
+	public void setFechaPcio(String fechaPcio) {
+		this.fechaPcio = fechaPcio;
+	}
+
+
+
 	public int getIva() {
 		return iva;
 	}
+
 
 
 	public void setIva(int iva) {
@@ -149,9 +207,11 @@ public class Productos
 	}
 
 
+
 	public String getLinea() {
 		return linea;
 	}
+
 
 
 	public void setLinea(String linea) {
@@ -159,9 +219,11 @@ public class Productos
 	}
 
 
+
 	public String getReferencia() {
 		return referencia;
 	}
+
 
 
 	public void setReferencia(String referencia) {
@@ -169,9 +231,11 @@ public class Productos
 	}
 
 
+
 	public String getSSA() {
 		return SSA;
 	}
+
 
 
 	public void setSSA(String sSA) {
@@ -179,9 +243,11 @@ public class Productos
 	}
 
 
+
 	public String getLaboratorio() {
 		return laboratorio;
 	}
+
 
 
 	public void setLaboratorio(String laboratorio) {
@@ -189,9 +255,11 @@ public class Productos
 	}
 
 
+
 	public String getDepartamento() {
 		return departamento;
 	}
+
 
 
 	public void setDepartamento(String departamento) {
@@ -199,9 +267,11 @@ public class Productos
 	}
 
 
+
 	public String getCategoria() {
 		return categoria;
 	}
+
 
 
 	public void setCategoria(String categoria) {
@@ -209,9 +279,11 @@ public class Productos
 	}
 
 
+
 	public int getActualizable() {
 		return actualizable;
 	}
+
 
 
 	public void setActualizable(int actualizable) {
@@ -219,9 +291,11 @@ public class Productos
 	}
 
 
+
 	public int getDescuento() {
 		return descuento;
 	}
+
 
 
 	public void setDescuento(int descuento) {
@@ -229,9 +303,11 @@ public class Productos
 	}
 
 
+
 	public float getCosto() {
 		return costo;
 	}
+
 
 
 	public void setCosto(float costo) {
@@ -239,9 +315,11 @@ public class Productos
 	}
 
 
+
 	public String getEquivalencia() {
 		return equivalencia;
 	}
+
 
 
 	public void setEquivalencia(String equivalencia) {
@@ -249,9 +327,11 @@ public class Productos
 	}
 
 
+
 	public String getSuperfamilia() {
 		return superfamilia;
 	}
+
 
 
 	public void setSuperfamilia(String superfamilia) {
@@ -259,9 +339,11 @@ public class Productos
 	}
 
 
+
 	public String getCls() {
 		return cls;
 	}
+
 
 
 	public void setCls(String cls) {
@@ -269,9 +351,11 @@ public class Productos
 	}
 
 
+
 	public String getZona() {
 		return zona;
 	}
+
 
 
 	public void setZona(String zona) {
@@ -279,9 +363,11 @@ public class Productos
 	}
 
 
+
 	public String getPareto() {
 		return pareto;
 	}
+
 
 
 	public void setPareto(String pareto) {
@@ -289,9 +375,23 @@ public class Productos
 	}
 
 
+
+	public String getPareto2() {
+		return pareto2;
+	}
+
+
+
+	public void setPareto2(String pareto2) {
+		this.pareto2 = pareto2;
+	}
+
+
+
 	public int getIeps() {
 		return ieps;
 	}
+
 
 
 	public void setIeps(int ieps) {
@@ -299,9 +399,11 @@ public class Productos
 	}
 
 
+
 	public int getIeps2() {
 		return ieps2;
 	}
+
 
 
 	public void setIeps2(int ieps2) {
@@ -309,9 +411,11 @@ public class Productos
 	}
 
 
+
 	public float getLimitado() {
 		return limitado;
 	}
+
 
 
 	public void setLimitado(float limitado) {
@@ -319,9 +423,11 @@ public class Productos
 	}
 
 
+
 	public String getKit() {
 		return kit;
 	}
+
 
 
 	public void setKit(String kit) {
@@ -329,9 +435,11 @@ public class Productos
 	}
 
 
+
 	public int getComision() {
 		return comision;
 	}
+
 
 
 	public void setComision(int comision) {
@@ -339,9 +447,11 @@ public class Productos
 	}
 
 
+
 	public float getMaxdescuento() {
 		return maxdescuento;
 	}
+
 
 
 	public void setMaxdescuento(float maxdescuento) {
@@ -349,9 +459,11 @@ public class Productos
 	}
 
 
+
 	public String getGrupo() {
 		return grupo;
 	}
+
 
 
 	public void setGrupo(String grupo) {
@@ -359,9 +471,11 @@ public class Productos
 	}
 
 
+
 	public int getAplicadescbase() {
 		return aplicadescbase;
 	}
+
 
 
 	public void setAplicadescbase(int aplicadescbase) {
@@ -369,9 +483,11 @@ public class Productos
 	}
 
 
+
 	public int getAplicapo() {
 		return aplicapo;
 	}
+
 
 
 	public void setAplicapo(int aplicapo) {
@@ -379,9 +495,11 @@ public class Productos
 	}
 
 
+
 	public int getAntibiotico() {
 		return antibiotico;
 	}
+
 
 
 	public void setAntibiotico(int antibiotico) {
@@ -389,9 +507,11 @@ public class Productos
 	}
 
 
+
 	public int getExistencias() {
 		return existencias;
 	}
+
 
 
 	public void setExistencias(int existencias) {
@@ -399,9 +519,11 @@ public class Productos
 	}
 
 
+
 	public String getEspecial() {
 		return especial;
 	}
+
 
 
 	public void setEspecial(String especial) {
@@ -409,9 +531,11 @@ public class Productos
 	}
 
 
+
 	public int getFamactualizar() {
 		return famactualizar;
 	}
+
 
 
 	public void setFamactualizar(int famactualizar) {
@@ -419,9 +543,11 @@ public class Productos
 	}
 
 
+
 	public int getCominmediata() {
 		return cominmediata;
 	}
+
 
 
 	public void setCominmediata(int cominmediata) {
@@ -429,9 +555,11 @@ public class Productos
 	}
 
 
+
 	public String getUltimoproveedor() {
 		return ultimoproveedor;
 	}
+
 
 
 	public void setUltimoproveedor(String ultimoproveedor) {
@@ -439,9 +567,11 @@ public class Productos
 	}
 
 
+
 	public float getUltimocosto() {
 		return ultimocosto;
 	}
+
 
 
 	public void setUltimocosto(float ultimocosto) {
@@ -449,9 +579,11 @@ public class Productos
 	}
 
 
+
 	public float getCostopromedio() {
 		return costopromedio;
 	}
+
 
 
 	public void setCostopromedio(float costopromedio) {
@@ -459,9 +591,11 @@ public class Productos
 	}
 
 
+
 	public float getCostoreal() {
 		return costoreal;
 	}
+
 
 
 	public void setCostoreal(float costoreal) {
@@ -469,40 +603,43 @@ public class Productos
 	}
 
 	
+	
+
 	@Override
 	public String toString() {
 		return "Productos [idProducto=" + idProducto + ", proveedor="
-				+ proveedor + ", clave=" + clave + ", codBar=" + codBar
+				+ proveedor + ", proveedor2=" + proveedor2 + ", proveedor3="
+				+ proveedor3 + ", clave=" + clave + ", codBar=" + codBar
 				+ ", descripcion=" + descripcion + ", idFamilia=" + idFamilia
 				+ ", precioPub=" + precioPub + ", precioDesc=" + precioDesc
-				+ ", precioFarmacia=" + precioFarmacia + ", iva=" + iva
-				+ ", linea=" + linea + ", referencia=" + referencia + ", SSA="
-				+ SSA + ", laboratorio=" + laboratorio + ", departamento="
+				+ ", precioFarmacia=" + precioFarmacia + ", fechaPcio="
+				+ fechaPcio + ", iva=" + iva + ", linea=" + linea
+				+ ", referencia=" + referencia + ", SSA=" + SSA
+				+ ", laboratorio=" + laboratorio + ", departamento="
 				+ departamento + ", categoria=" + categoria + ", actualizable="
 				+ actualizable + ", descuento=" + descuento + ", costo="
 				+ costo + ", equivalencia=" + equivalencia + ", superfamilia="
 				+ superfamilia + ", cls=" + cls + ", zona=" + zona
-				+ ", pareto=" + pareto + ", ieps=" + ieps + ", ieps2=" + ieps2
-				+ ", limitado=" + limitado + ", kit=" + kit + ", comision="
-				+ comision + ", maxdescuento=" + maxdescuento + ", grupo="
-				+ grupo + ", aplicadescbase=" + aplicadescbase + ", aplicapo="
-				+ aplicapo + ", antibiotico=" + antibiotico + ", existencias="
-				+ existencias + ", especial=" + especial + ", famactualizar="
-				+ famactualizar + ", cominmediata=" + cominmediata
-				+ ", ultimoproveedor=" + ultimoproveedor + ", ultimocosto="
-				+ ultimocosto + ", costopromedio=" + costopromedio
-				+ ", costoreal=" + costoreal + "]";
+				+ ", pareto=" + pareto + ", pareto2=" + pareto2 + ", ieps="
+				+ ieps + ", ieps2=" + ieps2 + ", limitado=" + limitado
+				+ ", kit=" + kit + ", comision=" + comision + ", maxdescuento="
+				+ maxdescuento + ", grupo=" + grupo + ", aplicadescbase="
+				+ aplicadescbase + ", aplicapo=" + aplicapo + ", antibiotico="
+				+ antibiotico + ", existencias=" + existencias + ", especial="
+				+ especial + ", famactualizar=" + famactualizar
+				+ ", cominmediata=" + cominmediata + ", ultimoproveedor="
+				+ ultimoproveedor + ", ultimocosto=" + ultimocosto
+				+ ", costopromedio=" + costopromedio + ", costoreal="
+				+ costoreal + "]";
 	}
+
 
 
 	public String setFormatData() {
-		return "" + idProducto + "~" + codBar
-				+ "~" + existencias + "~"
-				+ descripcion + "~" + laboratorio + "~" + cls
-				+ "~" + SSA + "~" + iva + "~" + ieps
-				+ "~" + categoria + "~" + pareto
-				+ "~" + precioPub + "~" + precioDesc
-				+ "~" + idFamilia + "~";
+		return "" + idProducto + "~" + codBar + "~" + existencias + "~"
+				+ descripcion + "~" + laboratorio + "~" + cls + "~" + SSA + "~"
+				+ iva + "~" + ieps + "~" + antibiotico + "~" + pareto + "~"
+				+ precioPub + "~" + precioDesc + "~" + idFamilia + "~";
 	}
-	
+
 }

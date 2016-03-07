@@ -14,11 +14,16 @@ import javax.servlet.http.HttpServletResponse;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import mx.com.pastillero.model.dao.AntibioticoDao;
 import mx.com.pastillero.model.dao.MovimientoSalidaDao;
 import mx.com.pastillero.model.dao.ProductosDao;
 import mx.com.pastillero.model.dao.RecepcionDao;
 import mx.com.pastillero.model.dao.SalidaDao;
+import mx.com.pastillero.model.formBeans.Antibioticos;
+import mx.com.pastillero.model.formBeans.AntibioticosCopy;
 import mx.com.pastillero.model.formBeans.MovimientoSalida;
 import mx.com.pastillero.model.formBeans.Productos;
 import mx.com.pastillero.model.formBeans.Salida;
@@ -29,6 +34,7 @@ public class SalidaController extends HttpServlet{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
+	private static final Logger logger = LoggerFactory.getLogger(SalidaController.class);
 	
 	
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -48,7 +54,7 @@ public class SalidaController extends HttpServlet{
 		// Bloque ejecutado al cargar el jsp
 		if(request.getParameter("tarea").equals("cargar")){
 			int idSalida;
-			salida.setFecha("");
+			salida.setFecha("2000-01-01");
 			salida.setHora("");
 			salida.setMerma("");
 			salida.setNumFactura("");
@@ -78,8 +84,8 @@ public class SalidaController extends HttpServlet{
 				response.getWriter().write("0");
 			}
 			else{
-				String datos = producto.get(0)[0].toString()+"~"+producto.get(0)[1].toString()+"~"+producto.get(0)[2].toString()+"~"+producto.get(0)[3].toString()+"~"+producto.get(0)[4].toString();
-				System.out.println(datos);	
+				String datos = producto.get(0)[0].toString()+"~"+producto.get(0)[1].toString()+"~"+producto.get(0)[2].toString()+"~"+producto.get(0)[3].toString()+"~"+producto.get(0)[4].toString()+"~"+producto.get(0)[5].toString();
+				//System.out.println(datos);	
 				response.getWriter().write(datos);
 			}
 			
@@ -88,10 +94,12 @@ public class SalidaController extends HttpServlet{
 		// Bloque para guardar los datos de una salida
 		if(request.getParameter("tarea").equals("guardar")){
 					
-			System.out.println(request.getParameter("tblDatos"));
 			
 			// Actualiza salida con datos actualizados y completos
-			salida.setFecha(request.getParameter("txtFecha").toString().trim());
+			String[] fecha1 = request.getParameter("txtFecha").toString().trim().split("-");
+			String fecha = fecha1[2]+"-"+fecha1[1]+"-"+fecha1[0];
+			
+			salida.setFecha(fecha);
 			salida.setHora(hora.format(date));
 			salida.setMerma(request.getParameter("txtMerma").trim().toUpperCase());
 			salida.setNumFactura(request.getParameter("txtFactura").trim().toUpperCase());
@@ -100,9 +108,7 @@ public class SalidaController extends HttpServlet{
 			
 			RecepcionDao r  = new RecepcionDao();
 			salida.setIdUsuario(r.idUsuario(request.getParameter("txtResponsable").trim()));
-			System.out.println(salida.toString());
-			
-						
+					
 			
 			JSONParser parser = new JSONParser();
 			Object productos;
@@ -112,6 +118,7 @@ public class SalidaController extends HttpServlet{
 			try {
 				productos = parser.parse(tblProductos);
 				JSONArray arrayProductos = (JSONArray) productos;
+				AntibioticoDao antibDao = new AntibioticoDao();
 				
 				for(int i=0; i<arrayProductos.size();i++){
 					JSONObject pr = (JSONObject)arrayProductos.get(i);
@@ -122,7 +129,6 @@ public class SalidaController extends HttpServlet{
 					movimientoSalida.setIdNota(Integer.parseInt(request.getParameter("txtFolio").trim()));
 					movimientoSalida.setDocumento(request.getParameter("txtFactura").trim().toUpperCase());
 					movimientoSalida.setClave(pr.get("Codigo").toString());
-					movimientoSalida.setDescripcion(pr.get("Descripcion").toString().toUpperCase());
 					movimientoSalida.setAdquiridos(0);
 					movimientoSalida.setVendidos(Integer.parseInt(pr.get("Cant").toString()));
 					movimientoSalida.setValor(Float.parseFloat(pr.get("Costo").toString()));
@@ -137,8 +143,42 @@ public class SalidaController extends HttpServlet{
 					movimientoSalida.setHora(hora.format(date));
 					movimientoSalida.setUtilidad(0);
 					
+					
+					
+					if (antibDao.isAntibiotico(movimientoSalida.getClave())) {
+						AntibioticosCopy antibioticoCopy = new AntibioticosCopy();
+						Antibioticos antibiotico = new Antibioticos();
+						antibioticoCopy.setAdquiridos(0);
+						antibioticoCopy.setDocumento(Integer.toString(movimientoSalida.getIdNota())); // id de la nota
+						antibioticoCopy.setFecha(movimientoSalida.getFecha());
+						antibioticoCopy.setIdMedico(1);													// id por default *temporal
+						antibioticoCopy.setIdProducto(p.get(0).getIdProducto());
+						antibioticoCopy.setQuedan(movimientoSalida.getQuedan());
+						antibioticoCopy.setReceta(0);
+						antibioticoCopy.setSello(0);
+						antibioticoCopy.setVendidos(movimientoSalida.getVendidos());
+						antibioticoCopy.setHabian(movimientoSalida.getHabian());
+						antibioticoCopy.setIdProveedor(1);
+						
+						antibiotico.setAdquiridos(0);
+						antibiotico.setDocumento(Integer.toString(movimientoSalida.getIdNota())); // id de la nota
+						antibiotico.setFecha(movimientoSalida.getFecha());
+						antibiotico.setIdMedico(1);													// id por default *temporal
+						antibiotico.setIdProducto(p.get(0).getIdProducto());
+						antibiotico.setQuedan(movimientoSalida.getQuedan());
+						antibiotico.setReceta(0);
+						antibiotico.setSello(0);
+						antibiotico.setVendidos(movimientoSalida.getVendidos());
+						antibiotico.setHabian(movimientoSalida.getHabian());
+						antibiotico.setIdProveedor(1);
+
+						antibDao.guardarAntibiotico(antibiotico,antibioticoCopy);
+						
+						logger.info("Antibiotico guardado: "+antibiotico.getIdProducto());
+						antibiotico = null;
+					}
+					
 					//Inserta Detalle de movimiento
-					System.out.println(movimientoSalida.toString());
 					movimientoSalidaDao.guardarMovimientoSalida(movimientoSalida);
 					
 					p.get(0).setExistencias(movimientoSalida.getQuedan());

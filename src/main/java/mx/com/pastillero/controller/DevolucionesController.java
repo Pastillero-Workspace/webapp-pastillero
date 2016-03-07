@@ -1,6 +1,5 @@
 package mx.com.pastillero.controller;
 
-import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.text.DateFormat;
@@ -29,7 +28,6 @@ import mx.com.pastillero.model.formBeans.ItemVenta;
 import mx.com.pastillero.model.formBeans.MovimientoDevolucionCompra;
 import mx.com.pastillero.model.formBeans.MovimientoDevolucionVenta;
 import mx.com.pastillero.model.formBeans.Productos;
-import mx.com.pastillero.model.formBeans.Usuario;
 import mx.com.pastillero.utils.DevolucionVentaDet;
 import mx.com.pastillero.utils.TicketServiceDevolucionVenta;
 
@@ -88,7 +86,6 @@ public class DevolucionesController extends HttpServlet{
 			movimientoDev.setIdNota(idDev);
 			movimientoDev.setDocumento(request.getParameter("txtDocumento").trim().toUpperCase());
 			movimientoDev.setClave(request.getParameter("txtCodigo").trim());
-			movimientoDev.setDescripcion(request.getParameter("txtDescripcion").trim().toUpperCase());
 			movimientoDev.setAdquiridos(0);
 			movimientoDev.setVendidos(Integer.parseInt(request.getParameter("txtCantidad").trim()));
 			movimientoDev.setValor(Float.parseFloat(request.getParameter("txtCosto").trim()));
@@ -124,6 +121,7 @@ public class DevolucionesController extends HttpServlet{
 				dVenta.setFecha(detalleDev.get(i)[0].toString());
 				dVenta.setNota(detalleDev.get(i)[1].toString());
 				dVenta.setClave(detalleDev.get(i)[2].toString());
+				
 				dVenta.setDescripcion(detalleDev.get(i)[3].toString());
 				dVenta.setCantidad(Integer.parseInt(detalleDev.get(i)[4].toString()));
 				dVenta.setPrecioUnitario(Float.parseFloat(detalleDev.get(i)[5].toString()));
@@ -197,7 +195,6 @@ public class DevolucionesController extends HttpServlet{
 					movimientoDevVenta.setIdNota(idDev);
 					movimientoDevVenta.setDocumento("0");
 					movimientoDevVenta.setClave(dev.getCodigo());
-					movimientoDevVenta.setDescripcion(dev.getDescripcion().toUpperCase());
 					movimientoDevVenta.setAdquiridos(dev.getCantidad());
 					movimientoDevVenta.setVendidos(0);
 					movimientoDevVenta.setValor(dev.getSubtotal());

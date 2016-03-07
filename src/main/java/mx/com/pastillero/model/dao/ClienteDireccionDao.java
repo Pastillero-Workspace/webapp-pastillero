@@ -25,7 +25,7 @@ public class ClienteDireccionDao extends GenericoDAO{
 						+ "d.estado,d.cp from Cliente as c, Direccion as d where c.idDireccion=d.idDireccion").list();
 		}catch(HibernateException e){
 			session = null;clientes=null;
-			logger.error("ERROR: No se puede recuperar la informacion del los clientes.");
+			logger.info("ERROR: No se puede recuperar la informacion del los clientes."+e);
 			e.printStackTrace();
 		}finally{
 			if (session != null && session.isOpen()) {
@@ -43,7 +43,8 @@ public class ClienteDireccionDao extends GenericoDAO{
 	public List<Object[]> getIdCliente(String clave){
 		Session session = factory.openSession();
 		
-		List<Object[]> cliente = session.createQuery("select idCliente ,idDireccion from Cliente where clave ='"+clave+"'").list();
+		List<Object[]> cliente = session.createQuery("select idCliente ,idDireccion, clave from Cliente where clave = :clave")
+													.setParameter("clave", clave).list();
 		
 		return cliente;		
 	}
@@ -58,7 +59,7 @@ public class ClienteDireccionDao extends GenericoDAO{
 			id = (Integer) session.save(d);
 			tx.commit();
 		}catch(Exception ex){
-			System.out.println("Error al guardar Direccion");
+			logger.info("Error al guardar Direccion "+ex);
 			ex.printStackTrace();
 			tx.rollback();
 		}finally{
@@ -86,7 +87,7 @@ public class ClienteDireccionDao extends GenericoDAO{
 			logger.info("Cliente Guardado con Exito!");
 		}catch(Exception ex){
 			resultado = false;
-			logger.info("Error al Guardar Cliente.");
+			logger.info("Error al Guardar Cliente. "+ex);
 			ex.printStackTrace();
 			tx.rollback();
 		}finally{
@@ -138,7 +139,7 @@ public class ClienteDireccionDao extends GenericoDAO{
 			logger.info("Cliente Actualizado con Exito!");
 		}catch(Exception ex){
 			resultado = false;
-			logger.info("Error al Actualizar Cliente.");
+			logger.info("Error al Actualizar Cliente. "+ex);
 			ex.printStackTrace();
 			tx.rollback();			
 		}
@@ -168,7 +169,7 @@ public class ClienteDireccionDao extends GenericoDAO{
 			logger.info("Cliente Eliminado con Exito!");
 		}catch(Exception ex){
 			resultado = false;
-			logger.info("Error al Eliminar Cliente.");
+			logger.info("Error al Eliminar Cliente. "+ex);
 			ex.printStackTrace();
 			tx.rollback();
 		}
@@ -183,7 +184,5 @@ public class ClienteDireccionDao extends GenericoDAO{
 		}
 		return resultado;
 	}
-
-	
 
 }

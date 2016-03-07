@@ -6,6 +6,7 @@ import mx.com.pastillero.model.formBeans.DevolucionCompra;
 import mx.com.pastillero.model.formBeans.DevolucionVenta;
 import mx.com.pastillero.model.formBeans.MovimientoDevolucionCompra;
 import mx.com.pastillero.model.formBeans.MovimientoDevolucionVenta;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -47,9 +48,9 @@ public class DevolucionesDao extends GenericoDAO{
 		List<Object[]> devolucion = null;
 		try{
 			session = factory.openSession();
-			devolucion = session.createQuery("select m.descripcion,m.adquiridos, md.vendidos"
-					+ " from MovimientoRecepcion m, MovimientoDevolucionCompra md where m.clave='"+codigo+"'"
-					+ " and md.clave='"+codigo+"'"+" and md.documento='"+documento+"'"+" and m.documento='"+documento+"'").list();
+			devolucion = session.createQuery("select pr.descripcion,m.adquiridos, md.vendidos"
+					+ " from MovimientoRecepcion m, MovimientoDevolucionCompra md, Productos pr where m.clave='"+codigo+"'"
+					+ " and md.clave='"+codigo+"'"+" and pr.codBar='"+codigo+"' and md.documento='"+documento+"'"+" and m.documento='"+documento+"'").list();
 		}catch(HibernateException e){
 			devolucion = null;
 			logger.error("ERROR: No se puede verificar la devolucion de la compra.");
@@ -176,9 +177,9 @@ public class DevolucionesDao extends GenericoDAO{
 		
 		try{
 			session = factory.openSession();
-			ventaDetalle = session.createQuery("select n.fecha, n.idNota, m.clave, m.descripcion, m.vendidos, m.valor/m.vendidos, m.valor, n.iva, m.valor+n.iva "
-												+ "from Nota n, MovimientoVenta m "
-												+ "where n.idNota= m.idNota and m.idNota="+nota).list();
+			ventaDetalle = session.createQuery("select n.fecha, n.idNota, m.clave, pr.descripcion, m.vendidos, m.valor/m.vendidos, m.valor, n.iva, m.valor+n.iva "
+												+ "from Nota n, MovimientoVenta m, Productos pr "
+												+ "where m.clave=pr.codBar and n.idNota= m.idNota and m.idNota="+nota).list();
 		}catch(HibernateException e){
 			ventaDetalle = null;
 			logger.error("ERROR: No se puede mostrar el detalle de la venta.\n");
@@ -272,10 +273,89 @@ public class DevolucionesDao extends GenericoDAO{
 			}
 		}		
 		return notas;
-		
 	}
 	
 	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> busquedaPorCodigo (String codigo){
+		Session session = null;
+		List<Object[]> notas = null;
+		try{
+			session = factory.openSession();
+			notas = session.createQuery("select m.fecha, p.nombre, m.idNota, m.documento, m.adquiridos, "
+					+ "m.clave, pr.descripcion, m.valor from Recepcion r, MovimientoRecepcion m, Proveedor p,"
+					+ " Productos pr where r.idRecepcion = m.idNota and r.idProveedor = p.idProveedor and"
+					+ " m.clave = pr.codBar and m.clave='"+codigo+"' order by idNota desc").list();
+			
+		}catch(HibernateException e){
+			notas = null;
+			logger.error("Error: No se puede realizar la busqueda por Codigo");
+			e.printStackTrace();
+		}finally{
+			if(session != null && session.isOpen()){
+				try{
+					session.close();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+		return notas;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> busquedaPorProveedor (String proveedor){
+		Session session = null;
+		List<Object[]> notas = null;
+		try{
+			session = factory.openSession();
+			notas = session.createQuery("select m.fecha, p.nombre, m.idNota, m.documento, m.adquiridos, "
+					+ "m.clave, pr.descripcion, m.valor from Recepcion r, MovimientoRecepcion m, Proveedor p,"
+					+ " Productos pr where r.idRecepcion = m.idNota and r.idProveedor = p.idProveedor and"
+					+ " m.clave = pr.codBar and p.nombre ='"+proveedor+"' order by idNota desc").list();
+			
+		}catch(HibernateException e){
+			notas = null;
+			logger.error("Error: No se puede realizar la busqueda por Proveedor");
+			e.printStackTrace();
+		}finally{
+			if(session != null && session.isOpen()){
+				try{
+					session.close();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+		return notas;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Object[]> busquedaPorDocumento (String documento){
+		Session session = null;
+		List<Object[]> notas = null;
+		try{
+			session = factory.openSession();
+			notas = session.createQuery("select m.fecha, p.nombre, m.idNota, m.documento, m.adquiridos, "
+					+ "m.clave, pr.descripcion, m.valor from Recepcion r, MovimientoRecepcion m, Proveedor p,"
+					+ " Productos pr where r.idRecepcion = m.idNota and r.idProveedor = p.idProveedor and"
+					+ " m.clave = pr.codBar and m.documento='"+documento+"' order by idNota desc").list();
+			
+		}catch(HibernateException e){
+			notas = null;
+			logger.error("Error: No se puede realizar la busqueda por Documento");
+			e.printStackTrace();
+		}finally{
+			if(session != null && session.isOpen()){
+				try{
+					session.close();
+				}catch(Exception e){
+					e.printStackTrace();
+				}
+			}
+		}
+		return notas;
+	}
 	
 
 }

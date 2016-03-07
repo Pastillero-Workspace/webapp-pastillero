@@ -21,7 +21,7 @@ public class ViewModelMovimientosDao extends GenericoDAO{
 	private static final Logger logger = LoggerFactory.getLogger(ViewModelMovimientosDao.class);
 
 	 
-	  public List<MovimientoGeneral> getViewStored() throws Exception
+	  public List<MovimientoGeneral> getViewStored(final String query) throws Exception
 	  {	
 		  logger.info("Entrada a movimientos con exito!");  
 		final List<MovimientoGeneral> datos = new ArrayList<MovimientoGeneral>();
@@ -36,7 +36,8 @@ public class ViewModelMovimientosDao extends GenericoDAO{
 	                  	    ResultSet rs=null;
 	                          try{     
 	                                 cs = c.prepareCall("{ call usp_alterview_Movimiento(?) }",ResultSet.TYPE_SCROLL_INSENSITIVE,ResultSet.CONCUR_READ_ONLY);
-	                                 cs.setInt(1, 5);
+	                                 cs.setString(1, query);
+	                                 
 	                                 boolean results = cs.execute();
 	                                 int rowsAffected = 0;
 	                                 while (results || rowsAffected != -1){
@@ -50,7 +51,7 @@ public class ViewModelMovimientosDao extends GenericoDAO{
 	                                 }
 	                                 while (rs.next()) {             
 
-	                                     //System.out.println("Tipo: "+ rs.getString("tipo") + "Fecha: "+rs.getString("fecha")+"Hora: "+rs.getString("hora")+"Utilidad: "+rs.getString("utilidad"));
+	                                    
 	                                     MovimientoGeneral mg = new MovimientoGeneral();
 	                                     //mg.setIdMovimiento(Integer.parseInt(rs.getString("idMovimiento")));
 	                                     mg.setTipo(rs.getString("tipo"));
@@ -63,7 +64,7 @@ public class ViewModelMovimientosDao extends GenericoDAO{
 	                                     mg.setValor(Float.parseFloat(rs.getString("valor")));
 	                                     mg.setHabian(Integer.parseInt(rs.getString("habian")));
 	                                     mg.setQuedan(Integer.parseInt(rs.getString("quedan")));
-	                                     mg.setFecha(rs.getString("fecha"));
+	                                     mg.setFecha(rs.getString("fecha").toString());
 	                                     mg.setHora(rs.getString("hora"));
 	                                     mg.setUtilidad(Float.parseFloat(rs.getString("utilidad")));
 	                                     datos.add(mg);

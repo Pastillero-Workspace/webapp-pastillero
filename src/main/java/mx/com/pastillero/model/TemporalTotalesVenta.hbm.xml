@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.TemporalTotalesVenta" table="Temporal_totales_venta">
+      <meta attribute="class-description">
+         This class contains the Nota detail. 
+      </meta>
+      <id name="nota" type="int" column="nota"></id>
+      <property name="precioTotal" column="preciototal" type="float"/>
+      <property name="descuentoTotal" column="descuentototal" type="float"/>
+      <property name="iva" column="iva" type="float"/>
+      <property name="subtotal" column="subtotal" type="float"/>
+      <property name="total" column="total" type="float"/>
+      </class>
+</hibernate-mapping>

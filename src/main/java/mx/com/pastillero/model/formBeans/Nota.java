@@ -1,8 +1,5 @@
 package mx.com.pastillero.model.formBeans;
 
-import java.util.Date;
-
-
 public class Nota {
 	private int idNota;
 	private String fecha;

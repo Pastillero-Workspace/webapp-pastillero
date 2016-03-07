@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import ch.qos.logback.classic.Logger;
 import mx.com.pastillero.model.dao.ProveedorDireccionDao;
 import mx.com.pastillero.model.formBeans.Direccion;
 import mx.com.pastillero.model.formBeans.Proveedor;
@@ -97,10 +96,9 @@ protected void doPost(HttpServletRequest request, HttpServletResponse response) 
 		}
 		
 		if(request.getParameter("tarea").equals("eliminar")){
-			p.setNombre(request.getParameter("txtNombre").trim().toUpperCase());
-			
-			List<Object[]> proveedor = proveedorDireccion.getIdProveedor(p.getNombre().toUpperCase());
-			boolean eliminar = proveedorDireccion.eliminarProveedor(Integer.parseInt(proveedor.get(0)[0].toString()));
+			p.setNombre(request.getParameter("txtNombre").trim().toUpperCase());		
+			//List<Object[]> proveedor = proveedorDireccion.getIdProveedor(p.getNombre().toUpperCase());
+
 		}
 
 	}

@@ -60,10 +60,10 @@ function cerrar()
          var data = localStorage.getItem("sessionid");
          $.post('logout.jr',
          {          	
-         	        user : nickname,
+         	     usuario : nickname,
          	    password : psw, 
          	idLocalSesion: data,
-         	     workout : 'exitws'    
+         	     workout : 'exitnr'    
          },function(data)
          {
          	if(data == "Exit")

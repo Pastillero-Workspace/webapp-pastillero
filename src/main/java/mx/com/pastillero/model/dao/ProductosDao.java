@@ -29,7 +29,7 @@ public class ProductosDao extends GenericoDAO
 		  	results = cr.list();
 	  	}catch(HibernateException e){
 	  		results = null;
-	  		logger.error("ERROR: No se pudo consultar el producto.");
+	  		logger.error("ERROR: No se pudo consultar el producto. "+e);
 			e.printStackTrace();
 	  	}finally{
 	  		if (session != null && session.isOpen()) {
@@ -55,7 +55,7 @@ public class ProductosDao extends GenericoDAO
 			  	results = cr.list();
 		  	}catch(HibernateException e){
 		  		results = null;
-		  		logger.error("ERROR: No se pudo mostrar la tabla Antibioticos.");
+		  		logger.info("ERROR: No se pudieron mostrar los productos. "+e);
 				e.printStackTrace();
 		  	}finally{
 		  		if (session != null && session.isOpen()) {
@@ -81,6 +81,8 @@ public class ProductosDao extends GenericoDAO
 			Productos producto = (Productos) session.get(Productos.class, p.getIdProducto());
 			producto.setIdProducto(p.getIdProducto());
 			producto.setProveedor(p.getProveedor());
+			producto.setProveedor2(p.getProveedor2());
+			producto.setProveedor3(p.getProveedor3());
 			producto.setClave(p.getClave());
 			producto.setCodBar(p.getCodBar());
 			producto.setDescripcion(p.getDescripcion());
@@ -88,6 +90,7 @@ public class ProductosDao extends GenericoDAO
 			producto.setPrecioPub(p.getPrecioPub());
 			producto.setPrecioDesc(p.getPrecioDesc());
 			producto.setPrecioFarmacia(p.getPrecioFarmacia());
+			producto.setFechaPcio(p.getFechaPcio());
 			producto.setIva(p.getIva());
 			producto.setLinea(p.getLinea());
 			producto.setReferencia(p.getReferencia());
@@ -103,6 +106,7 @@ public class ProductosDao extends GenericoDAO
 			producto.setCls(p.getCls());
 			producto.setZona(p.getZona());
 			producto.setPareto(p.getPareto());
+			producto.setPareto2(p.getPareto2());
 			producto.setIeps(p.getIeps());
 			producto.setIeps2(p.getIeps2());
 			producto.setLimitado(p.getLimitado());
@@ -125,9 +129,10 @@ public class ProductosDao extends GenericoDAO
 			session.update(producto);	
 			tx.commit();
 			resultado = true;
+			logger.info("Producto Actualizado con Exito! "+producto.getIdProducto());
 		}catch(HibernateException e){
 			resultado=false;
-			logger.error("Error en actualizar : Verifique datos");
+			logger.info("Error al Actualizar el producto "+e);
 			e.printStackTrace();
 		}
 		finally{
@@ -143,9 +148,7 @@ public class ProductosDao extends GenericoDAO
 		
 	}
 	
-	public boolean actualizarExistencias(Productos p)
-	{
-		
+	public boolean actualizarExistencias(Productos p){
 		boolean resultado = false;
 		Session session = null;
 		Transaction tx = null;
@@ -153,14 +156,18 @@ public class ProductosDao extends GenericoDAO
 			session = factory.openSession();
 			tx  = session.beginTransaction();
 			Productos producto = (Productos) session.get(Productos.class, p.getIdProducto());
-			producto.setExistencias(p.getExistencias());	
+			producto.setExistencias(p.getExistencias());
+			producto.setUltimocosto(p.getUltimocosto());
+			producto.setCosto(p.getCosto());
+			producto.setUltimoproveedor(p.getUltimoproveedor());
 			// update product			
 			session.update(producto);	
 			tx.commit();
 			resultado = true;
+			logger.info("Existencias del producto actualizadas con Exito! "+producto.getExistencias());
 		}catch(HibernateException e){
 			resultado=false;
-			logger.error("Error en actualizar : Verifique datos");
+			logger.info("Error al actualizar Existencias de producto. "+e);
 			e.printStackTrace();
 		}
 		finally{
@@ -188,10 +195,10 @@ public class ProductosDao extends GenericoDAO
 			session.save(producto);
 			tx.commit();
 			resultado=true;
-		} catch (Exception e1) {
+		} catch (Exception e) {
 			resultado=false;
-			logger.error("Error funcion guardar producto ");
-			e1.printStackTrace();
+			logger.info("Error funcion guardar producto "+e);
+			e.printStackTrace();
 		} finally {
 			if (session != null && session.isOpen())
 				try {
@@ -206,8 +213,7 @@ public class ProductosDao extends GenericoDAO
 	}
 		
 	// actualizar producto para la parte de cobro	
-	public boolean actualizarTotales(Productos p)
-	{
+	public boolean actualizarTotales(Productos p){
 		boolean resultado = false;
 		Session session = null;
 		Transaction tx = null;
@@ -219,9 +225,10 @@ public class ProductosDao extends GenericoDAO
 			session.update(producto);
 			tx.commit();
 			resultado = true;
+			logger.info("Existencias de producto Actualizadas con Exito! "+producto.getExistencias());
 		}catch(Exception e){
 			resultado=false;
-			System.out.println("Error en actualizarProducto de ProductoDao");
+			logger.info("Error al Actualizar Existencias de Producto. "+e);
 			e.printStackTrace();
 		}
 		finally{
@@ -241,11 +248,10 @@ public class ProductosDao extends GenericoDAO
 		List<Object[]> producto = null;
 		try{
 			session = factory.openSession();
-			producto = session.createQuery("select descripcion,iva,ieps,ultimocosto,existencias from Productos where codBar='"+codigo+"'")
-								.list();
+			producto = session.createQuery("select descripcion,iva,ieps,ieps2,costo,existencias from Productos where codBar='"+codigo+"'").list();
 		}catch(HibernateException e){
 			producto = null;
-			logger.error("ERROR: No se puede obtener informacion del producto.");
+			logger.info("ERROR: No se puede obtener informacion del producto. "+e);
 			e.printStackTrace();
 		} finally {
 			if (session != null && session.isOpen()) {
@@ -267,15 +273,15 @@ public class ProductosDao extends GenericoDAO
 		List<Object[]> list = null;
 		try{
 			session = factory.openSession();
-			list = session.createQuery("select p.proveedor, p.clave, p.codBar, p.descripcion, p.existencias, f.nombre, p.precioPub, p.precioDesc, p.precioFarmacia,"
-					+"p.iva, p.linea, p.referencia, p.SSA, p.laboratorio, p.departamento, p.categoria, p.actualizable, p.descuento, p.costo,"
-					+"p.equivalencia, p.superfamilia, p.cls, p.zona, p.pareto, p.ieps, p.ieps2, p.limitado, p.kit, p.comision, p.maxdescuento,"
+			list = session.createQuery("select p.proveedor,p.proveedor2,p.proveedor3, p.clave, p.codBar, p.descripcion, p.existencias, f.nombre, p.precioPub, p.precioDesc, p.precioFarmacia,"
+					+"p.fechaPcio,p.iva, p.linea, p.referencia, p.SSA, p.laboratorio, p.departamento, p.categoria, p.actualizable, p.descuento, p.costo,"
+					+"p.equivalencia, p.superfamilia, p.cls, p.zona, p.pareto, p.pareto2, p.ieps, p.ieps2, p.limitado, p.kit, p.comision, p.maxdescuento,"
 					+"p.grupo, p.aplicadescbase, p.aplicapo, p.antibiotico, p.especial, p.famactualizar, p.cominmediata, p.ultimoproveedor, p.ultimocosto, p.costopromedio, p.costoreal "
 					+ " from Productos as p, Familia as f "
 					+ "where p.idFamilia = f.idFamilia and p.codBar like '%"+codigo+"'").list();
 		}catch(HibernateException e){
 			list = null;
-			logger.error("ERROR: No se pudo mostrar la informacion de los productos.");
+			logger.info("ERROR: No se pudo mostrar la informacion de los productos. "+e);
 			e.printStackTrace();
 		}finally{
 			if (session != null && session.isOpen()) {
@@ -296,15 +302,15 @@ public class ProductosDao extends GenericoDAO
 		List<Object[]> list = null;
 		try{
 			session = factory.openSession();
-			list = session.createQuery("select p.proveedor, p.clave, p.codBar, p.descripcion, p.existencias, f.nombre, p.precioPub, p.precioDesc, p.precioFarmacia,"
-					+"p.iva, p.linea, p.referencia, p.SSA, p.laboratorio, p.departamento, p.categoria, p.actualizable, p.descuento, p.costo,"
-					+"p.equivalencia, p.superfamilia, p.cls, p.zona, p.pareto, p.ieps, p.ieps2, p.limitado, p.kit, p.comision, p.maxdescuento,"
+			list = session.createQuery("select p.proveedor,p.proveedor2,p.proveedor3, p.clave, p.codBar, p.descripcion, p.existencias, f.nombre, p.precioPub, p.precioDesc, p.precioFarmacia,"
+					+"p.fechaPcio,p.iva, p.linea, p.referencia, p.SSA, p.laboratorio, p.departamento, p.categoria, p.actualizable, p.descuento, p.costo,"
+					+"p.equivalencia, p.superfamilia, p.cls, p.zona, p.pareto, p.pareto2, p.ieps, p.ieps2, p.limitado, p.kit, p.comision, p.maxdescuento,"
 					+"p.grupo, p.aplicadescbase, p.aplicapo, p.antibiotico, p.especial, p.famactualizar, p.cominmediata, p.ultimoproveedor, p.ultimocosto, p.costopromedio, p.costoreal "
 					+ " from Productos as p, Familia as f "
 					+ "where p.idFamilia = f.idFamilia and p.descripcion like '%"+descripcion+"%'").list();
 		}catch(HibernateException e){
 			list = null;
-			logger.error("ERROR: No se pudo mostrar la informacion de los productos.");
+			logger.info("ERROR: No se pudo mostrar la informacion de los productos. "+e);
 			e.printStackTrace();
 		}finally{
 			if (session != null && session.isOpen()) {

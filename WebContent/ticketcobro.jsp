@@ -14,17 +14,26 @@
 	<!--  Java Script Library -->
 	
     <script type="text/javascript">
-	    function getPrint()
-		{ 
-			
-			if (window.opener != null && !window.opener.closed) 
-	        {
+	   
+	    function getPrint(){ 
+	    	 window.addEventListener("beforeunload", function (e) {
+	 	    	localStorage.removeItem("popupTicket");
+	 		});
+	    	/*if (window.opener != null && !window.opener.closed){
 	            window.opener.close();
-	        }
+	        }*/
+	    	window.print();
+	    	/*if (window.opener != null && !window.opener.closed){
+	            window.opener.close();
+	        }*/
+	    	window.onfocus=function(){
+	    		//alert("Cerrando ventana de ticket");
+	    		window.close();
+	    		
+	    	};
 			
-			window.print();
-			window.close();
-	    } 	    
+	    }
+	    
 	    <%
 	   		 HttpSession sesion = request.getSession(false);
 		     Integer num =   (Integer) sesion.getAttribute("numero");
@@ -51,7 +60,7 @@
     </script>
 
  </head>
-<body onload="getPrint()">
+<body onload="getPrint();">
     <form name="form1" method="post" action="#" id="form1">
 	<div class="print-area">
 		<div class="centerdiv">

@@ -30,8 +30,7 @@
 
 	/*Funcion que muestra el formulario de "Alta Cobro"*/
 	var op = false;
-    $(document).ready(function () 
-    {
+    $(document).ready(function (){
     	 	
 	    	$(document).keydown(function(e) 
 	        {
@@ -71,6 +70,13 @@
         	$("#btnDevolucion").click(function(){
 				window.open("listadevolventas.jsp", "_blank");
 			});
+        	
+        	window.addEventListener("beforeunload", function (e) {
+        		var confirmationMessage = "Antes de cerrar el navegador, verifique y cierre su sesión del sistema";
+
+        		  (e || window.event).returnValue = confirmationMessage;     
+        		  	return confirmationMessage;                            
+        	});
         	
     });
     
@@ -248,7 +254,7 @@
 							<li>
 							<label> Total a Cobrar:</label><input type="text"  id="txtTotalCobro" disabled></li> 
 							<li>
-							<label> Total Recibido:</label><input type="text"  id="txtTotalPago" requiered></li>
+							<label> Total Recibido:</label><input type="text"  id="txtTotalPago" required></li>
 							<li>
 							<label> Cambio:</label><input type="text"  id="txtCambio" disabled></li>
 						</ol>

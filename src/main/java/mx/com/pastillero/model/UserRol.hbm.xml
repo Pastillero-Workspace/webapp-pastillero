@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.UserRol" table="UserRol">
+      <meta attribute="class-description">
+         This class contains the M -- M UserRol. 
+      </meta>
+      <id name="idUserRol" type="int" column="idUserRol" >
+         <generator class="native"/>
+      </id>
+      <property name="idUsuario" column="idUsuario" type="int"/>
+      <property name="id_rol" column="id_rol" type="int"/>
+      <property name="estatus" column="estatus" type="int"/>
+      </class>
+</hibernate-mapping>

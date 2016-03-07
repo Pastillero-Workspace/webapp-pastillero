@@ -16,64 +16,35 @@
 	<link href="<c:url value="/resources/css/jquery.dataTables.css" />"rel="stylesheet">
 	<link href="<c:url value="/resources/css/demo-cfg.css" />" rel="stylesheet">
 	 <link href="<c:url value="/resources/css/edit.css" />" rel="stylesheet">
-	
 	<!-- JS Script -->
 	<script src="<c:url value="/resources/js/jquery-1.10.2.js" />"></script>
     <script src="<c:url value="/resources/js/jquery-ui-1.10.4.custom.js" />"></script>
     <script src="<c:url value="/resources/js/jquery-ui-dialog.js" />"></script>
     <script src="<c:url value="/resources/js/jquery.dataTables.js" />"></script>
-    <script src="<c:url value="/resources/js/dataTables.scroller.js" />"></script>   
+    <script src="<c:url value="/resources/js/dataTables.scroller.js" />"></script>
+    <script src="<c:url value="/resources/js/functions.js" />"></script>
     
     <script type="text/javascript">   
     <%  HttpSession sesion = request.getSession(false);
 		String usuario = (String)sesion.getAttribute("usuario");
-		String nombre = (String)sesion.getAttribute("nombre");
-		String apepat = (String)sesion.getAttribute("apepat");
-		String apemat = (String)sesion.getAttribute("apemat");
 		String perfil = (String)session.getAttribute("perfil");
 		Integer num =   (Integer) sesion.getAttribute("numero");
-		
-		boolean res=false;	
-		
-		if(num == null)
-		{
+		Integer permiso =(Integer)sesion.getAttribute("pv");
+		boolean res=false;		
+		if(num == null){
 			response.sendRedirect("index.jsp");
 		}
-		else 
-		{
+		else {
 			if(num == 1 && perfil.equalsIgnoreCase(Types.A.getStatusCode()))
 			{
 				sesion.setAttribute("numero", 2);
 			    res = true;
 			}
-		}
-		
+		}		
 		ConfiguracionSucursalDao sucursal = new ConfiguracionSucursalDao();
-   	 	List<CfgSucursal> datosSucursal = sucursal.mostrarSucursal();	 
-		     
+   	 	List<CfgSucursal> datosSucursal = sucursal.mostrarSucursal();	 	     
 	   %>	
        var op = <%=res%>      
-// close function
-
- /*Salir*/
-
-	// FUNCTIONS
-	
-	function info( x)
-	{
-		if(x == '1')
-			alert("Función: Corte aún no implementada");
-		if(x == '2')
-			alert("Función: Medico en desarrollo");
-	}
-	
-	$(document).ready(function () {
-		$("#submit").button();
-		$("#name_rs").select();
-			
-	});
-	
-	
 </script>   	   
 </head>
 <body>	
@@ -83,10 +54,10 @@
 	<div id="header">
 		<!--div id="logo"></div-->
 	</div>
-	
-	<div id="sucursal">									
-		<p>Cajero  : <label id="lblname"><%=nombre%> <%=apepat%> <%=apemat%></label></p>
-		<p>Usuario : <label id="lbluser"><%=usuario%></label><label> | Sucursal: Sin Sucursal</label></p>			
+	<div id="sucursal">
+	    <p><c:out value="${sessionScope.perfil}"/> : <label id="lblname"><c:out value="${sessionScope.nombre}"/>
+	    <c:out value="${sessionScope.apepat}" /><c:out value="${sessionScope.apemat}" /></label></p>
+        <p>Usuario : <label id="lbluser"><%=usuario%></label><label> | Sucursal: <c:out value="${sessionScope.scr}" /></label></p>
 	</div>
     
 	<!--Barra de Navegacion de la pagina principal-->

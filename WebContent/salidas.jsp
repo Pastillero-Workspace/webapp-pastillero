@@ -50,8 +50,8 @@
 						var counter = 0;
 						
 						$(window).load(function(){
-							$( "#txtFecha" ).datepicker({ dateFormat: "yy-mm-dd"});		
-							$( "#txtCaducidad" ).datepicker({ dateFormat: "yy-mm-dd"});
+							$( "#txtFecha" ).datepicker({ dateFormat: "dd-mm-yy"});		
+							$( "#txtCaducidad" ).datepicker({ dateFormat: "dd-mm-yy"});
 							$.post('salida.jr',{
 								tarea: "cargar"
 							},function(data){
@@ -86,10 +86,13 @@
 										if(obj[4]=="1"){
 											$('#chkIEPS1').prop('checked',true);
 										}
-										$("#txtCosto").val(obj[5]);
-										$("#txtImporte").val(obj[6]);
-										$("#txtLote").val(obj[7]);
-										$("#txtCaducidad").val(obj[8]);
+										if(obj[5]=="1"){
+											$('#chkIEPS2').prop('checked',true);
+										}
+										$("#txtCosto").val(obj[6]);
+										$("#txtImporte").val(obj[7]);
+										$("#txtLote").val(obj[8]);
+										$("#txtCaducidad").val(obj[9]);
 										
 										$("#txtLote").prop('disabled',false);
 										$("#txtCaducidad").prop('disabled',false);
@@ -142,6 +145,7 @@
 								$('#txtCodigo').prop('disabled',false);
 								$('#chkIVA').prop('disabled',false);
 								$('#chkIEPS1').prop('disabled',false);
+								$('#chkIEPS2').prop('disabled',false);
 								$('#txtCosto').prop('disabled',false);
 								$('#btnAgregar').prop('disabled',false);
 								$('#btnModificar').prop('disabled',true);
@@ -153,11 +157,35 @@
 						$("#txtCantidad").keypress(function(e){
 							if(e.which == 13){
 								var cantidad = $("#txtCantidad").val();
-								if(cantidad>0){
+								
+								if(!cantidad.startsWith("0")){
+									cantidad = parseInt(cantidad);
+									if(cantidad < 1000){
+										if(cantidad > 10){
+											var confirmar = confirm("Esta seguro que quiere agregar el numero de piezas a la salida, \n" +
+											"sino vuelva a ingresar la cantidad");
+											if(confirmar){
+												$('#txtCodigo').select();
+											}else{
+												$('#txtCantidad').select();
+											}
+										}else{
+											$('#txtCodigo').select();
+										}
+									}else{
+										alert("No puede hacer una salida de mercancia\n con esa cantidad para un producto.");
+										$('#txtCantidad').select();
+									}
+								}else{
+									alert("La cantidad ingresada no es valida");
+									$('#txtCantidad').select();
+								}
+								
+								/*if(cantidad>0){
 									$("#txtCodigo").focus();	
 								}else{
 									window.alert("La cantidad de producto no puede ser menor a 1")
-								}
+								}*/
 								
 							}
 						});
@@ -169,17 +197,19 @@
 									console.log(descripcion);
 									if(descripcion!=0){
 										var datos = descripcion.split("~");
-										if(datos[4]<=0){
+										if(datos[5]<=0){
 											alert("El producto no se puede agregar porque no tiene existencias");
 										}else{
 											$('#txtDescp').val(datos[0]);
 											if(datos[1]=="2")
 												$('#chkIVA').prop('checked',true);
-											if(datos[2]=="2")
+											if(datos[2]=="1")
 												$('#chkIEPS1').prop('checked',true);
+											if(datos[3]=="1")
+												$('#chkIEPS2').prop('checked',true);
+											$("#txtCosto").val(datos[4]);
 											
-											$("#txtCosto").val(datos[3]);
-											$("#btnAgregar").focus();
+											$("#txtCosto").select();
 										}
 									}else{
 										window.alert("Error, el codigo no existe");
@@ -193,8 +223,12 @@
 						$("#txtCosto").keypress(function(e){
 							if(e.which == 13){
 								var costo = $("#txtCosto").val(); 
-								if(costo>0){
-									$("#btnAgregar").focus();
+								if(costo > 0){
+									if(!$("#btnAgregar").prop('disabled')){
+										$("#btnAgregar").focus();
+									}else{
+										$("#btnModificar").focus();
+									}
 								}else{
 									window.alert("El costo del producto debe ser mayor a $0.00");
 								}
@@ -231,7 +265,7 @@
 													
 						
 						$('#btnModificar').on('click ',function(e){
-							console.log("click en modificar");
+							/*console.log("click en modificar");
 							t.row(index).data([
 						            
 						            $('#txtCantidad').val(),
@@ -255,10 +289,29 @@
 							$('#txtImporte').val("");
 							$("#txtLote").val("");
 							$("#txtCaducidad").val("");
+							*/
+							
+							console.log("click en modificar");
+
+							var cantidad = $('#txtCantidad').val(); 
+							var codigo = $('#txtCodigo').val(); 	
+							var descp = $('#txtDescp').val(); 
+							var costo = $('#txtCosto').val();
+							
+							$('#txtFormLote').val($('#txtLote').val());
+							$('#txtFormCaducidad').val($('#txtCaducidad').val());
+							
+							if(cantidad.trim()!=""&&codigo.trim()!=""&&descp.trim()!=""&&costo.trim()!=""){
+								$("#form-salidas").dialog("open");
+							}else{
+								window.alert("Revise que ninguno de los datos esten vacios y/o los descuentos sean igual o mayores que 0");
+								$('#txtCantidad').focus();
+							}
+							
 															
 						});
 						$("#btnGuardar").button().click(function(){
-							var table = $("#salidas").tableToJSON();
+							var table = $("#salidas").tableToJSON({ignoreColumns: [2]});
 							$.post("salida.jr",{
 								tarea: "guardar",
 								txtFecha: $("#txtFecha").val(), 
@@ -310,20 +363,40 @@
 												}
 											}
 											
-											t.row.add([
-												$('#txtCantidad').val(),
-												codigo1.concat($("#txtCodigo").val().trim()),
-												$('#txtDescp').val(),						
-												$('#chkIVA:checked').length,
-												$('#chkIEPS1:checked').length,
-												($('#txtCosto').val()*1).toFixed(2),
-												($('#txtCosto').val()*$('#txtCantidad').val()).toFixed(2),
-												$("#txtFormLote").val(),
-												$("#txtFormCaducidad").val(),
-												'<button type="button" class="myButton" id="Edit'+counter+'" onclick="editar()">Editar</button>',
-												'<button type="button" class="myButton" id="Del'+counter+'" onclick="eliminar()">X</button>'
-											])
-											.draw();
+											if(!$("#btnAgregar").prop('disabled')){//Sea grego de nueva modif
+												t.row.add([
+													$('#txtCantidad').val(),
+													codigo1.concat($("#txtCodigo").val().trim()),
+													$('#txtDescp').val(),						
+													$('#chkIVA:checked').length,
+													$('#chkIEPS1:checked').length,
+													$('#chkIEPS2:checked').length,
+													($('#txtCosto').val()*1).toFixed(2),
+													($('#txtCosto').val()*$('#txtCantidad').val()).toFixed(2),
+													$("#txtFormLote").val(),
+													$("#txtFormCaducidad").val(),
+													'<button type="button" class="myButton" id="Edit'+counter+'" onclick="editar()">Editar</button>',
+													'<button type="button" class="myButton" id="Del'+counter+'" onclick="eliminar()">X</button>'
+												])
+												.draw();
+											}else{
+												t.row(index).data([
+													$('#txtCantidad').val(),
+													codigo1.concat($("#txtCodigo").val().trim()),
+													$('#txtDescp').val(),						
+													$('#chkIVA:checked').length,
+													$('#chkIEPS1:checked').length,
+													$('#chkIEPS2:checked').length,
+													$('#txtCosto').val(),
+													($('#txtCosto').val()*$('#txtCantidad').val()).toFixed(2),
+													$("#txtFormLote").val(),
+													$("#txtFormCaducidad").val(),
+													'<button type="button" class="myButton" id="Mod'+index+'" onclick="editar()">Editar</button>',
+													'<button type="button" class="myButton" id="Del'+index+'" onclick="eliminar()">X</button>'
+													 ]);
+												$('#btnAgregar').prop('disabled',false);
+												$('#btnModificar').prop('disabled',true);
+											}
 										    counter++;	
 											$('#txtCantidad').val("1");
 											$('#txtCodigo').val("");
@@ -331,6 +404,11 @@
 											$('#chkIEPS1').prop('checked',false);
 											$('#txtCosto').val("");
 											$('#txtDescp').val("");
+											
+											$('#txtImporte').val("");
+											$("#txtLote").val("");  //Se agrego de modif
+											$("#txtCaducidad").val("");
+											
 											$("#txtFormLote").val("");
 											$("#txtFormCaducidad").val("");
 											
@@ -414,7 +492,7 @@
 				<label id="box-caja">Fecha</label>
 				<%
 					Date date = new Date();
-					DateFormat fecha = new SimpleDateFormat("yyyy-MM-dd");
+					DateFormat fecha = new SimpleDateFormat("dd-MM-yyyy");
 					out.println("<input type=\"text\" id=\"txtFecha\" name=\"txtFecha\" value="+fecha.format(date)+">");
 				%>
 					
@@ -469,6 +547,7 @@
 									<th style="width: 25%">Descripcion</th>
 									<th style="width: 0%">IVA</th>
 									<th style="width: 0%">IEPS1</th>
+									<th style="width: 0%">IEPS2</th>
 									<th>Costo</th>
 									<th>Importe</th>
 									<th>Lote</th>
@@ -488,6 +567,7 @@
 									<th style="width: 25%"><input type="text" id ="txtDescp" name="txtDescp" disabled="disabled"></th>
 									<th style="width: 1%"><input type="checkbox" id="chkIVA" name="chBoxIva" disabled="disabled"></th>
 									<th style="width: 1%"><input type="checkbox" id="chkIEPS1" name="chBoxIeps1" disabled="disabled"></th>
+									<th style="width: 1%"><input type="checkbox" id="chkIEPS2" name="chBoxIeps2" disabled="disabled"></th>
 									<th style="width: 8%"><input type="text" id="txtCosto" name="txtCosto" disabled="disabled"></th>
 									<th style="width: 8%"><input type="text" id="txtImporte" name="txtImporte" disabled="disabled"></th>
 									<th style="width: 8%"><input type="text" id="txtLote" name="txtLote" disabled="disabled"></th>

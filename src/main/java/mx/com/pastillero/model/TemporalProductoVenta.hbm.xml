@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.TemporalProductoVenta" table="Temporal_productos_venta">
+      <meta attribute="class-description">
+         This class contains the Nota detail. 
+      </meta>
+      <id name="idProducto" type="int" column="idProducto">
+         <generator class="native"/>
+      </id>
+      <property name="nota" column="nota" type="int"/>
+      <property name="codigo" column="codigo" type="string"/>
+      <property name="descripcion" column="descripcion" type="string"/>
+      <property name="cantidad" column="cantidad" type="int"/>
+      <property name="precioPub" column="precioPub" type="float"/>
+      <property name="precioDesc" column="precioDesc" type="float"/>
+      <property name="subtotal" column="subtotal" type="float"/>
+      </class>
+</hibernate-mapping>

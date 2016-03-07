@@ -21,10 +21,10 @@ public class MovimientoRecepcionDao extends GenericoDAO {
 			tx=session.beginTransaction(); 
 			session.save(movimientoRecepcion); 
 			tx.commit(); 
-		}catch(Exception e1){
+		}catch(Exception e){
 			resultado=false;
-			logger.error("Error al guardar Movimiento");
-			e1.printStackTrace();
+			logger.info("Error al guardar Movimiento" +e);
+			e.printStackTrace();
 		}
 		finally{ 
 			if(session!=null&&session.isOpen())
@@ -52,7 +52,7 @@ public class MovimientoRecepcionDao extends GenericoDAO {
 		}catch(Exception e){
 			tx.rollback();
 			movimientos = null;
-			logger.error("ERROR: Error al mostrar movimientos");
+			logger.info("ERROR: Error al mostrar movimientos");
 			e.printStackTrace();
 		}
 		finally{

@@ -1,61 +1,50 @@
 <%@page import="mx.com.pastillero.model.dao.MedicoDireccionDao"%>
 <%@page import="java.util.List"%>
 <%@page import="mx.com.pastillero.types.Types"%>
-
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html lang="es">
 <head>
 	<!-- The CSS Styles for forms -->
-	<title>Consulta de Proveedores | Cajero</title>
+	<title>Consulta de Medicos | </title>
     <link href="<c:url value="/resources/css/edit.css" />" rel="stylesheet">
 	<link href="<c:url value="/resources/css/jquery-ui-1.10.4.custom.css"/>" rel="stylesheet" type="text/css">
 	<link href="<c:url value="/resources/css/jquery.dataTables.css" />" rel="stylesheet">
-	<link href="<c:url value="/resources/css/demo.css" />" rel="stylesheet">
-	
+	<link href="<c:url value="/resources/css/demo.css" />" rel="stylesheet">	
 	<!-- The Javascript config -->
 	<script src="<c:url value="/resources/js/jquery-1.10.2.js" />"></script>
 	<script src="<c:url value="/resources/js/jquery-ui-1.10.4.custom.js" />"></script>
 	<script src="<c:url value="/resources/js/jquery-ui-dialog.js" />"></script>
-	
 	<script src="<c:url value="/resources/js/jquery.dataTables.js" />"></script>
 	<script src="<c:url value="/resources/js/dataTables.scroller.js" />"></script>
 	<script src="<c:url value="/resources/js/demo.js" />"></script>
 	<script src="<c:url value="/resources/js/jquery.tabletojson.min.js" />"></script>
-	
+	<script src="<c:url value="/resources/js/functions.js" />"></script>  	
 	<script type="text/javascript" language="javascript" class="init">
 	var op = false;
 	<% HttpSession sesion = request.getSession(false);
 	  String usuario = (String)sesion.getAttribute("usuario");
-	   String nombre = (String)sesion.getAttribute("nombre");
-	   String apepat = (String)sesion.getAttribute("apepat");
-	   String apemat = (String)sesion.getAttribute("apemat");
 	   String perfil = (String)session.getAttribute("perfil");
 	   Integer sesionid = (Integer)sesion.getAttribute("idSesion");
-	   Integer num = (Integer)sesion.getAttribute("numero");	
-	
-		if(num == null)
-		{
+	   Integer num = (Integer)sesion.getAttribute("numero");
+	   Integer permiso =(Integer)sesion.getAttribute("pv");
+		if(num == null){
 				response.sendRedirect("index.jsp");
 		}
 		else 
-			if(num == 1 && perfil.equalsIgnoreCase(Types.A.getStatusCode()))
-			{
+			if(num == 1 && perfil.equalsIgnoreCase(Types.A.getStatusCode())){
 			sesion.setAttribute("numero", 2);
 			}
 	 %>
-		$(document).ready(function() {
-		
-		    // Algoritmo de filtrado
-			$("#search thead input").on( 'keypress changed', function (e) 
-			{  
+		$(document).ready(function() {	
+			checkEnabledRestriction('<%=usuario%>','<%=permiso%>'); 
+			$("#search thead input").on( 'keypress changed', function (e) {  
 					 table
 					.column( $(this).parent().index()+':visible' )
 					.search(this.value)
 					.draw();
-				    //alert("valor" + $(this).parent().index());					
-                  
+				    //alert("valor" + $(this).parent().index());					            
 			} );			
 	<% 		 	
 	 	MedicoDireccionDao mD = new MedicoDireccionDao();
@@ -76,7 +65,8 @@
 			   	            '<%=datos.get(i)[9]%>',
 			   	            '<%=datos.get(i)[10]%>',
 			   	            '<%=datos.get(i)[11]%>',
-			   	        	'<%=datos.get(i)[12]%>'];
+			   	        	'<%=datos.get(i)[12]%>',
+			   	        	'<%=datos.get(i)[13]%>'];
 		<%}%>	
 	         
 			// Se establece el control de datos al destino
@@ -115,13 +105,10 @@
 		// botones adicionales para limpiar campos de textos
 		$('<input type="button" id="refresh" style="width: 25%" value="Limpiar datos"/>').appendTo('div.dataTables_filter');
 			$('#refresh').click(function(e) 
-				{	
-				
-				
+				{				
 					var elem = document.getElementsByClassName("boxinit");
 						var names = [];
-							for(var i = 0; i < 13; ++i) 
-							{		
+							for(var i = 0; i < 13; ++i) {		
 								if(elem[i].value.length != 0)
 								{
 									names.push(elem[i].value);
@@ -129,8 +116,7 @@
 									elem[i].focus();									
 								}
 							}					     			
-				});	
-			 
+				});	 
 			var index = 0;
 			var table = $('#search').DataTable();
 			$(function(){
@@ -147,9 +133,12 @@
 						$.post('medico.jr',{
 							tarea: 'eliminar',
 							txtCedula: cedulaMedico
-						},function(){
-							
-						});
+						
+						}).done(function(){
+							alert("Se elimino medico con exito");
+						}).fail(function(xhr,textStatus, errorThrown){
+							alert("Error al eliminar el medico: "+textStatus +", "+errorThrown + "," +xhr);
+						});;
 						table.row(index).remove().draw(true);
 					}else{
 						window.alert("Seleccione un medico de la lista para poder eliminarlo");
@@ -174,43 +163,21 @@
 					index = table.row('.selected').index();
 					var registro = table.row('.selected').data();
 					
-					if(index>=0){
-						$.each(registro, function(date,value){
-							if(date==0){
-								$("#txtCedula").val(value);
-							}
-							if(date==1){
-								$("#txtNombre").val(value);
-							}
-							if(date==2){
-								$("#txtTelFijo").val(value);
-							}
-							if(date==3){
-								$("#txtTelMovil").val(value);
-							}
-							if(date==4){
-								$("#txtEmail").val(value);
-							}
-							if(date==5){
-								$("#txtCalle").val(value);
-							}
-							if(date==6){
-								$("#txtNoExt").val(value);
-							}
-							if(date==7){
-								$("#txtNoInt").val(value);
-							}
-							if(date==8){
-								$("#txtColonia").val(value);
-							}
-							if(date==9){
-								$("#txtEstado").val(value);
-							}
-							if(date==10){
-								$("#txtCp").val(value);
-							}
-							
-						});
+					if(index >= 0){
+						console.log(registro);
+						$("#txtCedula").val(registro[0]);
+						$("#txtNombre").val(registro[1]);
+						$("#txtTelFijo").val(registro[2]);
+						$("#txtTelMovil").val(registro[3]);
+						$("#txtEmail").val(registro[4]);
+						$("#txtCalle").val(registro[5]);
+						$("#txtNoExt").val(registro[6]);
+						$("#txtNoInt").val(registro[7]);
+						$("#txtColonia").val(registro[8]);
+						$("#txtCiudad").val(registro[9]);
+						$("#txtEstado").val(registro[10]);
+						$("#txtCp").val(registro[11]);
+						
 						$("#formMedico").dialog("open");
 						$("#txtCedula").select();
 					}
@@ -231,7 +198,7 @@
 							if($('#txtCedula').val().trim()!=""&&$('#txtNombre').val().trim()!=""&&$('#txtTelFijo').val().trim()!=""&&
 									$('#txtTelMovil').val().trim()!=""&&$('#txtEmail').val().trim()!=""&&$('#txtCalle').val().trim()!=""&&
 									$('#txtNoInt').val().trim()!=""&&$('#txtNoExt').val().trim()!=""&&$('#txtColonia').val().trim()!=""&&
-									$('#txtEstado').val().trim()!=""&&$('#txtCp').val().trim()!=""){
+									$('#txtEstado').val().trim()!=""&&$('#txtCiudad').val().trim()!=""&&$('#txtCp').val().trim()!=""){
 									$.post('medico.jr',{
 										tarea: 'actualizar',
 										txtCedula: $('#txtCedula').val(),
@@ -243,15 +210,16 @@
 										txtNoInt: $('#txtNoInt').val(),
 										txtNoExt: $('#txtNoExt').val(),
 										txtColonia: $('#txtColonia').val(),
+										txtCiudad: $('#txtCiudad').val(),
 										txtEstado: $('#txtEstado').val(),
 										txtCp: $('#txtCp').val()
-			
-									},function(){
-										
+									}).done(function(){
+										alert("Se ha actualizado el medico correctamente");
+									}).fail(function(xhr,textStatus, errorThrown){
+										alert("Error al actualizar el medico: "+textStatus +", "+errorThrown + "," +xhr);
 									});
 									
 									table.row(index).data([
-											            
 										$('#txtCedula').val(),
 										$('#txtNombre').val(),
 										$('#txtTelFijo').val(),						
@@ -261,9 +229,10 @@
 										$('#txtNoExt').val(),
 										$('#txtNoInt').val(),						
 										$('#txtColonia').val(),
+										$('#txtCiudad').val(),
 										$('#txtEstado').val(),
 										$('#txtCp').val()
-									]);
+									]);	
 									
 									$(this).dialog("close");
 									$('#txtCedula').val('');
@@ -275,13 +244,13 @@
 									$('#txtNoInt').val('');
 									$('#txtNoExt').val('');
 									$('#txtColonia').val('');
+									$('#txtColonia').val(''),
 									$('#txtEstado').val('');
 									$('#txtCp').val('');
 									
 								}else{
 									window.alert("No puede dejar campos vacios");
-								}
-									
+								}							
 						}
 
 					}
@@ -289,9 +258,7 @@
 			});
 			$("#formMedico").dialog("option", "width", 760);
 			$("#formMedico").dialog("option", "height", 600);
-			
-			
-			
+	
 			$("#formMedicoNuevo").dialog({
 				modal:true,
 				autoOpen: false,
@@ -304,7 +271,7 @@
 							if($('#txtCedulaNuevo').val().trim()!=""&&$('#txtNombreNuevo').val().trim()!=""&&$('#txtTelFijoNuevo').val().trim()!=""&&
 									$('#txtTelMovilNuevo').val().trim()!=""&&$('#txtEmailNuevo').val().trim()!=""&&$('#txtCalleNuevo').val().trim()!=""&&
 									$('#txtNoIntNuevo').val().trim()!=""&&$('#txtNoExtNuevo').val().trim()!=""&&$('#txtColoniaNuevo').val().trim()!=""&&
-									$('#txtEstadoNuevo').val().trim()!=""&&$('#txtCpNuevo').val().trim()!=""){
+									$('#txtEstadoNuevo').val().trim()!=""&&$('#txtCiudadNuevo').val().trim()!=""&&$('#txtCpNuevo').val().trim()!=""){
 									$.post('medico.jr',{
 										tarea: 'agregar',
 										txtCedula: $('#txtCedulaNuevo').val(),
@@ -316,11 +283,13 @@
 										txtNoInt: $('#txtNoIntNuevo').val(),
 										txtNoExt: $('#txtNoExtNuevo').val(),
 										txtColonia: $('#txtColoniaNuevo').val(),
+										txtCiudad: $('#txtCiudadNuevo').val(),
 										txtEstado: $('#txtEstadoNuevo').val(),
 										txtCp: $('#txtCpNuevo').val()
-										
-									},function(){
-										
+									}).done(function(){
+										alert("Se ha agregado el medico correctamente");
+									}).fail(function(xhr,textStatus, errorThrown){
+										alert("Error al agregar el medico: "+textStatus +", "+errorThrown + "," +xhr);
 									});
 									
 									table.row.add([
@@ -334,6 +303,7 @@
 										$('#txtNoExtNuevo').val(),
 										$('#txtNoIntNuevo').val(),						
 										$('#txtColoniaNuevo').val(),
+										$('#txtCiudadNuevo').val(),
 										$('#txtEstadoNuevo').val(),
 										$('#txtCpNuevo').val()
 									]).draw();
@@ -348,6 +318,7 @@
 									$('#txtNoIntNuevo').val('');
 									$('#txtNoExtNuevo').val('');
 									$('#txtColoniaNuevo').val('');
+									$('#txtCiudadNuevo').val('');
 									$('#txtEstadoNuevo').val('');
 									$('#txtCpNuevo').val('');
 									
@@ -361,11 +332,7 @@
 			});
 			$("#formMedicoNuevo").dialog("option", "width", 760);
 			$("#formMedicoNuevo").dialog("option", "height", 600);
-
-			
-			
-			
-			
+	
 			//Tecla enter en todos los campos
 			$("#txtCedula").keypress(function(e){
 				if(e.which == 13){
@@ -485,8 +452,6 @@
 		
 		});
 			
-		
-	
 			/*Funcion que muestra el formulario de "Alta Medico"*/
 			$(document).ready(function () {
 		        	$("#openFormAltaMedico").click(
@@ -497,20 +462,8 @@
 					
 	        	);
 		    });
-
-			/*Funcion que muestra el formulario de "Alta Cliente"*/
-		    $(document).ready(function () {
-		        	$("#openFormAltaCliente").click(
-		            function () {
-		                $("#formAltaCliente").dialog('open');
-		                return false;
-		            }
-	        	);
-		    });
-			
 		    /*Salir*/
-		    $(document).ready(function ()
-		    {
+		    $(document).ready(function (){
 	        	$("#close").click(
 	            function () 
 	             {               
@@ -524,69 +477,20 @@
 	</script>	
 </head>
 <body>
-
-<div id="formMedico" title="Editar Medico" class="text-form">
-	<form id="medico">
-	<legend>* Campos Obligatorios</legend>
-	<fieldset>
-		<legend>Medico</legend>
-		<ol>
-			<li><label for="cedula">*Cedula: </label><input type="text" size="15" id="txtCedula" name="txtCedula" value="SIN ASIGNAR" requiered autofocus><label for="nombre">*Nombre: </label><input type="text" size="30" id="txtNombre" name="txtNombre" requiered>  </li>
-			<li><label for="telFijo">*Tel. Fijo: </label><input type="text" size="15" id="txtTelFijo" name="txtTelFijo" value="(000)-000-00-00" requiered><label for="telMovil">*Tel. Movil: </label><input type="text" size="15" id="txtTelMovil" name="txtTelMovil" value="00-00-00-00-00" requiered></li>
-			<li><label for="email">*Email: </label><input type="text" size="25" id="txtEmail" name="txtEmail" value="SIN ASIGNAR" requiered></li>
-		</ol>
-	</fieldset>
-	<fieldset>
-		<legend>Direccion</legend>
-		<ol>
-			<li><label for="calle">*Calle: </label><input type="text" id="txtCalle" name="txtCalle" value="SIN ASIGNAR" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExt" name="txtNoExt" size="5" value="00" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoInt" name="txtNoInt" size="5" value="00" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColonia" name="txtColonia" value="SIN ASIGNAR" requiered><label for="estado">*Estado: </label><input type="text" id="txtEstado" name="txtEstado" size="23" value="SIN ASIGNAR" requiered><li>
-			<li><label for="cp">*C.P: </label><input type="text" id="txtCp" name="txtCp" size="7" value="00000" requiered></li>
-		</ol>
-	</fieldset>
-	</form>
-</div>
-
-<div id="formMedicoNuevo" title="Nuevo Medico" class="text-form">
-	<form id="medicoNuevo">
-	<legend>* Campos Obligatorios</legend>
-	<fieldset>
-		<legend>Medico</legend>
-		<ol>
-			<li><label for="cedula">*Cedula: </label><input type="text" size="15" id="txtCedulaNuevo" name="txtCedulaNuevo" value="SIN ASIGNAR" requiered autofocus><label for="nombre">*Nombre: </label><input type="text" size="30" id="txtNombreNuevo" name="txtNombreNuevo" requiered>  </li>
-			<li><label for="telFijo">*Tel. Fijo: </label><input type="text" size="15" id="txtTelFijoNuevo" name="txtTelFijoNuevo" value="(000)-000-00-00" requiered><label for="telMovil">*Tel. Movil: </label><input type="text" size="15" id="txtTelMovilNuevo" name="txtTelMovilNuevo" value="00-00-00-00-00"requiered></li>
-			<li><label for="email">*Email: </label><input type="text" size="25" id="txtEmailNuevo" name="txtEmailNuevo" value="SIN ASIGNAR" requiered></li>
-		</ol>
-	</fieldset>
-	<fieldset>
-		<legend>Direccion</legend>
-		<ol>
-			<li><label for="calle">*Calle: </label><input type="text" id="txtCalleNuevo" name="txtCalleNuevo" value="SIN ASIGNAR" requiered><label for="noExt">*Num. Ext.: </label><input type="text" id="txtNoExtNuevo" name="txtNoExtNuevo" size="5" value="00" requiered><label for="noInt">*Num. Int.: </label><input type="text" id="txtNoIntNuevo" name="txtNoIntNuevo" size="5" value="00" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColoniaNuevo" name="txtColoniaNuevo" value="SIN ASIGNAR" requiered><label for="estado">*Estado: </label><input type="text" id="txtEstadoNuevo" name="txtEstadoNuevo" size="23" value="SIN ASIGNAR" requiered><li>
-			<li><label for="cp">*C.P: </label><input type="text" id="txtCpNuevo" name="txtCpNuevo" size="7" value="00000" requiered></li>
-		</ol>
-	</fieldset>
-	</form>
-</div>
-
-
+	<c:url value="Templates/formmedico.jsp" var="myURL"></c:url> <c:import url="${myURL}"/>
 <div>
-			<div id="header">
-				<!--div id="logo"></div-->
-			</div>
-	
-			<div id="sucursal">
-			    <p>Cajero  : <label id="lblname"><%=nombre%> <%=apepat%> <%=apemat%></label></p>
-		        <p>Usuario : <label id="lbluser"><%=usuario%></label><label> | Sucursal: San Martín Texmelucan</label></p>
-			</div>
-
+	<div id="header">
+		<!--div id="logo"></div-->
+	</div>	
+	<div id="sucursal">
+	    <p><c:out value="${sessionScope.perfil}"/> : <label id="lblname"><c:out value="${sessionScope.nombre}"/>
+	    <c:out value="${sessionScope.apepat}" /><c:out value="${sessionScope.apemat}" /></label></p>
+        <p>Usuario : <label id="lbluser"><%=usuario%></label><label> | Sucursal: <c:out value="${sessionScope.scr}" /></label></p>
+	</div>
 	<!--Barra de Navegacion de la pagina principal-->
-	
 			<ul id="nav">
 					<li><a href="#">Recargar Datos</a></li>
-			</ul>
-
-    
+			</ul> 
 	<!--Barra de Navegacion, contiene el contenido que se muestra de lado derecho-->
 	<div id="navigatorpanel">
 		<ul id="nav-right">
@@ -602,11 +506,7 @@
 				</span>
 			</li>
 		</ul>
-	</div>
-	
-	
-		
-			
+	</div>	
 		<div class="container">
 			
 			<div id="buttons">
@@ -627,6 +527,7 @@
 						<th style="width: 5%" >No.Ext.</th>
 						<th style="width: 5%" >No.Int.</th>
 						<th style="width: 15%">Colonia</th>
+						<th style="width: 15%">Ciudad</th>
 						<th style="width: 10%">Estado</th>
 						<th style="width: 10%">CP</th>
 				    </tr>
@@ -642,6 +543,7 @@
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="No.Ext" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="No.Int" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Colonia" /></th>
+						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Ciudad" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="Estado" /></th>
 						<th><input class="boxinit" style="width: 90%" type="text" placeholder="CP" /></th>	
 					</tr>	

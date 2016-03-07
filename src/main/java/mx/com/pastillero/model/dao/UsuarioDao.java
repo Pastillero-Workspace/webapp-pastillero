@@ -83,6 +83,34 @@ public class UsuarioDao extends GenericoDAO
 	
 	
 	@SuppressWarnings("unchecked")
+	public List<Usuario> getAllUsers()
+	  {
+		Session session = null;
+		List<Usuario> list = null;
+		try
+		{
+		  	session = factory.openSession(); 
+		  	Criteria criteria = session.createCriteria(Usuario.class);
+			list = criteria.list();
+		}catch(HibernateException ex)
+		{
+			list = null;
+			logger.error("Error al obtener el usuario:\n" + ex);	 
+		}
+		finally
+		{
+			if (session != null && session.isOpen()) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return list;
+	  }
+	
+	@SuppressWarnings("unchecked")
 	public Usuario getUniqueUsuario(String usuario)
 	  {
 		Session session = null;
@@ -200,6 +228,43 @@ public class UsuarioDao extends GenericoDAO
 	}
 	
 	@SuppressWarnings("unchecked")
+	public List<Usuario> readUserActive(String profile)
+	  {
+		Session session = null;
+		List<Usuario> list = null;
+		try
+		{
+		  	session = factory.openSession(); 
+		  	Criteria criteria = session.createCriteria(Usuario.class);
+		  	
+		  	Criterion perfil = Restrictions.eq("perfil", profile);	
+		  	Criterion status = Restrictions.eq("activo",1);
+		  	
+		  	LogicalExpression andExp = Restrictions.and(perfil,status);
+		  	criteria.add( andExp );	
+		  
+			list = criteria.list();
+			
+		}
+		catch(Throwable ex)
+		{
+			list = null;
+			logger.error("Error al obtener el usuario:\n" + ex);	 
+		}
+		finally
+		{
+			if (session != null && session.isOpen()) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return list;
+	  }
+	
+	@SuppressWarnings("unchecked")
 	public List<Usuario> readUserActive()
 	  {
 		Session session = null;
@@ -212,7 +277,7 @@ public class UsuarioDao extends GenericoDAO
 		  	Criterion perfil = Restrictions.eq("perfil", "CAJERO");	
 		  	Criterion status = Restrictions.eq("activo",1);
 		  	
-		  	LogicalExpression andExp = Restrictions.and(perfil, status);
+		  	LogicalExpression andExp = Restrictions.and(perfil,status);
 		  	criteria.add( andExp );	
 		  
 			list = criteria.list();

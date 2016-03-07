@@ -171,7 +171,30 @@ public class ProveedorDireccionDao extends GenericoDAO{
 			}
 		}
 		return proveedor;
-	} 
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<Proveedor> getNombreProveedor(int idProveedor){
+		Session session = null;
+		List<Proveedor> proveedor = null;
+		try{
+			session = factory.openSession();
+			proveedor = session.createQuery("from Proveedor where  idProveedor ='"+idProveedor+"'").list();
+		}catch(HibernateException e){
+			proveedor = null;
+			logger.error("ERROR: No de puede obtener la informacion del proveedor.");
+			e.printStackTrace();
+		}finally{
+			if (session != null && session.isOpen()) {
+				try {
+					session.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return proveedor;
+	}
 	
 	public boolean eliminarProveedor(int idProveedor){
 		boolean resultado = false;

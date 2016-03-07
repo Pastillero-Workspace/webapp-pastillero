@@ -10,158 +10,144 @@ public class Recepcion {
 	private int folioElectronico;
 	private int notaFactura;
 	private float subtotal;
+	private float iva;
+	private float ieps;
+	private float ieps2;
+	private float total;
 	private int estado;
 	private int idUsuario;
 	private int idProveedor;
 	
 	public Recepcion() {
-	
 	}
-
 
 	public int getIdRecepcion() {
 		return idRecepcion;
 	}
 
-
-
 	public void setIdRecepcion(int idRecepcion) {
 		this.idRecepcion = idRecepcion;
 	}
-
-
 
 	public String getNumFactura() {
 		return numFactura;
 	}
 
-
-
 	public void setNumFactura(String numFactura) {
 		this.numFactura = numFactura;
 	}
-
-
 
 	public String getFecha() {
 		return fecha;
 	}
 
-
-
 	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
-
-
 
 	public String getHora() {
 		return hora;
 	}
 
-
-
 	public void setHora(String hora) {
 		this.hora = hora;
 	}
-
-
 
 	public float getDesc1() {
 		return desc1;
 	}
 
-
-
 	public void setDesc1(float desc1) {
 		this.desc1 = desc1;
 	}
-
-
 
 	public float getDesc2() {
 		return desc2;
 	}
 
-
-
 	public void setDesc2(float desc2) {
 		this.desc2 = desc2;
 	}
-
-
 
 	public int getFolioElectronico() {
 		return folioElectronico;
 	}
 
-
-
 	public void setFolioElectronico(int folioElectronico) {
 		this.folioElectronico = folioElectronico;
 	}
-
-
 
 	public int getNotaFactura() {
 		return notaFactura;
 	}
 
-
-
 	public void setNotaFactura(int notaFactura) {
 		this.notaFactura = notaFactura;
 	}
-
-
 
 	public float getSubtotal() {
 		return subtotal;
 	}
 
-
-
 	public void setSubtotal(float subtotal) {
 		this.subtotal = subtotal;
 	}
 
+	public float getIva() {
+		return iva;
+	}
 
+	public void setIva(float iva) {
+		this.iva = iva;
+	}
+
+	public float getIeps() {
+		return ieps;
+	}
+
+	public void setIeps(float ieps) {
+		this.ieps = ieps;
+	}
+
+	public float getIeps2() {
+		return ieps2;
+	}
+
+	public void setIeps2(float ieps2) {
+		this.ieps2 = ieps2;
+	}
+
+	public float getTotal() {
+		return total;
+	}
+
+	public void setTotal(float total) {
+		this.total = total;
+	}
 
 	public int getEstado() {
 		return estado;
 	}
 
-
-
 	public void setEstado(int estado) {
 		this.estado = estado;
 	}
-
-
 
 	public int getIdUsuario() {
 		return idUsuario;
 	}
 
-
-
 	public void setIdUsuario(int idUsuario) {
 		this.idUsuario = idUsuario;
 	}
-
-
 
 	public int getIdProveedor() {
 		return idProveedor;
 	}
 
-
-
 	public void setIdProveedor(int idProveedor) {
 		this.idProveedor = idProveedor;
 	}
-
-
 
 	@Override
 	public String toString() {
@@ -169,11 +155,11 @@ public class Recepcion {
 				+ numFactura + ", fecha=" + fecha + ", hora=" + hora
 				+ ", desc1=" + desc1 + ", desc2=" + desc2
 				+ ", folioElectronico=" + folioElectronico + ", notaFactura="
-				+ notaFactura + ", subtotal=" + subtotal + ", estado=" + estado
-				+ ", idUsuario=" + idUsuario + ", idProveedor=" + idProveedor
-				+ "]";
+				+ notaFactura + ", subtotal=" + subtotal + ", iva=" + iva
+				+ ", ieps=" + ieps + ", ieps2=" + ieps2 + ", total=" + total
+				+ ", estado=" + estado + ", idUsuario=" + idUsuario
+				+ ", idProveedor=" + idProveedor + "]";
 	}
-
 
 	@Override
 	public int hashCode() {
@@ -188,13 +174,16 @@ public class Recepcion {
 		result = prime * result + idProveedor;
 		result = prime * result + idRecepcion;
 		result = prime * result + idUsuario;
+		result = prime * result + Float.floatToIntBits(ieps);
+		result = prime * result + Float.floatToIntBits(ieps2);
+		result = prime * result + Float.floatToIntBits(iva);
 		result = prime * result + notaFactura;
 		result = prime * result
 				+ ((numFactura == null) ? 0 : numFactura.hashCode());
 		result = prime * result + Float.floatToIntBits(subtotal);
+		result = prime * result + Float.floatToIntBits(total);
 		return result;
 	}
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -229,6 +218,12 @@ public class Recepcion {
 			return false;
 		if (idUsuario != other.idUsuario)
 			return false;
+		if (Float.floatToIntBits(ieps) != Float.floatToIntBits(other.ieps))
+			return false;
+		if (Float.floatToIntBits(ieps2) != Float.floatToIntBits(other.ieps2))
+			return false;
+		if (Float.floatToIntBits(iva) != Float.floatToIntBits(other.iva))
+			return false;
 		if (notaFactura != other.notaFactura)
 			return false;
 		if (numFactura == null) {
@@ -239,7 +234,10 @@ public class Recepcion {
 		if (Float.floatToIntBits(subtotal) != Float
 				.floatToIntBits(other.subtotal))
 			return false;
+		if (Float.floatToIntBits(total) != Float.floatToIntBits(other.total))
+			return false;
 		return true;
 	}
-
+	
+	
 }

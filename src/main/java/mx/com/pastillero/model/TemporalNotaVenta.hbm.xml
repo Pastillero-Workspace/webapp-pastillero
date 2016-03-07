@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.TemporalNotaVenta" table="Temporal_nota_venta">
+      <meta attribute="class-description">
+         This class contains the Nota detail. 
+      </meta>
+      <id name="folio" type="int" column="folio"></id>
+      <property name="caja" column="caja" type="string"/>
+      <property name="cajero" column="cajero" type="string"/>
+      <property name="usuario" column="usuario" type="string"/>
+      <property name="cliente" column="cliente" type="int"/>
+      <property name="descripcion" column="descripcion" type="string"/>
+      </class>
+</hibernate-mapping>

@@ -1,4 +1,7 @@
 <%@page import="mx.com.pastillero.model.dao.UPDDao"%>
+<%@page import="mx.com.pastillero.model.dao.RolesDao"%>
+<%@page import="mx.com.pastillero.model.formBeans.Roles"%>
+<%@page import="java.util.ArrayList"%>
 <%@page import="java.util.List"%>
 <%@page import="mx.com.pastillero.types.Types"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1" pageEncoding="ISO-8859-1"%>
@@ -7,7 +10,7 @@
 <html lang="es">
 <head>
 	<!-- The CSS Styles for forms -->
-	<title>Consulta de Usuario | </title>
+	<title>Consulta de Usuario </title>
     <link href="<c:url value="/resources/css/edit.css" />" rel="stylesheet">
 	<link href="<c:url value="/resources/css/jquery-ui-1.10.4.custom.css"/>" rel="stylesheet" type="text/css">
 	<link href="<c:url value="/resources/css/jquery.dataTables.css" />" rel="stylesheet">
@@ -21,19 +24,15 @@
 	<script src="<c:url value="/resources/js/dataTables.scroller.js" />"></script>
 	<script src="<c:url value="/resources/js/demo.js" />"></script>
 	<script src="<c:url value="/resources/js/jquery.tabletojson.min.js" />"></script>
-	
-	
+	<script src="<c:url value="/resources/js/functions.js" />"></script>  
 	<script type="text/javascript" language="javascript" class="init">
 	var op = false;
     <%    HttpSession sesion = request.getSession(false);
 		  String usuario = (String)sesion.getAttribute("usuario");
-		   String nombre = (String)sesion.getAttribute("nombre");
-		   String apepat = (String)sesion.getAttribute("apepat");
-		   String apemat = (String)sesion.getAttribute("apemat");
 		   String perfil = (String)session.getAttribute("perfil");
-		Integer sesionid = (Integer)sesion.getAttribute("idSesion");
-		     Integer num = (Integer)sesion.getAttribute("numero");	
-		
+		   Integer sesionid = (Integer)sesion.getAttribute("idSesion");
+		   Integer num = (Integer)sesion.getAttribute("numero");	
+		   Integer permiso =(Integer)sesion.getAttribute("pv");
 			if(num == null)
 			{
 						response.sendRedirect("index.jsp");
@@ -47,14 +46,17 @@
 			}
 	     
   %>	
-		$(document).ready(function() {
+		$(document).ready(function() {	
+			checkEnabledRestriction('<%=usuario%>','<%=permiso%>'); 
+			/*hide permission section on this below*/
+            $("#permisos").hide();	
+			/*create table*/
 			$("#search thead input").on( 'keypress changed', function (e) 
 			{  
 					 table
 					.column( $(this).parent().index()+':visible' )
 					.search(this.value)
-					.draw();				
-                  
+					.draw();				                
 			} );
 						
 	<% 	 		 	
@@ -92,10 +94,9 @@
 	         
 			// Se establece el control de datos al destino
 			var table = $('#search').DataTable( {
-			scrollY:        700,
-			scrollX: 		1700,
-			data:	data,
-			
+			scrollY: 700,
+			scrollX: 1700,
+			data:	data,			
 			dom : "rtiS",
 			"stateSave" : true,
 		    "bSort": false,
@@ -118,7 +119,7 @@
 
 		   			 
 			var index = 0;
-			var table = $('#search').DataTable();
+			//var table = $('#search').DataTable();
 			var oldvalue = "";
 			
 			//botton eliminar			
@@ -275,6 +276,47 @@
 				});
 				
 			});
+			
+			
+			/*Editar permisos de usuario*/
+			$("#btnEditarPermiso").button().click(function(e){
+				removeattr();
+				index = table.row('.selected').index();
+				var registro = table.row('.selected').data();
+				var claveUsuario ="";
+				if(index >= 0)
+				{	
+					
+					$("#permisos").show();
+					$("#userpane").hide();
+ 					$.each(registro, function(data, value){
+ 					  if(data == 0){
+ 							claveUsuario = value;
+ 							$.post('permisos.jr',{
+ 									workout: 'getUser',
+ 									Usuario: claveUsuario
+ 								},function(data)
+ 								{								   
+ 									var obj = jQuery.parseJSON(data);
+ 									$.each(obj, function( index ) {
+ 										  $('#rol'+obj[index].Rol).prop('checked', true);
+ 										}); 
+ 									$("#Usernamedata").text(value);
+ 									
+ 								});
+ 						}
+ 					});
+					
+					
+				}
+				else
+				{
+					window.alert("A que usuario va a ver permiso: primero seleccionelo");
+				}
+			
+		     });
+			
+			/** fin editar permisos de usuario**/
 			
 			$("#formUsuario").dialog({
 				modal:true,
@@ -693,8 +735,7 @@
 	    $(document).ready(function ()
 	    {
         	$("#close").click(
-            function () 
-             {               
+            function (){               
             	var r = confirm("Desea cerrar el panel ?");
             	if (r == true) 
             	{
@@ -703,110 +744,44 @@
              });
        });
 		
+		
+	    function removeattr(){
+			$('input:checkbox').removeAttr('checked');
+		}
 					
 	</script>	
 </head>
 <body>
-
-<div id="formUsuario" title="Actualizar Usuario" class="text-form">
-	<form id="clienteActualizar">
-	<legend>* Campos Obligatorios</legend>
-	<fieldset>
-		<legend>Usuario</legend>
-		<ol>
-			<li><label for="usuario">*Usuario: </label><input type="text" id="txtUsuario" name="usuario" size="20" requiered ><label for="nombre">*Contraseña: </label><input type="text" size="15" id="txtContrasena" name="contraseña" requiered> </li>
-			<li><label for="perfil">*Perfil: </label><input type="text" size="20" id="txtPerfil" name="Perfil" requiered><label for="tel">*Usuario Activo:</label><input type="checkbox" id="chkActivo"name="Activo" value="0"requiered>
-	        <label for="sucursal">*Sucursal: </label><input type="text" size="15" id="txtSucursal" name="sucursal" value="SIN ASIGNAR" requiered></li>
-		</ol>
-	</fieldset>
-	<fieldset>
-		<legend>Datos Personales</legend>
-		<ol>
-			<li><label for="persona">Nombre:</label><input type="text" id="txtNombre" name="Nombre" size="25" requiered><label for="Apellido Paterno">*Apellido Paterno:</label><input type="text" id="txtApePat" name="Apellido Paterno" size="25" requiered></li>
-			<li><label for="apellidopat">*Apellido Materno:</label><input type="text" id="txtApeMat" name="apellidopat" size="25" requiered><label for="fechaingreso">*Fecha Ingreso:</label><input type="text" id="txtFechaIngreso" name="fechaingreso" size="25" value="00-00-0000" requiered></li>
-			<li><label for="rfc">*RFC:</label><input type="text" id="txtRFC" name="rfc" size="25" value="SIN ASIGNAR" requiered><label for="curp">*CURP:</label><input type="text" id="txtCURP" name="curp" size="25" value="SIN ASIGNAR" requiered></li>
-			<li><label for="turno">*Turno:</label><input type="text" id="txtTurno" name="turno" size="25" value="SIN ASIGNAR" requiered><label for="email">*Email:</label><input type="text" id="txtEmail" name="email" size="25" value="SIN ASIGNAR" requiered></li>
-			<li><label for="telfijo">*Telefono Fijo:</label><input type="text" id="txtTelFijo" name="telfijo" size="15" value="(000)-000-00-00" requiered><label for="telmovil">*Telefono Móvil:</label><input type="text" id="txtTelMovil" name="telmovil" size="15" value="00-00-00-00-00"></li>
-		</ol>
-	</fieldset>
-	<fieldset>
-		<legend>Direccion</legend>
-		<ol>
-			<li><label for="calle">*Calle: </label><input type="text" id="txtCalle" name="txtCalle" value="SIN ASIGNAR" requiered><label for="noExt">*Num.Ext.: </label><input type="text" id="txtNoExt" name="txtNoExt" size="5" value="00" requiered><label for="noInt">*Num.Int.: </label><input type="text" id="txtNoInt" name="txtNoInt" size="5" value="00" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColonia" name="txtColonia" value="SIN ASIGNAR" requiered><label for="ciudad">*Ciudad: </label><input type="text" id="txtCiudad" name="txtCiudad" size="15" value="SIN ASIGNAR" requiered><li>
-			<li><label for="estado">*Estado: </label><input type="text" id="txtEstado" name="txtEstado" size="15" value="SIN ASIGNAR" requiered><label for="cp">*C.P: </label><input type="text" id="txtCp" name="txtCp" size="5" value="00000" requiered></li>
-		</ol>
-	</fieldset>
-	</form>
-</div>
-<div id="formUsuarioNuevo" title="Agregar Usuario" class="text-form">
-	<form id="UsuarioNuevo">
-	<legend>* Campos Obligatorios</legend>
-	<fieldset>
-		<legend>Usuario</legend>
-		<ol>
-			<li><label for="usuario">*Usuario: </label><input type="text" id="txtUsuarioNuevo" name="usuario" size="20" requiered autofocus><label for="contrasena">*Contraseña: </label><input type="text" size="15" id="txtContrasenaNuevo" name="contrasena" requiered> </li>
-			<li><label for="perfil">*Perfil: </label><input type="text" size="20" id="txtPerfilNuevo" name="Perfil" requiered><label for="tel">*Usuario Activo:</label><input type="checkbox" id="chkActivoNuevo" name="Activo" value="0" requiered>
-			<label for="sucursal">*Sucursal: </label><input type="text" size="15" id="txtSucursalNuevo" name="sucursal" value="SIN ASIGNAR" requiered></li>
-		</ol>
-	</fieldset>
-	<fieldset>
-		<legend>Datos Personales</legend>
-		<ol>
-			<li><label for="nombre">Nombre:</label><input type="text" id="txtNombreNuevo" name="Nombre" size="25" requiered><label for="apellidoPat">*Apellido Paterno:</label><input type="text" id="txtApePatNuevo" name="Apellido Paterno" size="25" requiered></li>
-			<li><label for="apellidoMat">*Apellido Materno:</label><input type="text" id="txtApeMatNuevo" name="apellidoMat" size="25" requiered><label for="fechaingreso">*Fecha Ingreso:</label><input type="text" id="txtFechaIngresoNuevo" name="fechaingreso" size="25" value="00-00-0000" requiered></li>
-			<li><label for="rfc">*RFC:</label><input type="text" id="txtRFCNuevo" name="rfc" size="25" value="SIN ASIGNAR" requiered><label for="curp">*CURP:</label><input type="text" id="txtCURPNuevo" name="curp" size="25" value="SIN ASIGNAR" requiered></li>
-			<li><label for="turno">*Turno:</label><input type="text" id="txtTurnoNuevo" name="turno" size="25" value="SIN ASIGNAR" requiered><label for="email">*Email:</label><input type="text" id="txtEmailNuevo" name="email" size="25" value="SIN ASIGNAR" requiered></li>
-			<li><label for="telfijo">*Telefono Fijo:</label><input type="text" id="txtTelFijoNuevo" name="telfijo" size="15" value="(000)-000-00-00" requiered><label for="telmovil">*Telefono Móvil:</label><input type="text" id="txtTelMovilNuevo" name="telmovil" size="15" value="00-00-00-00-00" requiered></li>
-		</ol>
-	</fieldset>
-	<fieldset>
-		<legend>Direccion</legend>
-		<ol>
-			<li><label for="calle">*Calle: </label><input type="text" id="txtCalleNuevo" name="txtCalleNuevo" value="SIN ASIGNAR" requiered><label for="noExt">*Num.Ext.: </label><input type="text" id="txtNoExtNuevo" name="txtNoExtNuevo" size="5" value="00" requiered><label for="noInt">*Num.Int.: </label><input type="text" id="txtNoIntNuevo" name="txtNoIntNuevo" size="5" value="00" requiered><li>
-			<li><label for="colonia">*Colonia: </label><input type="text" id="txtColoniaNuevo" name="txtColoniaNuevo" value="SIN ASIGNAR" requiered><label for="ciudad">*Ciudad: </label><input type="text" id="txtCiudadNuevo" name="txtCiudadNuevo" size="15" value="SIN ASIGNAR" requiered><li>
-			<li><label for="estado">*Estado: </label><input type="text" id="txtEstadoNuevo" name="txtEstadoNuevo" size="15" value="SIN ASIGNAR" requiered><label for="cp">*C.P: </label><input type="text" id="txtCpNuevo" name="txtCpNuevo" size="5" value="00000" requiered></li>
-		</ol>
-	</fieldset>
-	</form>
-</div>
-<div>
-			<div id="header">
-				<!--div id="logo"></div-->
-			</div>	
-			<div id="sucursal">
-				<p>Cajero  : <label id="lblname"><%=nombre%> <%=apepat%> <%=apemat%></label></p>
-		        <p>Usuario : <label id="lbluser"><%=usuario%></label><label> | Sucursal: San Martín Texmelucan</label></p>
-			</div>
-	<!--Barra de Navegacion de la pagina principal-->
-	
-			<ul id="nav">
-					<li><a href="#">Recargar Datos</a></li>
-			</ul>    
+<c:url value="Templates/formusuario.jsp" var="myURL"></c:url> <c:import url="${myURL}"/>
+	<div id="header">
+		<!--div id="logo"></div-->
+	</div>	
+	<div id="sucursal">
+		<p>Cajero  : <label id="lblname"><c:out value="${sessionScope.nombre}"/> 
+		<c:out value="${sessionScope.apepat}"/> <c:out value="${sessionScope.apemat}"/></label></p>
+        <p>Usuario : <label id="lbluser"><c:out value="${sessionScope.nombre}"/> </label><label> | Sucursal: <c:out value="${sessionScope.scr}" /></label></p>
+	</div>
+<!--Barra de Navegacion de la pagina principal-->
+	<ul id="nav">
+			<li><a href="#">Recargar Datos</a></li>
+	</ul>    
 	<!--Barra de Navegacion, contiene el contenido que se muestra de lado derecho-->
 	<div id="navigatorpanel">
 		<ul id="nav-right">
 			<li><a href="#" id="close">Salir</a></li>
 			<li>
-				<span id="menu">
-					<select>
-						<option value="">Barra de Acceso Rápido...</option>
-						<option value="">Opcion1</option>
-						<option value="">Opcion2</option>
-						<option value="">Opcion3</option>
-				</select>
-				</span>
 			</li>
 		</ul>
 	</div>			
-		<div class="container">			
+		<div class="container" id="userpane">			
 			<div id="buttons">
-				<button id="btnEditar">Editar</button>
+				<button id="btnEditar">Editar Usuario</button>
+				<button id="btnEditarPermiso">Editar Permisos</button>
 				<button id="btnEliminar">Eliminar</button>
 				<button id="btnAgregar">Agregar</button>
-				<button id="btnExcel">Excel</button>
+				<button id="btnExcel">Exportar Excel</button>
 			</div>
-			<table id="search" class="display"cellspacing="0" width="1280px">
+			<table id="search" class="display" cellspacing="0" width="1280px">
 				
 				<thead>
 					<tr>
@@ -865,6 +840,9 @@
 				<tfoot>
 				</tfoot>
 			</table>					
+	 	</div>
+	 	<div id="permisos" class="container">
+	 			<jsp:include page="cfgpermisos.jsp" flush="true" />
 	 	</div>
 	</div>
 </body>

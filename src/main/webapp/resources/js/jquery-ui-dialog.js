@@ -1,4 +1,5 @@
-/*funcion de Jquery que crea el cuadro de dialogo para ingresar la cantidad de dinero que entrara en caja, si la cantidad es valida (menor a mil pesos, aparece el cuadro de dialogo de bienvenida" confirmation-2"),
+/*funcion de Jquery que crea el cuadro de dialogo para ingresar la cantidad de dinero que entrara en caja, 
+si la cantidad es valida (menor a mil pesos, aparece el cuadro de dialogo de bienvenida" confirmation-2"),
  * en caso contrario aparece el cuadro de dialogo error "confirmation-1"*/
 $(function() {
 	$("#dialog").dialog({
@@ -21,6 +22,7 @@ $(function() {
 			}
 		} ]
 	});
+	
 	$("#dialog").dialog("option", "width", 420);
 	$("#dialog").dialog("option", "height", 190);
 	$("#cantidad").keypress(function(e) {
@@ -31,7 +33,6 @@ $(function() {
 			if (x < 1000) {
 				EnviarTicket(x);
 			} else {
-				console.log("cantidad incorrecta");
 				$("#confirmation-1").dialog("open");
 			}
 		}
@@ -75,6 +76,8 @@ $(function() {
 	$("#confirmation-2").dialog("option", "width", 420);
 	$("#confirmation-2").dialog("option", "height", 150);
 });
+
+
 /* Popus forms data context */
 $(function() {
 	$("#formAltaMedico").dialog({
@@ -124,24 +127,25 @@ $(function() {
 				keydown : function(e) {
 					// Se activa cuando se presiona el boton F10
 					if (e.which == 121) {
-						var totalCobro = parseFloat($('#txtTotalPago').val());
-						var totalCambio = parseFloat($('#txtCambio').val());
+						var totalCobro = parseFloat($('#txtTotalPago').val()).toFixed(2);
+						var totalCambio = parseFloat($('#txtCambio').val()).toFixed(2);
 						if (totalCobro != 0 && totalCambio >= 0) {
-							EnviarFormulario();
-							$(this).dialog("close");
+							popPrinterCobro = EnviarFormulario();
+							$("#formAltaCobro").dialog("close");
 						} else
 							alert("Debe especificar una cantidad a cobrar");
-					} else {
+					}
+					/*else {
 						alert("Debe presionar F10 para cobrar la venta");
 						$('#btnF10').focus();
-					}
+					}*/
 				},
-				click : function(e) {
-					var totalCobro = parseFloat($('#txtTotalPago').val());
-					var totalCambio = parseFloat($('#txtCambio').val());
+				click : function() {
+					var totalCobro = parseFloat($('#txtTotalPago').val()).toFixed(2);
+					var totalCambio = parseFloat($('#txtCambio').val()).toFixed(2);
 					if (totalCobro != 0 && totalCambio >= 0) {
-						EnviarFormulario();
-						$(this).dialog("close");
+						popPrinterCobro = EnviarFormulario();
+						$("#formAltaCobro").dialog("close");
 					} else
 						alert("Debe especificar una cantidad a cobrar");
 				}
@@ -149,10 +153,10 @@ $(function() {
 			"Venta Domicilio" : function() {
 				$(this).dialog("close");
 			},
-			"Cr�dito" : function() {
+			"Credito" : function() {
 				$(this).dialog("close");
 			},
-			"F11 Tarjeta Cr�dito" : function() {
+			"F11 Tarjeta Credito" : function() {
 				$(this).dialog("close");
 			},
 			"Vale" : function() {
@@ -177,13 +181,6 @@ $(function() {
 					// Se activa cuando se presiona enter
 					if (e.which == 13) {
 						alert("Antibiotico guardado con exito");
-						var myObject = new Object();
-						myObject.idnt = $('#txtFolio').val();
-						myObject.caja = $('#txtCaja').val();
-						myObject.usuario = $('#txtUsuario').val();
-						myObject.cliente = $('#txtCliente').val();
-						myObject.dcliente = $('#txtDescripcion').val();
-						localStorage.setItem("nota", JSON.stringify(myObject));
 						$(this).dialog("close");
 					}
 				},
@@ -200,11 +197,14 @@ $(function() {
 	$("#formAltaAntibiotico").dialog("option", "width", 350);
 	$("#formAltaAntibiotico").dialog("option", "height", 300);
 });
+
 // rutina de enviar formulario
+var popPrinterCobro;
+//funcion que procesa la informacion de venta
 function EnviarFormulario() {
 	blockpage();
-	var table = $('#example').tableToJSON(); // Convert the table into a
-												// javascript object
+	var table = $('#example').tableToJSON({ignoreColumns: [1]}); 
+	
 	var datosNota = {
 			idnt:	$('#txtFolio').val(),
 			caja:	$('#txtCaja').val(),
@@ -214,48 +214,95 @@ function EnviarFormulario() {
 			dcliente:$('#txtDescripcion').val()
 			
 	};
-	$.post('cobroController.jr', {
-		data_1 : JSON.stringify(datosNota),
-		data_2 : localStorage.getItem("totales"),
-		data_3 : JSON.stringify(table),
-		varTotalCobro : $('#txtTotalCobro').val(),
-		varTotalPago : $('#txtTotalPago').val(),
-		varCambio : $('#txtCambio').val(),
-		// se envian los datos de antibiotico
-		varMedico : $('#selMedico').val(),
-		varReceta : $('#selReceta').val(),
-		varSello : $('#selSello').val(),
-		workout : 'insertdbp'
-	}, function(data) {
-		if (data == "OK") {
-			//alert("Ok");
-			var popPrinter;
-			// delete storage
-			table = null;
-			localStorage.removeItem("nota");
-			localStorage.removeItem("totales");
-			localStorage.setItem("idcontrolventa", "0"); // set control de venta 0 for leave cobro
-			localStorage.removeItem("descClteFrec");
-			localStorage.removeItem("descInsen");
-			/*for (var i = 1; i <= localStorage.getItem("item"); i++) {
-				var producto = JSON.parse(localStorage.getItem("Producto"+i+""));
-				localStorage.removeItem(""+producto.codigo);
-				localStorage.removeItem("Producto" + i + "");
-			}*/
-			var productos = JSON.parse(localStorage.getItem("productosVenta"));
-			for (var i = 1; i < productos.length; i++) {
-				localStorage.removeItem(""+productos[i].codigo);
+	
+	var totalesNota = {
+		pt: $('#txtPrecT').val(),
+		dt: $('#txtDesT').val(),
+		va: $('#txtIva').val(),
+		sbt: $('#txtSubtotal').val(),
+		tt: $('#txtTotal').val()
+	};
+	
+	if (datosNota.idnt != "") {
+		//Se envian datos de venta para procesar y guardar la información en base de datos.
+		$.ajax({
+			async:false,
+	        cache:false,
+	        type: 'POST',  
+	        url: "cobroController.jr",
+	        data: {
+	        	workout : 'insertdbp', 
+	        	txtUsuario: $("#txtUsuario").val(),
+	        	data_1 : JSON.stringify(datosNota),
+	    		data_2 : JSON.stringify(totalesNota),
+	    		data_3 : JSON.stringify(table),
+	    		varTotalCobro : $('#txtTotalCobro').val(),
+	    		varTotalPago : $('#txtTotalPago').val(),
+	    		varCambio : $('#txtCambio').val(),
+	    		// se envian los datos de antibiotico
+	    		varMedico : $('#selMedico').val(),
+	    		varReceta : $('#selReceta').val(),
+	    		varSello : $('#selSello').val()
+	      }
+		}).done(function(data){
+			if (data == "OK") {
+				//alert("Ok");
+				// delete storage
+				
+					$.ajax({
+	                    async:false,
+	                    cache:false,
+	                    type: 'POST',  
+	                    url: "temporales.jr",
+	                    data: {
+	                    	tarea: 'borrarVentaTemp',
+	    					txtNota: $('#txtFolio').val()
+	                   }
+					}).fail(function(xhr,textStatus, errorThrown){
+	              	  alert("Error al eliminar temporales "+errorThrown);
+	                });
+					
+					if(localStorage.getItem("descClteFrec") != null)
+						localStorage.removeItem("descClteFrec");
+					if(localStorage.getItem("descInsen") != null)
+						localStorage.removeItem("descInsen");
+					localStorage.setItem("idcontrolventa", "0"); // set control de venta 0 for leave cobro
+					
+					$.unblockUI();
+					popPrinterCobro = window.open("ticketcobro.jsp", "Impresion","height=600,width=400");
+					localStorage.setItem("popupTicket","1");
+					
+					$('#txtFolio').val("");
+					$('#txtCaja').val("");
+					$('#txtCajero').val("");
+					$('#txtUsuario').val("");
+					$('#txtCliente').val("");
+					$('#txtDescripcion').val("");
+					datosNota = {
+							idnt:	"",
+							caja:	"",
+							cajero: "",
+							usuario:"",
+							cliente:"",
+							dcliente:""
+					};
+					
+					popPrinterCobro.focus();
+					window.close();
+			}else{
+				$.unblockUI();
 			}
-			localStorage.removeItem("productosVenta");
-			
-			localStorage.removeItem("item");
+		}).fail(function(xhr,textStatus, errorThrown){
 			$.unblockUI();
-			popPrinter = window.open("ticketcobro.jsp", "Impresion","height=600,width=400");
-			popPrinter.focus();
-			
-		}
-	});
+	  	  	alert("Error al procesar venta: "+errorThrown+" ,"+xhr+" ,"+textStatus);
+	    });	
+	}else{
+		$.unblockUI();
+		alert("No se puede procesar venta, no hay datos");
+	}
 }
+
+//Función que envia datos de ticket de deposito al iniciar sesion
 function EnviarTicket(x) {
 	console.log("cantidad correcta");
 	$("#confirmation-2").dialog("open");
@@ -275,6 +322,7 @@ function EnviarTicket(x) {
 		var popPrinter;
 		popPrinter = window.open("ticketdeposito.jsp", "Impresion",
 				"height=600,width=350");
+			
 		popPrinter.focus();
 	});
 }
@@ -292,3 +340,40 @@ function blockpage() {
 		}
 	});
 }
+
+function isTicket(){
+	if(localStorage.getItem("popupTicket") == null || localStorage.getItem("popupTicket") == "0"){
+		window.open("cobro.jsp");
+	}else{
+		alert("Usted tiene un Ticket pendiente de impresion, para abrir la ventana de cobro imprima antes el ticket pendiente");
+	}
+}
+
+
+function launchApplication(l_url, l_windowName)
+{
+  if ( typeof launchApplication.winRefs == 'undefined' )
+  {
+    launchApplication.winRefs = {};
+  }
+  if ( typeof launchApplication.winrefs[l_windowName] == 'undefined' || launchApplication.winrefs[l_windowName].closed )
+  {
+    var l_width = screen.availWidth;
+    var l_height = screen.availHeight;
+
+    var l_params = 'status=1' +
+                   ',resizable=1' +
+                   ',scrollbars=1' +
+                   ',width=' + l_width +
+                   ',height=' + l_height +
+                   ',left=0' +
+                   ',top=0';
+
+    launchApplication.winrefs[l_windowName] = window.open(l_url, l_windowName, l_params);
+    launchApplication.winrefs[l_windowName].moveTo(0,0);
+    launchApplication.winrefs[l_windowName].resizeTo(l_width, l_height);
+  } else {
+    launchApplication.winrefs[l_windowName].focus()
+  }
+}
+

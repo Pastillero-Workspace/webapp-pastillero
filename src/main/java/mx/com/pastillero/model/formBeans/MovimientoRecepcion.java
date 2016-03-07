@@ -6,7 +6,6 @@ public class MovimientoRecepcion {
 	private int idNota;
 	private String documento;
 	private String clave;
-	private String descripcion;
 	private int adquiridos;
 	private int vendidos;
 	private float valor;
@@ -58,14 +57,6 @@ public class MovimientoRecepcion {
 
 	public void setClave(String clave) {
 		this.clave = clave;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
 	}
 
 	public int getAdquiridos() {
@@ -123,7 +114,7 @@ public class MovimientoRecepcion {
 	public void setHora(String hora) {
 		this.hora = hora;
 	}
-	
+
 	public float getUtilidad() {
 		return utilidad;
 	}
@@ -136,13 +127,13 @@ public class MovimientoRecepcion {
 	public String toString() {
 		return "MovimientoRecepcion [idMovimiento=" + idMovimiento + ", tipo="
 				+ tipo + ", idNota=" + idNota + ", documento=" + documento
-				+ ", clave=" + clave + ", descripcion=" + descripcion
-				+ ", adquiridos=" + adquiridos + ", vendidos=" + vendidos
-				+ ", valor=" + valor + ", habian=" + habian + ", quedan="
-				+ quedan + ", fecha=" + fecha + ", hora=" + hora
-				+ ", utilidad=" + utilidad + "]";
+				+ ", clave=" + clave + ", adquiridos=" + adquiridos
+				+ ", vendidos=" + vendidos + ", valor=" + valor + ", habian="
+				+ habian + ", quedan=" + quedan + ", fecha=" + fecha
+				+ ", hora=" + hora + ", utilidad=" + utilidad + "]";
 	}
 
+	
 	
 	
 }

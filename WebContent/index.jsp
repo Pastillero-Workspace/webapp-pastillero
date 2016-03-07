@@ -8,19 +8,25 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0"> 
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"> 
         <title>Pastillero | Inicio de sesión </title>
-        <meta name="description" content="Custom Login Form Styling with CSS3" />
+        <meta name="description" content="Pastillero Login" />
         <link rel="shortcut icon" href="../favicon.ico"> 
         <link href="<c:url value="/resources/css/style.css" />" rel="stylesheet" type="text/css">
         <link href="<c:url value="/resources/css/font-awesome.css" />" rel="stylesheet" type="text/css">
          <script src="<c:url value="/resources/js/jquery-1.10.2.js" />"></script>
          <script src="<c:url value="/resources/js/DOMinit.js" />"></script> 
-       		<script type = "text/javascript" >
-			function disableBackButton()
-			{
-			window.history.forward();
-			}
-			setTimeout("disableBackButton()",0);
-      		</script>         
+       	<script type = "text/javascript" >
+					function disableBackButton()
+					{
+					window.history.forward();
+					}
+					setTimeout("disableBackButton()",0);
+	                 
+					$(document).ready(function(){
+					$("input").click(function() {
+						   $("#message").hide(300);
+						});
+					});
+      	</script>         
     </head>
     <body onunload="disableBackButton()" onload="loadpagesession()" >
         <div class="container">		<!-- Contenedor principal -->
@@ -38,14 +44,14 @@
 							<div  class="float-left" >
 								<p>
 									<label for="login"><i class="icon-user"></i>Usuario</label>
-									<input id="userName" type="text" name="userName" required>
+									<input id="userName" type="text" name="userName" required >
 									<input id="s" type="hidden" name="s" value="0">
 								</p>
 							</div>
 							<div  class="float-left" >
 								<p>
 									<label for="password"><i class="icon-lock"></i>Clave</label>
-									<input id="userPassword"type="password" name="userPassword" required>							
+									<input id="userPassword"type="password" name="userPassword" required >							
 								</p>
 							
 							</div>
@@ -56,7 +62,10 @@
 					</div>
 				</form>​​
 			</section>
-			
+			<div id="message" class="codrops-demos">
+			<c:if test="${not empty message}">
+				    <p>${message}</p>
+			</c:if></div>
 			<footer class="codrops-demos" >
 			<!-- Information if user is sesion not closed -->
 			<div id="1">

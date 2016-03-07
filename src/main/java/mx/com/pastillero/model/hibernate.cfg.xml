@@ -39,7 +39,12 @@
 		<mapping resource="mx/com/pastillero/model/DevolucionVenta.hbm.xml" />
 		<mapping resource="mx/com/pastillero/model/MovimientoDevolucionVenta.hbm.xml" />
 		<mapping resource="mx/com/pastillero/model/MovimientoSalida.hbm.xml" />
-
+		<mapping resource="mx/com/pastillero/model/TemporalNotaVenta.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/TemporalProductoVenta.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/TemporalTotalesVenta.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/Roles.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/UserRol.hbm.xml" />
+		<mapping resource="mx/com/pastillero/model/UserChange.hbm.xml" />
 	</session-factory>
 
 </hibernate-configuration>

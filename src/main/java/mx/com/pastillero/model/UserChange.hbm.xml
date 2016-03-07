@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC 
+ "-//Hibernate/Hibernate Mapping DTD//EN"
+ "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd"> 
+
+<hibernate-mapping>
+   <class name="mx.com.pastillero.model.formBeans.UserChanged" table="ControlPermiso">
+      <meta attribute="class-description">
+      </meta>
+      <id name="id" type="int" column="id">
+         <generator class="native"/>
+      </id>
+      <property name="iduser" column="iduser" type="int"/>
+      <property name="ischanged" column="ischanged" type="int"/>
+      </class>
+</hibernate-mapping>

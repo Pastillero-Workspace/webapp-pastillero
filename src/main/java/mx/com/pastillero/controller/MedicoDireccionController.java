@@ -39,7 +39,7 @@ public class MedicoDireccionController extends HttpServlet {
 			d.setNoInt(request.getParameter("txtNoInt").trim().toUpperCase());
 			d.setNoExt(request.getParameter("txtNoExt").trim().toUpperCase());
 			d.setColonia(request.getParameter("txtColonia").trim().toUpperCase());
-			//d.setCiudad(request.getParameter("txtCiudad").trim().toUpperCase());
+			d.setCiudad(request.getParameter("txtCiudad").trim().toUpperCase());
 			d.setEstado(request.getParameter("txtEstado").trim().toUpperCase());
 			d.setCp(Integer.parseInt(request.getParameter("txtCp").trim()));
 			int idDireccion = medicoDireccion.guardarDireccion(d);
@@ -53,35 +53,37 @@ public class MedicoDireccionController extends HttpServlet {
 		}
 		else if (request.getParameter("tarea").equals("actualizar")) {
 			List<Object[]> IdMedico = medicoDireccion.getIdMedico(request.getParameter("txtCedula").trim());
+			
 			m.setIdMedico(Integer.parseInt(IdMedico.get(0)[0].toString()));
+			m.setIdDireccion(Integer.parseInt(IdMedico.get(0)[1].toString()));
 			m.setCedula(request.getParameter("txtCedula").trim());
 			m.setNombre(request.getParameter("txtNombre").trim().toUpperCase());
 			m.setTelFijo(request.getParameter("txtTelFijo").trim());
 			m.setTelMovil(request.getParameter("txtTelMovil").trim());
 			m.setEmail(request.getParameter("txtEmail").trim());
+						
 			d.setIdDireccion(m.getIdDireccion());
 			d.setCalle(request.getParameter("txtCalle").trim().toUpperCase());
 			d.setNoInt(request.getParameter("txtNoInt").trim().toUpperCase());
 			d.setNoExt(request.getParameter("txtNoExt").trim().toUpperCase());
 			d.setColonia(request.getParameter("txtColonia").trim().toUpperCase());
-			//d.setCiudad(request.getParameter("txtCiudad").trim().toUpperCase());
+			d.setCiudad(request.getParameter("txtCiudad").trim().toUpperCase());
 			d.setEstado(request.getParameter("txtEstado").trim().toUpperCase());
 			d.setCp(Integer.parseInt(request.getParameter("txtCp").trim()));
+			
 			medicoDireccion.actualizarMedico(m, d);
 		}
 		else if (request.getParameter("tarea").equals("eliminar")) {
 			m.setCedula(request.getParameter("txtCedula").trim());
 			List<Object[]> medico = medicoDireccion.getIdMedico(m.getCedula());
-			boolean eliminar = medicoDireccion.eliminarMedico(Integer.parseInt(medico.get(0)[0].toString()));
-			System.out.println("Eliminado: " + eliminar);
+			medicoDireccion.eliminarMedico(Integer.parseInt(medico.get(0)[0].toString()));
+			
 		}
 		// obtener los medicos de la base de datos
 		else if (request.getParameter("tarea").equals("mostrar")) {
 			List<Object[]> listmedico = medicoDireccion.mostrar();
 			StringBuilder medico = new StringBuilder();
 			for (Object[] med : listmedico) {
-				/*medico.append("<option value=\"" + med[2] + "\">" + med[2]
-						+ "</option>");*/
 				medico.append(""+med[2]+",");
 			}
 			response.setContentType("text/plain");

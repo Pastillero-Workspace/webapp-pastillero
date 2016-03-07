@@ -78,7 +78,7 @@ public class AntibioticoDao extends GenericoDAO {
 			session = factory.openSession();
 			Criteria cr = session.createCriteria(Productos.class);
 			cr.add(Restrictions.eq("codBar", codigo)).add(
-					Restrictions.eq("categoria", "C"));			
+					Restrictions.eq("antibiotico", 1));			
 			List<Productos> productos = cr.list();	
 			if (productos != null && productos.size() > 0) {
 				result = true;
@@ -106,12 +106,21 @@ public class AntibioticoDao extends GenericoDAO {
 		try{
 			session = factory.openSession();
 			tx = session.beginTransaction();
-			session.update(antibioticoCopy);
+			AntibioticosCopy antibiotico = (AntibioticosCopy) session.get(AntibioticosCopy.class, antibioticoCopy.getIdAntibiotico());
+			antibiotico.setIdMedico(antibioticoCopy.getIdMedico());
+			antibiotico.setReceta(antibioticoCopy.getReceta());
+			antibiotico.setSello(antibioticoCopy.getSello());
+			antibiotico.setAdquiridos(antibioticoCopy.getAdquiridos());
+			antibiotico.setVendidos(antibioticoCopy.getVendidos());
+			antibiotico.setHabian(antibioticoCopy.getHabian());
+			antibiotico.setQuedan(antibioticoCopy.getQuedan());
+			session.update(antibiotico);
 			tx.commit();
 			resultado = true;
+			logger.info("Antibiotico Actualizado con Exito!");
 		}catch(HibernateException ex){
 			resultado = false;
-		    logger.error("Error al actualizar");
+		    logger.error("Error al actualizar Antibiotico.");
 			ex.printStackTrace();
 			tx.rollback();
 		}

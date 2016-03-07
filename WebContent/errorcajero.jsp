@@ -8,7 +8,13 @@
 <title>Error</title>
 </head>
 <body>
-<h3> Invalid access : Primero inicie sesion como cajero </h3>
-   <a href="${pageContext.request.contextPath}/index.jsp" >Login</a>
+<h3> Problema </h3>
+<div><h4>  Al menos debe estar habilitada una sesion de cajero </h4>
+     <p> * Presione Home para regresar a login </p>
+
+</div>
+<div>
+</div>
+   <a href="${pageContext.request.contextPath}/index.jsp" >Home</a>
 </body>
 </html>

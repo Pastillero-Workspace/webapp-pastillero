@@ -27,6 +27,7 @@ import mx.com.pastillero.model.dao.MovimientoNotaDao;
 import mx.com.pastillero.model.dao.NotaDao;
 import mx.com.pastillero.model.dao.PersonaDao;
 import mx.com.pastillero.model.dao.ProductosDao;
+import mx.com.pastillero.model.dao.TemporalesDao;
 import mx.com.pastillero.model.dao.UsuarioDao;
 import mx.com.pastillero.model.formBeans.Antibioticos;
 import mx.com.pastillero.model.formBeans.AntibioticosCopy;
@@ -37,6 +38,7 @@ import mx.com.pastillero.model.formBeans.MovimientoVenta;
 import mx.com.pastillero.model.formBeans.Nota;
 import mx.com.pastillero.model.formBeans.Persona;
 import mx.com.pastillero.model.formBeans.Productos;
+import mx.com.pastillero.model.formBeans.TemporalNotaVenta;
 import mx.com.pastillero.model.formBeans.Usuario;
 import mx.com.pastillero.utils.TicketServiceCobro;
 
@@ -50,6 +52,9 @@ public class CobroController extends HttpServlet {
 	private List<Familia> mapFamilia = new ArrayList<Familia>();
 	private Usuario Usuario = new Usuario();
 	private Cliente Cliente = new Cliente();
+	
+	List<TemporalNotaVenta> listNotaVenta = new ArrayList<TemporalNotaVenta>();
+	TemporalesDao temporal = new TemporalesDao();
 	
 	// Time data
 	Date date;
@@ -140,7 +145,7 @@ public class CobroController extends HttpServlet {
 					// setting time
 					hora = hourFormat.format(date);
 					fecha = dateFormat.format(date);
-					
+										
 					// setting data
 					nt = new Nota();
 					nt.setFecha(fecha);
@@ -198,288 +203,252 @@ public class CobroController extends HttpServlet {
 			
 		}
 		
-		/* Insert items list and update product in database */
+		//Guarda productos de venta y actualiza existencias de productos
 		else if (request.getParameter("workout").equals("insertdbp")) {
-			logger.info("Guardando Nota...");
-			List<ItemVenta> liv = new ArrayList<ItemVenta>();
-			JSONParser parser = new JSONParser();
-			JSONObject objnota = null, objtotal = null;
-			Object obj_1, obj_2, obj_3;
-		
-			// Requesting data
-			String data_1 = request.getParameter("data_1");
-			String data_2 = request.getParameter("data_2");
-			String data_3 = request.getParameter("data_3");
+			listNotaVenta = temporal.getNota(request.getParameter("txtUsuario").trim());
 			
-			// other recipes for cook ticket
-			String TotalCobro = request.getParameter("varTotalCobro").trim();
-			String TotalPago = request.getParameter("varTotalPago").trim();
-			String Cambio = request.getParameter("varCambio").trim();
+			if(!listNotaVenta.isEmpty()){
+				logger.info("Guardando Nota...");
+				List<ItemVenta> liv = new ArrayList<ItemVenta>();
+				JSONParser parser = new JSONParser();
+				JSONObject objnota = null, objtotal = null;
+				Object obj_1, obj_2, obj_3;
 			
-			// data for antibioticos
-			String nombreMedico = request.getParameter("varMedico").trim().toUpperCase();
-			String receta = request.getParameter("varReceta").trim().toUpperCase();
-			String sello = request.getParameter("varSello").trim().toUpperCase();
-			
-			if(nombreMedico.length() != 0){
-				logger.info("medico recibido: " + nombreMedico);
-				logger.info("receta: " + receta);
-				logger.info("sello: " + sello);
-			}
-			
-			
-			mdd = new MedicoDireccionDao();
-			antibDao = new AntibioticoDao();
-			psd = new ProductosDao();
-			int idMedico = 0;
-			if (nombreMedico.length() != 0) {
-				idMedico = mdd.getIdMedicoByName(nombreMedico).get(0);
-			}
-			try {
-				// data ticket
-				logger.info("data_1 (nota): "+data_1);
-				obj_1 = parser.parse(data_1);
-				objnota = (JSONObject) obj_1;
-			
-				// total ticket
-				logger.info("data_2 (totales): "+data_2);
-				obj_2 = parser.parse(data_2);
-				objtotal = (JSONObject) obj_2;
+				// Requesting data
+				String data_1 = request.getParameter("data_1");
+				String data_2 = request.getParameter("data_2");
+				String data_3 = request.getParameter("data_3");
 				
-				// products
-				obj_3 = parser.parse(data_3);
-				JSONArray array = (JSONArray) obj_3;
+				// other recipes for cook ticket
+				String TotalCobro = request.getParameter("varTotalCobro").trim();
+				String TotalPago = request.getParameter("varTotalPago").trim();
+				String Cambio = request.getParameter("varCambio").trim();
 				
-				// read the objets for get data storage
-				for (int i = 0; i < array.size(); i++) {
-					JSONObject objitem = (JSONObject) array.get(i);
-					ItemVenta iv = new ItemVenta();
+				// data for antibioticos
+				String nombreMedico = request.getParameter("varMedico").trim().toUpperCase();
+				String receta = request.getParameter("varReceta").trim().toUpperCase();
+				String sello = request.getParameter("varSello").trim().toUpperCase();
 				
-					/* Se obtiene la comparacion a 16 digitos */
-					StringBuilder codigo = new StringBuilder(objitem.get("Código").toString());
-					int tamaño = codigo.length();
-			    	if(tamaño < 16){
-			    		int falta = 16 - tamaño;
-			    		for(int j = 0; j < falta; j++){
-			    			codigo.insert(0,'0');
-			    		}
-			    	}
-					
-					/* ------------------------------------------ */
-					iv.setCodigo(codigo.toString());
-					iv.setDescripcion(objitem.get("Descripcion").toString().toUpperCase());
-					iv.setCantidad(Integer.parseInt(objitem.get("Cantidad").toString()));
-					iv.setPreciodesc(Float.parseFloat(objitem.get("PrecioDes").toString()));
-					iv.setPreciopub(Float.parseFloat(objitem.get("PrecioPub").toString()));
-					iv.setSubtotal(Float.parseFloat(objitem.get("Subtotal").toString()));
-					List<Productos> mapProducts = psd.productoPorCodigo(iv.getCodigo());
-					
-					if (!mapProducts.isEmpty()) {
-						iv.setIdproducto(mapProducts.get(0).getIdProducto());
-						iv.setHabian(mapProducts.get(0).getExistencias());
-						iv.setUltimocosto(mapProducts.get(0).getUltimocosto());
-						
-						logger.info("Id producto y codigo : "+ iv.getIdproducto() + "|" + iv.getCodigo());
-						
-						if (nombreMedico.length() != 0	&& antibDao.isAntibiotico(iv.getCodigo())) {
-							AntibioticosCopy antibioticoCopy = new AntibioticosCopy();
-							antibioticoCopy.setAdquiridos(0);
-							antibioticoCopy.setDocumento(objnota.get("idnt").toString()); // id de la nota
-							antibioticoCopy.setFecha(dateFormat.format(date));
-							antibioticoCopy.setIdMedico(idMedico);
-							antibioticoCopy.setIdProducto(iv.getIdproducto());
-							antibioticoCopy.setQuedan(mapProducts.get(0).getExistencias() - iv.getCantidad());
-							antibioticoCopy.setHabian(iv.getHabian());
-							
-							int recetaByte2 = 0;
-							if (receta.compareTo("SI") == 0) {
-								recetaByte2 = 1;
-							}
-							antibioticoCopy.setReceta(recetaByte2);
-							antibioticoCopy.setSello(Integer.parseInt(sello));
-							antibioticoCopy.setVendidos(iv.getCantidad());
-							antibioticoCopy.setIdProveedor(1);
-							
-							Antibioticos antibiotico = new Antibioticos();
-							antibiotico.setAdquiridos(0);
-							antibiotico.setDocumento(objnota.get("idnt").toString().toUpperCase()); // id de la nota
-							antibiotico.setFecha(dateFormat.format(date));
-							antibiotico.setIdMedico(idMedico);
-							antibiotico.setIdProducto(iv.getIdproducto());
-							antibiotico.setQuedan(mapProducts.get(0).getExistencias() - iv.getCantidad());
-							antibiotico.setHabian(iv.getHabian());
-							
-							int recetaByte1 = 0;
-							if (receta.compareTo("SI") == 0) {
-								recetaByte1 = 1;
-							}
-							antibiotico.setReceta(recetaByte1);
-							antibiotico.setSello(Integer.parseInt(sello));
-							antibiotico.setVendidos(iv.getCantidad());
-							antibiotico.setIdProveedor(1);
-							
-							antibDao.guardarAntibiotico(antibiotico, antibioticoCopy);
-							logger.info("Antibiotico guardado: "+antibiotico.getIdProducto());
-							antibioticoCopy = null;
-							
-						}
-					}
-
-					// add the item to collection of products
-					liv.add(iv);
+				if(nombreMedico.length() != 0){
+					logger.info("medico recibido: " + nombreMedico);
+					logger.info("receta: " + receta);
+					logger.info("sello: " + sello);
 				}
-			} catch (ParseException e) {
-				logger.info("Error al procesar la venta, Intente de nuevo: "+e);
-				e.printStackTrace();
-			}
-			
-			MovimientoNotaDao mnd = new MovimientoNotaDao();
-			mnd.getInsertedMovNota(Integer.parseInt(objnota.get("idnt").toString()), "VENTA");
-			
-			// Get client and user for insert new order sale
-			
-			List<Usuario> lu = new ArrayList<Usuario>();
-			List<Usuario> listaCajero = new ArrayList<Usuario>();
-			List<Persona> lp = new ArrayList<Persona>();
-			UsuarioDao ud = new UsuarioDao();
-			PersonaDao pd = new PersonaDao();
-			ClienteDao cd = new ClienteDao();
-			
-			// getting data
-			if (objnota != null) {
-				mapCliente = cd.getSearchClientebyClave(objnota.get("cliente").toString());
-				lu = ud.getUsuario(objnota.get("usuario").toString().toUpperCase());
-				lp = pd.getPersonabyId(lu.get(0).getIdPersona());
-				listaCajero = ud.getUsuario(objnota.get("cajero").toString().toUpperCase());
-			}
-			
-			// date and hour
-			hora = hourFormat.format(date);
-			fecha = dateFormat.format(date);
-			
-			// Create instances for insert database ,fill data and update in db
-			Nota n = new Nota();
-			NotaDao nd = new NotaDao();
-			
-			n.setIdNota(Integer.parseInt(objnota.get("idnt").toString()));
-			n.setEstado("COMPLETO");
-			n.setIdCliente(mapCliente.get(0).getIdCliente());
-			n.setIdUsuario(lu.get(0).getIdUsuario());
-			n.setIdCajero(listaCajero.get(0).getIdUsuario());
-			n.setFecha(fecha);
-			n.setHora(hora);
-			n.setPrecio(0);
-			n.setDescuento(Float.parseFloat(objtotal.get("dt").toString()));
-			n.setIva(Float.parseFloat(objtotal.get("va").toString()));
-			n.setSubtotal(Float.parseFloat(objtotal.get("sbt").toString()));
-			n.setTotal(Float.parseFloat(objtotal.get("tt").toString()));
-			nd.updateNota(n);
-			logger.info("Nota guardada!: "+n.getIdNota());
-			// Create instance movimiento nota , fill data and insert
-			List<MovimientoVenta> mv = new ArrayList<MovimientoVenta>();
-			ProductosDao pdao = new ProductosDao();
-			
-			for (ItemVenta pr : liv) {
-				MovimientoVenta itemNota = new MovimientoVenta();
-				Productos p = new Productos();
-				itemNota.setTipo("VENTA");
-				itemNota.setIdNota(n.getIdNota());
-				itemNota.setDocumento("");
-				itemNota.setClave(pr.getCodigo());
-				itemNota.setDescripcion(pr.getDescripcion().toUpperCase());
-				itemNota.setAdquiridos(0);
-				itemNota.setVendidos(pr.getCantidad());
-				float valor = (itemNota.getVendidos() * pr.getPreciodesc());
-				itemNota.setValor(valor);
-				List<Productos> producto = psd.productoPorCodigo(itemNota.getClave());
-				int quedan = (producto.get(0).getExistencias() - itemNota.getVendidos());
-				itemNota.setHabian(producto.get(0).getExistencias());
-				itemNota.setQuedan(quedan);
-				itemNota.setHora(hora);
-				itemNota.setFecha(fecha);
-				itemNota.setUtilidad((pr.getPreciodesc() - pr.getUltimocosto()) * pr.getCantidad());
-				p.setExistencias(itemNota.getQuedan());
-				p.setIdProducto(pr.getIdproducto());
-				pdao.actualizarTotales(p);
-				mv.add(itemNota);
-				logger.info("Producto actualizado (codigo, existencias): "+itemNota.getClave()+" "+p.getExistencias());
 				
-				mnd.insertMovimientoNota(itemNota);
-				logger.info("Movimiento Guardado!");
-				producto = null;
-				p = null;
-				itemNota = null;
+				
+				mdd = new MedicoDireccionDao();
+				antibDao = new AntibioticoDao();
+				psd = new ProductosDao();
+				int idMedico = 0;
+				if (nombreMedico.length() != 0) {
+					idMedico = mdd.getIdMedicoByName(nombreMedico).get(0);
+				}
+				try {
+					// data ticket
+					logger.info("data_1 (nota): "+data_1);
+					obj_1 = parser.parse(data_1);
+					objnota = (JSONObject) obj_1;
+				
+					// total ticket
+					logger.info("data_2 (totales): "+data_2);
+					obj_2 = parser.parse(data_2);
+					objtotal = (JSONObject) obj_2;
+					
+					// products
+					obj_3 = parser.parse(data_3);
+					JSONArray array = (JSONArray) obj_3;
+					
+					// read the objets for get data storage
+					for (int i = 0; i < array.size(); i++) {
+						JSONObject objitem = (JSONObject) array.get(i);
+						ItemVenta iv = new ItemVenta();
+					
+						/* Se obtiene la comparacion a 16 digitos */
+						StringBuilder codigo = new StringBuilder(objitem.get("Código").toString());
+						int tamaño = codigo.length();
+				    	if(tamaño < 16){
+				    		int falta = 16 - tamaño;
+				    		for(int j = 0; j < falta; j++){
+				    			codigo.insert(0,'0');
+				    		}
+				    	}
+						
+						/* ------------------------------------------ */
+						iv.setCodigo(codigo.toString());
+						iv.setCantidad(Integer.parseInt(objitem.get("Cantidad").toString()));
+						iv.setPreciodesc(Float.parseFloat(objitem.get("PrecioDes").toString()));
+						iv.setPreciopub(Float.parseFloat(objitem.get("PrecioPub").toString()));
+						iv.setSubtotal(Float.parseFloat(objitem.get("Subtotal").toString()));
+						List<Productos> mapProducts = psd.productoPorCodigo(iv.getCodigo());
+						
+						if (!mapProducts.isEmpty()) {
+							iv.setDescripcion(mapProducts.get(0).getDescripcion());
+							iv.setIdproducto(mapProducts.get(0).getIdProducto());
+							iv.setHabian(mapProducts.get(0).getExistencias());
+							iv.setUltimocosto(mapProducts.get(0).getUltimocosto());
+							
+							logger.info("Id producto y codigo : "+ iv.getIdproducto() + "|" + iv.getCodigo());
+							
+							if (nombreMedico.length() != 0	&& antibDao.isAntibiotico(iv.getCodigo())) {
+								AntibioticosCopy antibioticoCopy = new AntibioticosCopy();
+								antibioticoCopy.setAdquiridos(0);
+								antibioticoCopy.setDocumento(objnota.get("idnt").toString()); // id de la nota
+								antibioticoCopy.setFecha(dateFormat.format(date));
+								antibioticoCopy.setIdMedico(idMedico);
+								antibioticoCopy.setIdProducto(iv.getIdproducto());
+								antibioticoCopy.setQuedan(mapProducts.get(0).getExistencias() - iv.getCantidad());
+								antibioticoCopy.setHabian(iv.getHabian());
+								
+								int recetaByte2 = 0;
+								if (receta.compareTo("SI") == 0) {
+									recetaByte2 = 1;
+								}
+								antibioticoCopy.setReceta(recetaByte2);
+								antibioticoCopy.setSello(Integer.parseInt(sello));
+								antibioticoCopy.setVendidos(iv.getCantidad());
+								antibioticoCopy.setIdProveedor(1);
+								
+								Antibioticos antibiotico = new Antibioticos();
+								antibiotico.setAdquiridos(0);
+								antibiotico.setDocumento(objnota.get("idnt").toString().toUpperCase()); // id de la nota
+								antibiotico.setFecha(dateFormat.format(date));
+								antibiotico.setIdMedico(idMedico);
+								antibiotico.setIdProducto(iv.getIdproducto());
+								antibiotico.setQuedan(mapProducts.get(0).getExistencias() - iv.getCantidad());
+								antibiotico.setHabian(iv.getHabian());
+								
+								int recetaByte1 = 0;
+								if (receta.compareTo("SI") == 0) {
+									recetaByte1 = 1;
+								}
+								antibiotico.setReceta(recetaByte1);
+								antibiotico.setSello(Integer.parseInt(sello));
+								antibiotico.setVendidos(iv.getCantidad());
+								antibiotico.setIdProveedor(1);
+								
+								antibDao.guardarAntibiotico(antibiotico, antibioticoCopy);
+								logger.info("Antibiotico guardado: "+antibiotico.getIdProducto());
+								antibioticoCopy = null;
+								
+							}
+						}
+
+						// add the item to collection of products
+						liv.add(iv);
+					}
+				} catch (ParseException e) {
+					logger.info("Error al procesar la venta, Intente de nuevo: "+e);
+					e.printStackTrace();
+				}
+				
+				MovimientoNotaDao mnd = new MovimientoNotaDao();
+				mnd.getInsertedMovNota(Integer.parseInt(objnota.get("idnt").toString()), "VENTA");
+				
+				// Get client and user for insert new order sale
+				
+				List<Usuario> lu = new ArrayList<Usuario>();
+				List<Usuario> listaCajero = new ArrayList<Usuario>();
+				List<Persona> lp = new ArrayList<Persona>();
+				UsuarioDao ud = new UsuarioDao();
+				PersonaDao pd = new PersonaDao();
+				ClienteDao cd = new ClienteDao();
+				
+				// getting data
+				if (objnota != null) {
+					mapCliente = cd.getSearchClientebyClave(objnota.get("cliente").toString());
+					lu = ud.getUsuario(objnota.get("usuario").toString().toUpperCase());
+					lp = pd.getPersonabyId(lu.get(0).getIdPersona());
+					listaCajero = ud.getUsuario(objnota.get("cajero").toString().toUpperCase());
+				}
+				
+				// date and hour
+				hora = hourFormat.format(date);
+				fecha = dateFormat.format(date);
+				
+				// Create instances for insert database ,fill data and update in db
+				Nota n = new Nota();
+				NotaDao nd = new NotaDao();
+				
+				n.setIdNota(Integer.parseInt(objnota.get("idnt").toString()));
+				n.setEstado("COMPLETO");
+				n.setIdCliente(mapCliente.get(0).getIdCliente());
+				n.setIdUsuario(lu.get(0).getIdUsuario());
+				n.setIdCajero(listaCajero.get(0).getIdUsuario());
+				n.setFecha(fecha);
+				n.setHora(hora);
+				n.setPrecio(0);
+				n.setDescuento(Float.parseFloat(objtotal.get("dt").toString()));
+				n.setIva(Float.parseFloat(objtotal.get("va").toString()));
+				n.setSubtotal(Float.parseFloat(objtotal.get("sbt").toString()));
+				n.setTotal(Float.parseFloat(objtotal.get("tt").toString()));
+				nd.updateNota(n);
+				logger.info("Nota guardada!: "+n.getIdNota());
+				// Create instance movimiento nota , fill data and insert
+				List<MovimientoVenta> mv = new ArrayList<MovimientoVenta>();
+				ProductosDao pdao = new ProductosDao();
+				
+				for (ItemVenta pr : liv) {
+					MovimientoVenta itemNota = new MovimientoVenta();
+					Productos p = new Productos();
+					itemNota.setTipo("VENTA");
+					itemNota.setIdNota(n.getIdNota());
+					itemNota.setDocumento("");
+					itemNota.setClave(pr.getCodigo());
+					//itemNota.setDescripcion(pr.getDescripcion().toUpperCase());
+					itemNota.setAdquiridos(0);
+					itemNota.setVendidos(pr.getCantidad());
+					float valor = (itemNota.getVendidos() * pr.getPreciodesc());
+					itemNota.setValor(valor);
+					List<Productos> producto = psd.productoPorCodigo(itemNota.getClave());
+					int quedan = (producto.get(0).getExistencias() - itemNota.getVendidos());
+					itemNota.setHabian(producto.get(0).getExistencias());
+					itemNota.setQuedan(quedan);
+					itemNota.setHora(hora);
+					itemNota.setFecha(fecha);
+					itemNota.setUtilidad((pr.getPreciodesc() - pr.getUltimocosto()) * pr.getCantidad());
+					p.setExistencias(itemNota.getQuedan());
+					p.setIdProducto(pr.getIdproducto());
+					pdao.actualizarTotales(p);
+					mv.add(itemNota);
+					logger.info("Producto actualizado (codigo, existencias): "+itemNota.getClave()+" "+p.getExistencias());
+					
+					mnd.insertMovimientoNota(itemNota);
+					logger.info("Movimiento Guardado!");
+					producto = null;
+					p = null;
+					itemNota = null;
+				}
+				
+				/*for (MovimientoVenta mvn : mv) {
+					mnd.insertMovimientoNota(mvn);
+				}*/
+				
+				TicketServiceCobro tsc = new TicketServiceCobro();
+				tsc.setIdNota(n.getIdNota());
+				tsc.setUserPerson(lp.get(0).getNombre() + " "
+						+ lp.get(0).getApellidoPat() + " "
+						+ lp.get(0).getApellidoMat());
+				tsc.setTime(hora);
+				tsc.setDate(fecha);
+				tsc.setItemsDetail(liv);
+				tsc.setIva(objtotal.get("va").toString());
+				tsc.setDescuento(objtotal.get("dt").toString());
+				tsc.setTotal(objtotal.get("tt").toString());
+				tsc.setTotalcobro(TotalCobro);
+				tsc.setTotalpago(TotalPago);
+				tsc.setCambio(Cambio);
+				tsc.setSubtotal(objtotal.get("sbt").toString());
+				logger.info("Nota guardada e impresion de ticket con exito! " + tsc.getIdNota());
+				
+				
+				
+				/* Set the response text */
+					
+			}else{
+				response.setContentType("text/plain");
+				response.setCharacterEncoding("UTF-8");
+				response.getWriter().write("NOT");
 			}
-			
-			/*for (MovimientoVenta mvn : mv) {
-				mnd.insertMovimientoNota(mvn);
-			}*/
-			
-			TicketServiceCobro tsc = new TicketServiceCobro();
-			tsc.setIdNota(n.getIdNota());
-			tsc.setUserPerson(lp.get(0).getNombre() + " "
-					+ lp.get(0).getApellidoPat() + " "
-					+ lp.get(0).getApellidoMat());
-			tsc.setTime(hora);
-			tsc.setDate(fecha);
-			tsc.setItemsDetail(liv);
-			tsc.setIva(objtotal.get("va").toString());
-			tsc.setDescuento(objtotal.get("dt").toString());
-			tsc.setTotal(objtotal.get("tt").toString());
-			tsc.setTotalcobro(TotalCobro);
-			tsc.setTotalpago(TotalPago);
-			tsc.setCambio(Cambio);
-			tsc.setSubtotal(objtotal.get("sbt").toString());
-			logger.info("Nota guardada e impresion de ticket con exito! " + tsc.getIdNota());
-			n = null;
-			
-			
-			/* Set the response text */
-			response.setContentType("text/plain");
-			response.setCharacterEncoding("UTF-8");
-			response.getWriter().write("OK");
 		}
-		
-		/* Delete method for item list sales */
-//		if (request.getParameter("workout").equals("deleteDataList")) {
-//			String varCodigo = request.getParameter("varCodigo");
-//			psd = new ProductosDao();
-//			psd.getBuildSess();
-//			familia = new FamiliaDao();
-//			familia.getBuildSess();
-//		
-//			// rutina de codigo a 16 digitos
-//			/* logica para evaluar si el producto tiene 16 digitos o no */
-//			String complement_data;
-//			complement_data = "";
-//			if (varCodigo.length() < 16) {
-//				int diference = codebar_lenght - varCodigo.length();
-//				for (int i = 0; i < diference; i++) {
-//					complement_data = complement_data.concat("0");
-//				}
-//				complement_data = complement_data.concat(varCodigo);
-//			} else {
-//				complement_data = varCodigo;
-//			}
-//			
-//			logger.info("codigo nuevo: " + complement_data);
-//			List<Productos> mapsProducts = psd.productoPorCodigo(complement_data);
-//			String sData = "";
-//			
-//			// Se revisa si la lista no tiene ningun producto
-//			if (!mapsProducts.isEmpty()) {
-//				for (Productos producto : mapsProducts) {
-//					sData = sData + producto.setFormatData();
-//				}
-//				mapFamilia = familia.getFamilia(mapsProducts.get(0).getIdFamilia());
-//				sData = sData + mapFamilia.get(0).toSetFormat();
-//				
-//				System.out.println("Dato retornado: " + sData);
-//			}
-//			
-//			response.setContentType("text/plain");
-//			response.setCharacterEncoding("UTF-8");
-//			response.getWriter().write(sData);
-//		}
 	}
 }

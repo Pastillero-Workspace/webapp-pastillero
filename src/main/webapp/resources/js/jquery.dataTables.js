@@ -10857,7 +10857,7 @@
 			 *      } );
 			 *    } );
 			 */
-			"sSearch": "Busqueda rápida: ",
+			"sSearch": "Busqueda rï¿½pida: ",
 			"sClean":"limpiar formulario",
 	
 	

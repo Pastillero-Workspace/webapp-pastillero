@@ -22,6 +22,7 @@
 	<script src="//code.jquery.com/ui/1.11.1/jquery-ui.js"></script>
 	<!-- <script src="<c:url value="/resources/js/jquery-ui-1.10.4.custom.js" />"></script> -->
 	<script src="<c:url value="/resources/js/jquery-ui-dialog.js" />"></script>
+	<script src="<c:url value="/resources/js/blockUI/jquery.blockUI.js" />"></script>
 	
 	<script src="<c:url value="/resources/js/jquery.dataTables.js" />"></script>
 	<script src="<c:url value="/resources/js/dataTables.scroller.js" />"></script>
@@ -69,24 +70,7 @@
                   
 			} );			
 	
-		// Se crea array de datos aleatorios
-		var data = [];
-		<%
-			DevolucionesDao dev = new DevolucionesDao();
-			List<Object[]> recepcion = dev.mostrarRecepcion();
-			for(int i = 0; i < recepcion.size();i++){ 
-		%>
-		data[<%=i%>]=[  '<%=recepcion.get(i)[0]%>',
-				        '<%=recepcion.get(i)[1]%>',
-				   	    '<%=recepcion.get(i)[2]%>',
-				   	    '<%=recepcion.get(i)[3]%>',
-				   	    '<%=recepcion.get(i)[4]%>',
-				   	    '<%=recepcion.get(i)[5]%>',
-				   	    '<%=recepcion.get(i)[6]%>',
-				   	    '<%=recepcion.get(i)[7]%>',
-				   	    '<button id="<%=i%>">Devolver</button>'];
-		<%}%> 
-			// Se establece el control de datos al destino
+		// Se establece el control de datos al destino
 			var table = $('#search').DataTable( {
 			//data:           data,
 			//deferRender:    true,
@@ -94,7 +78,6 @@
 			//"bSort":		false,
 			//scrollY:        500,
 			//scrollCollapse: true,
-			data:	data,
 			dom : "rtiS",
 			"stateSave" : true,
 		    "bSort": false,
@@ -122,76 +105,66 @@
 		   		   
 		// botones adicionales para limpiar campos de textos
 		$('<input type="button" id="refresh" style="width: 25%" value="Limpiar datos"/>').appendTo('div.dataTables_filter');
-			$('#refresh').click(function(e) 
-				{	
-				
-				
-					var elem = document.getElementsByClassName("boxinit");
+			$('#refresh').click(function(e){	
+						var elem = document.getElementsByClassName("boxinit");
 						var names = [];
-							for(var i = 0; i < 13; ++i) 
-							{		
-								if(elem[i].value.length != 0)
-								{
+							for(var i = 0; i < 13; ++i){		
+								if(elem[i].value.length != 0){
 									names.push(elem[i].value);
 									elem[i].value = '';
 									elem[i].focus();									
 								}
-							}					     			
-				});	
-			 
-			
+							}	
+			});
 		});
-			
 		
 		/*Funciones de <A>*/
-		$(function(){
-				var cantidad = 0;
-				<%for(int i=0; i<recepcion.size(); i++){%>
-					var obj=[];
-					$("#"+<%=i%>).button().click(function(){
-						var t = $('#search').DataTable();
-						var cont=0;
-						$('#search tbody').on('click','button',function(){
-							++cont;
-							obj = t.row( $(this).parents('tr') ).data();
-							if(cont==1){
-								$.post('devolucion.jr',{
-									devolucion:'verificaCompra',
-									txtCodigo: obj[5],
-									txtDocumento: obj[3]
-								},function(verifica){
-									console.log(verifica);
-									if(parseInt(verifica) < parseInt(obj[4])){
-										$.post('salida.jr',{tarea:'buscar',txtCodigo:obj[5]}, function(descripcion){
-											console.log(descripcion);
-											var datos = descripcion.split("~");
-											if(datos[4]<=0){
-												alert("No puede devolver el producto porque no tiene existencias");
-											}else{
-												$("#txtFecha").val(obj[0]);
-												$("#txtProveedor").val(obj[1]);
-												$("#txtFolio").val(obj[2]);
-												$("#txtDocumento").val(obj[3]);
-												$("#txtCantidad").val(parseInt(obj[4]) - parseInt(verifica));
-												cantidad = obj[4];
-												$("#txtCodigo").val(obj[5]);
-												$("#txtDescripcion").val(obj[6]);
-												$("#txtCosto").val(obj[7]);
-												$("#txtCantidad").focus();
-												$("#txtCantidad").select();
-												$("#formDevCompras").dialog("open");		
-											}
-										});
-									}
-									else{
-										alert("No puede devolver este producto, porque ya devolvio la cantidad total de esta recepcion");
-									}
-								});
-							}
-						});
+		var cantidad = 0;
+		window.nota = function nota () {
+			var obj=[];
+			var t = $('#search').DataTable();
+			var cont=0;
+			$('#search tbody').on('click','button',function(){
+				++cont;
+				obj = t.row( $(this).parents('tr') ).data();
+				if(cont==1){
+					$.post('devolucion.jr',{
+						devolucion:'verificaCompra',
+						txtCodigo: obj[5],
+						txtDocumento: obj[3]
+					},function(verifica){
+						console.log(verifica);
+						if(parseInt(verifica) < parseInt(obj[4])){
+							$.post('salida.jr',{tarea:'buscar',txtCodigo:obj[5]}, function(descripcion){
+								console.log(descripcion);
+								var datos = descripcion.split("~");
+								if(datos[4]<=0){
+									alert("No puede devolver el producto porque no tiene existencias");
+								}else{
+									$("#txtFecha").val(obj[0]);
+									$("#txtProveedor").val(obj[1]);
+									$("#txtFolio").val(obj[2]);
+									$("#txtDocumento").val(obj[3]);
+									$("#txtCantidad").val(parseInt(obj[4]) - parseInt(verifica));
+									cantidad = obj[4];
+									$("#txtCodigo").val(obj[5]);
+									$("#txtDescripcion").val(obj[6]);
+									$("#txtCosto").val(obj[7]);
+									$("#txtCantidad").focus();
+									$("#txtCantidad").select();
+									$("#formDevCompras").dialog("open");		
+								}
+							});
+						}
+						else{
+							alert("No puede devolver este producto, porque ya devolvio la cantidad total de esta recepcion");
+						}
 					});
-				<%}%>
-				
+				}
+			});
+		};
+		
+		$(function(){
 				var motivo = "";
 				$( "#menu" ).menu();
 				$("#item1-1").click(function (e){
@@ -250,7 +223,7 @@
 										txtCantidad:$("#txtCantidad").val(),
 										txtDocumento: $("#txtDocumento").val(),
 										txtCodigo: 	$("#txtCodigo").val(),
-										txtDescripcion: $("#txtDescripcion").val(),
+										//txtDescripcion: $("#txtDescripcion").val(),
 										txtCosto: $("#txtCosto").val(),
 										txtUsuario: $("#lbluser").text()
 										},function(e){
@@ -268,6 +241,81 @@
 				$("#txtCantidad").keypress(function (e){
 					if(e.which == 13){
 						$("#btnDevolver").focus();
+					}
+				});
+				$("#txtBuscarCodigo").keypress(function(e){
+					if(e.which == 13){
+						$("#btnBuscar").focus();	
+					}
+				});
+				$("#txtBuscarProveedor").keypress(function(e){
+					if(e.which == 13){
+						$("#btnBuscar").focus();
+					}
+				});
+				$("#txtBuscarDocumento").keypress(function(e){
+					if(e.which == 13){
+						$("#btnBuscar").focus();
+					}
+				});
+				$('#btnBuscar').button().click(function(e){
+					if($('#txtBuscarCodigo').val().trim() != '' || $('#txtBuscarProveedor').val().trim() != '' || $('#txtBuscarDocumento').val().trim() != ''){
+						var table = $('#search').DataTable();
+						table.clear().draw();
+						if($('#txtBuscarCodigo').val().trim() != ''){
+							blockpage();
+							$.post('consultanota.jr',{
+								tarea: "buscarCodigo",
+								txtCodigo: $('#txtBuscarCodigo').val().trim()
+								},function(e){
+									$.each(e, function(key, value) { // Iterate over the JSON object.
+										var fecha1 = value[0].split("-");
+										var fecha = fecha1[2]+"-"+fecha1[1]+"-"+fecha1[0];
+										table.row.add([fecha,value[1],value[2],value[3]
+									  	,value[4],value[5],value[6],value[7]
+									  	,'<button onclick="nota()" id="'+key+'">Devolver</button>']);
+							  		});
+							  		table.draw();
+								});
+							$.unblockUI();
+							$('#txtBuscarCodigo').val("");
+						}else if($('#txtBuscarProveedor').val().trim() != ''){
+							blockpage();
+							$.post('consultanota.jr',{
+								tarea: "buscarProveedor",
+								txtProveedor: $('#txtBuscarProveedor').val().trim()
+								},function(e){
+									 $.each(e, function(key, value) { // Iterate over the JSON object.
+										 	var fecha1 = value[0].split("-");
+											var fecha = fecha1[2]+"-"+fecha1[1]+"-"+fecha1[0];										 
+											table.row.add([fecha,value[1],value[2],value[3]
+										  	,value[4],value[5],value[6],value[7]
+										  	,'<button onclick="nota()" id="'+key+'">Devolver</button>']);
+									  });
+									  table.draw();
+								});
+							$.unblockUI();
+							$('#txtBuscarProveedor').val("");
+						}else if($('#txtBuscarDocumento').val().trim() != ''){
+							blockpage();
+							$.post('consultanota.jr',{
+								tarea: "buscarDocumento",
+								txtDocumento: $('#txtBuscarDocumento').val().trim()
+								},function(e){
+									$.each(e, function(key, value) { // Iterate over the JSON object.
+										var fecha1 = value[0].split("-");
+										var fecha = fecha1[2]+"-"+fecha1[1]+"-"+fecha1[0];
+										table.row.add([fecha,value[1],value[2],value[3]
+									  	,value[4],value[5],value[6],value[7]
+									  	,'<button onclick="nota()" id="'+key+'">Devolver</button>']);
+									 });
+								  table.draw();
+								});
+							$.unblockUI();
+							$('#txtBuscarDocumento').val("");
+						}
+					}else{
+						alert("Debe usar algun Criterio de busqueda.");
 					}
 				});
 				
@@ -376,6 +424,24 @@
 		<div class="container">
 			<div>
 				<h3></br>Lista de Recepciones, presione en el boton Devolver para hacer una devolución al Proveedor del producto indicado.<br>¡IMPORTANTE! Tenga cuidado al realizar una devolución.</h3>
+			</div>
+			
+			<div STYLE="float: left; top:150px; left:10px; width:500px; background-color:#00cccc;  margin: 20px;">
+				<table>
+					<tr>
+						<td><label for="codigo"><b>Codigo: </b></label></td>
+						<td><input type="text" id="txtBuscarCodigo" name="txtBuscarCodigo" size="40"></td>
+						<td><button type="button" id="btnBuscar">Buscar.</button></td>
+					</tr>
+					<tr>
+						<td><label for="proveedor"><b>Proveedor: </b></label></td>
+						<td><input type="text" id="txtBuscarProveedor" name="txtBuscarProveedor" size="40"></td>
+					</tr>				
+					<tr>
+						<td><label for="documento"><b>Documento: </b></label></td>
+						<td><input type="text" id="txtBuscarDocumento" name="txtBuscarDocumento" size="40"></td>					
+					</tr>
+				</table>
 			</div>
 			
 			<table id="search" class="display"cellspacing="0"  width="760px">

@@ -203,7 +203,9 @@
 										txtFechaFin: $("#txtFechaFin").val()
 									},function(e){
 										$.each(e, function(key, nota) { // Iterate over the JSON object.
-											table.row.add([nota[0],nota[1],nota[2],nota[3],nota[4]
+											var fecha1 = nota[0].split("-");
+											var fecha = fecha1[2]+"-"+fecha1[1]+"-"+fecha1[0];
+											table.row.add([fecha,nota[1],nota[2],nota[3],nota[4]
 								  			,nota[5],nota[6],nota[7],nota[8]
 								  			,nota[9],'<button onclick="nota()" id="'+key+'">Devolver</button>']);
 							  			});
@@ -217,8 +219,8 @@
 				$("#formBuscarNota").dialog("option", "width", 450);
 				$("#formBuscarNota").dialog("option", "height", 200);
 				
-				$( "#txtFechaIni" ).datepicker({ dateFormat: "yy-mm-dd"});
-				$( "#txtFechaFin" ).datepicker({ dateFormat: "yy-mm-dd"});
+				$( "#txtFechaIni" ).datepicker({ dateFormat: "dd-mm-yy"});
+				$( "#txtFechaFin" ).datepicker({ dateFormat: "dd-mm-yy"});
 				
 				$("#txtCantidad").keypress(function (e){
 					if(e.which == 13){
@@ -234,7 +236,9 @@
 					},function(e){
 						 
 						 $.each(e, function(key, value) { // Iterate over the JSON object.
-							table.row.add([value[0],value[1],value[2],value[3]
+							var fecha1 = value[0].split("-");
+							var fecha = fecha1[2]+"-"+fecha1[1]+"-"+fecha1[0];
+							table.row.add([fecha,value[1],value[2],value[3]
 				  			,value[4],value[5],value[6],value[7]
 				  			,value[8],value[9],'<button onclick="nota()" id="'+key+'">Devolver</button>']);
 			  			});

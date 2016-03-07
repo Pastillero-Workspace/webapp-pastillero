@@ -15,7 +15,6 @@
 	      <property name="idNota" column="idNota" type="int"/>
 	      <property name="documento" column="documento" type="string"/>
 	      <property name="clave" column="clave" type="string"/>
-	      <property name="descripcion" column="descripcion" type="string"/>
 	      <property name="adquiridos" column="adquiridos" type="int"/>
 	      <property name="vendidos" column="vendidos" type="int"/>
 	      <property name="valor" column="valor" type="float"/>

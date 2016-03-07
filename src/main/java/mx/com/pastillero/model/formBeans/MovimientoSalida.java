@@ -7,7 +7,6 @@ public class MovimientoSalida
 	private int idNota;
 	private String documento;
 	private String clave;
-	private String descripcion;
 	private int adquiridos;
 	private int vendidos;
 	private float valor;
@@ -16,8 +15,6 @@ public class MovimientoSalida
 	private String fecha;
 	private String hora;
 	private float utilidad;
-	
-	
 	public int getIdMovimiento() {
 		return idMovimiento;
 	}
@@ -47,12 +44,6 @@ public class MovimientoSalida
 	}
 	public void setClave(String clave) {
 		this.clave = clave;
-	}
-	public String getDescripcion() {
-		return descripcion;
-	}
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
 	}
 	public int getAdquiridos() {
 		return adquiridos;
@@ -102,16 +93,14 @@ public class MovimientoSalida
 	public void setUtilidad(float utilidad) {
 		this.utilidad = utilidad;
 	}
-	
 	@Override
 	public String toString() {
 		return "MovimientoSalida [idMovimiento=" + idMovimiento + ", tipo="
 				+ tipo + ", idNota=" + idNota + ", documento=" + documento
-				+ ", clave=" + clave + ", descripcion=" + descripcion
-				+ ", adquiridos=" + adquiridos + ", vendidos=" + vendidos
-				+ ", valor=" + valor + ", habian=" + habian + ", quedan="
-				+ quedan + ", fecha=" + fecha + ", hora=" + hora
-				+ ", utilidad=" + utilidad + "]";
+				+ ", clave=" + clave + ", adquiridos=" + adquiridos
+				+ ", vendidos=" + vendidos + ", valor=" + valor + ", habian="
+				+ habian + ", quedan=" + quedan + ", fecha=" + fecha
+				+ ", hora=" + hora + ", utilidad=" + utilidad + "]";
 	}
 	@Override
 	public int hashCode() {
@@ -119,8 +108,6 @@ public class MovimientoSalida
 		int result = 1;
 		result = prime * result + adquiridos;
 		result = prime * result + ((clave == null) ? 0 : clave.hashCode());
-		result = prime * result
-				+ ((descripcion == null) ? 0 : descripcion.hashCode());
 		result = prime * result
 				+ ((documento == null) ? 0 : documento.hashCode());
 		result = prime * result + ((fecha == null) ? 0 : fecha.hashCode());
@@ -150,11 +137,6 @@ public class MovimientoSalida
 			if (other.clave != null)
 				return false;
 		} else if (!clave.equals(other.clave))
-			return false;
-		if (descripcion == null) {
-			if (other.descripcion != null)
-				return false;
-		} else if (!descripcion.equals(other.descripcion))
 			return false;
 		if (documento == null) {
 			if (other.documento != null)
@@ -194,6 +176,8 @@ public class MovimientoSalida
 		return true;
 	}
 	
+	
+		
 	
 	
 }

@@ -7,282 +7,210 @@ $(document).ready(function() {
 					var DescuentoTotal = 0;
 					var IvaUnitario = 0;
 					var counter = 0;
-					var productos = [];
-					var productos2 = [];
+					
 					var t = $('#example').DataTable({
-						dom : "rtiS",
+						dom : "lrtip",
 						"bSort" : false,
 						scrollY : 200,
-						scrollCollapse : true
+						scrollCollapse : true,
+						paging: false
 					});
+					
+					
 					/* Event to get ID when the page is loaded */
 					$(window).load(function() {
-										
-										var datacontextload = localStorage.getItem("idcontrolventa");
-										console.log("dataContext: "+datacontextload);
-										//if (datacontextload != null && datacontextload == "0") {
-										if (datacontextload == null || datacontextload == "0") {
-											$.post('cobroController.jr',{
-												varUsuario : $('#txtUsuario').val(),
-												context : 1,
-												workout : 'getNota'
-											},function(data) {
-												console.log("data: "+data);
-												if(data != 'Error'){
-													if (data != 'Reload') {
-														var datos = data.split("+");
-														console.log(datos[0]);
-														console.log(datos[1]);
-														$('#txtFolio').val(datos[0]);
-														$('#txtCaja').val("1");
-														$('#txtCajero').val(datos[1]);
-														$('#txtTotal').val("0.0");
-														$('#txtDesT').val("0.0");
-														$('#txtSubtotal').val("0.0");
-														$('#txtIva').val("0.0");
-														$('#txtPrecT').val("0.0");
-														$('#openFormAltaCobro').prop("disabled",true);
+						var datacontextload = localStorage.getItem("idcontrolventa");
+						console.log("dataContext: "+datacontextload);
+						//if (datacontextload != null && datacontextload == "0") {
+						if (datacontextload == null || datacontextload == "0") {
+							//Carga número de Folio de base de datos
+							blockpage();
+							$.post('cobroController.jr',{
+								varUsuario : $('#txtUsuario').val(),
+								context : 1,
+								workout : 'getNota'
+							},function(data) {
+								console.log("data: "+data);
+								if(data != 'Error'){
+									if (data != 'Reload') {
+										var datos = data.split("+");
+										console.log(datos[0]);
+										console.log(datos[1]);
+										$('#txtFolio').val(datos[0]);
+										$('#txtCaja').val("1");
+										$('#txtCajero').val(datos[1]);
+										$('#txtTotal').val("0.0");
+										$('#txtDesT').val("0.0");
+										$('#txtSubtotal').val("0.0");
+										$('#txtIva').val("0.0");
+										$('#txtPrecT').val("0.0");
+										$('#openFormAltaCobro').prop("disabled",true);
+											
+										localStorage.setItem("idcontrolventa", "1");
 														
-														var myObject = new Object();
-														myObject.idnt = $('#txtFolio').val();
-														myObject.caja = $('#txtCaja').val();
-														myObject.cajero = $('#txtCajero').val();
-														myObject.usuario = $('#txtUsuario').val();
-														
-														localStorage.setItem("nota",JSON.stringify(myObject));
-														localStorage.setItem("idcontrolventa", "1");
-													}
-												}else{
-													//console.log('El cajero no ha iniciado sesion');
-													alert('No hay ningun Cajero con sesion iniciada.');
-													window.close();
-												}
-												
-											}).fail(function(xhr,textStatus, errorThrown){
-												alert("Error: "+errorThrown);
-											});
+										//Guarda datos temporales de nota a tabla temporal en base de datos
+										$.post('temporales.jr',{
+											tarea:'notaVentaTemp',
+											txtFolio: $('#txtFolio').val(),
+											txtCaja: $('#txtCaja').val(),
+											txtCajero: $('#txtCajero').val(),
+											txtUsuario: $('#txtUsuario').val(),
+										});
+									}
+									$.unblockUI();
+								}else{
+									$.unblockUI();
+									alert('No hay ningun Cajero con sesion iniciada.');
+									window.close();
+								}				
+							}).fail(function(xhr,textStatus, errorThrown){
+								$.unblockUI();
+								alert("Error: "+errorThrown);
+							});
 											
-										} else {
-											// loading data if page is reload
-											// (read data from localstorage)
-											/*
-											 * If data exist in local storage,
-											 * if not not load in cobro
-											 */
-											var arraynt = JSON.parse(localStorage.getItem("nota"));
-											console.log("arraynt: "+arraynt);
-											if (arraynt != null) {
-												$('#txtFolio').val(arraynt.idnt);
-												$('#txtCaja').val(arraynt.caja);
-												$('#txtCajero').val(arraynt.cajero);
-												$('#txtUsuario').val(arraynt.usuario);
-												$('#txtCliente').val(arraynt.cliente);
-												$('#txtDescripcion').val(arraynt.dcliente);
-											}
-											$('#txtCodigo').val("");
-											$('#lblDscp').text("");
-											$('#txtCantidad').val("0");
-											$('#lblPrcp').text("0.0");
-											$('#lblPrcd').text("0.0");
-											$('#lblImpTotal').text("0.0");
-											//console.log("item "+localStorage.getItem("item"));
-											productos2 = JSON.parse(localStorage.getItem("productosVenta"));
-											//for (var i = 0; i <= localStorage.getItem("item"); i++) {
-											if(productos2 != null){
-												for(var i = 0; i < productos2.length; i++){
-													/*var arrayp = JSON.parse(localStorage.getItem("Producto"+i+""));
-													console.log("Productos arrayp: "+arrayp.descripcion);
-													if (arrayp != null) {
-														t.row.add(
-															[ 	arrayp.codigo,
-																arrayp.descripcion,
-																arrayp.cantidad,
-																arrayp.preciopub,
-																arrayp.preciodesc,
-																arrayp.subtotal,
-																'<button type="button" class="myButton" id="Producto'+i+'">X</button>'
-															]).draw();
-													}*/
-													t.row.add(
-															[
-															 productos2[i].codigo,
-															 productos2[i].descripcion,
-															 productos2[i].cantidad,
-															 productos2[i].preciopub,
-															 productos2[i].preciodesc,
-															 productos2[i].subtotal,
-															 '<button type="button" class="myButton" id="Producto'+i+'">X</button>'
-															]).draw();
-												}
-											}
-											
-											// load local values
-											var arrayt = JSON.parse(localStorage.getItem("totales"));
-											console.log("totales arrayt: "+arrayt);
-											if (arrayt != null) {
-												$('#txtPrecT').val(arrayt.pt);
-												$('#txtDesT').val(arrayt.dt);
-												$('#txtIva').val(arrayt.va);
-												$('#txtSubtotal').val(arrayt.sbt);
-												$('#txtTotal').val(arrayt.tt);
-											}
-											
-											// $('#openFormAltaCobro').prop("disabled",
-											// false);
-											// $('#openFormAltaCobro').prop("disabled",
-											// true);
-											console.log("Item: "+localStorage.getItem("item"));
-											if (localStorage.getItem("item") <= 0)
-												counter = 0;
-											else {
-												counter = parseInt(localStorage.getItem("item"));
-												counter++;
-												console.log("datos de contador despues de recargar: "+ counter);
-											}
-										}
+						} else {
+							//Si hay datos almacenados de manera temporal en la base de datos los obtiene y los carga.
+							//Carga los datos de nota desde base de datos.
+							blockpage();
+							$.ajax({
+								async:false,
+							    cache:false,
+							    dataType:"json",
+							    type: 'POST',  
+							    url: "temporales.jr",
+							    data: {
+							    	tarea: 'obtenerNotaVentaTemp',
+							        txtUsuario: $('#txtUsuario').val()
+							    }
+							}).done(function(nota){
+								if(nota=='vacio'){
+									$.unblockUI();
+									alert("No se encontraron datos para la nota");
+								}else{
+									$('#txtFolio').val(nota.folio);
+									$('#txtCaja').val(nota.caja);
+									$('#txtCajero').val(nota.cajero);
+									$('#txtUsuario').val(nota.usuario);
+									$('#txtCliente').val(nota.cliente);
+									$('#txtDescripcion').val(nota.descripcion);
+								}
+							}).fail(function(xhr,textStatus, errorThrown){
+								$.unblockUI();
+							    alert("Error"+errorThrown);
+							});						
+							$('#txtCodigo').val("");
+							$('#lblDscp').text("");
+							$('#txtCantidad').val("0");
+							$('#lblPrcp').text("0.0");
+							$('#lblPrcd').text("0.0");
+							$('#lblImpTotal').text("0.0");					
+							//Carga los datos de productos almacenados temporalmente desde base de datos.
+							$.ajax({
+								async:false,
+								cache:false,
+								dataType:"json",
+								type: 'POST',  
+								url: "temporales.jr",
+								data: {
+									tarea: 'obtenerProductosVentaTemp',
+									txtNota: $('#txtFolio').val()
+								}
+							}).done(function(productos){
+								if(productos.valor !='vacio'){
+									var i=0;
+									$.each(productos, function(key, producto) { // Iterate over the JSON object.
+										table.row.add([
+										     producto.codigo,
+										     producto.descripcion,
+										     producto.cantidad,
+										     parseFloat(producto.precioPub).toFixed(2),
+										     parseFloat(producto.precioDesc).toFixed(2),
+										     parseFloat(producto.subtotal).toFixed(2),
+										     '<button type="button" class="myButton" id="Producto'+i+'">X</button>'            
+										]);
+										i++;
 									});
-					/*
-					 * Event change on: txtCantidad enables math operation when
-					 * input change value
-					 */
-					$('#txtCantidad').on('keyup ',function(e) {
-										// se verifica si no items en la lista o
-										// si es asi se actualiza
-										var cantidad = $.trim($("#txtCantidad").val());
-										cantidad = parseInt(cantidad);
-										var codigo = $("#txtCodigo").val();
-										var descp = $("#lblDscp").text();
-										var TotalPublico = 0;
-										var TotalDescuento = 0;
-										var TotalIVA = 0;
-										var ImporteTotal = 0;
-										if (codigo.length > 0 && descp.length > 0) {
-											if (cantidad > 0) {
-												// calculo del subtotal y del total
-												TotalPublico = PrecioUnitario * cantidad;
-												TotalDescuento = DescuentoUnitario * cantidad;
-												TotalIVA = IvaUnitario * cantidad;
-												ImporteTotal = ((DescuentoTotal * cantidad)).toFixed(2);
-												$('#lblImpTotal').text(ImporteTotal);
-											} else {
-												$('#lblImpTotal').text("0.0");
-											}
-											// Se presiona la tecla enter:  agrega a la lista el item
-											// seleccionado por defecto
-											if (e.which == 13 && cantidad > 0) {
-												var codigo1 = "";
-												var tamano = $("#txtCodigo").val().trim().length;
-												if (tamano < 16) {
-													var falta = 16 - tamano;
-													for (var i = 0; i < falta; i++) {
-														codigo1 = "0".concat(codigo1);
-													}
-												}
-												console.log("Codigo:" + codigo1.concat($("#txtCodigo").val().trim()));
-												t.row.add([
-															codigo1.concat($("#txtCodigo").val().trim()),
-															$('#lblDscp').text(),
-															$('#txtCantidad').val(),
-															$('#lblPrcp').text(),
-															$('#lblPrcd').text(),
-															$('#lblImpTotal').text(),
-															'<button type="button" id="Producto'+counter+ '" class="myButton" >X</button>'
-														]).draw();
-												
-												localStorage.setItem("item",counter);
-												console.log("nuevo item agregado: "	+ localStorage.getItem("item"));
-												
-												// add items for local storage products
-												/*var myObject = new Object();
-												myObject.codigo = codigo1.concat($("#txtCodigo").val().trim());
-												myObject.descripcion = $('#lblDscp').text();
-												myObject.cantidad = $('#txtCantidad').val();
-												myObject.preciopub = $('#lblPrcp').text();
-												myObject.preciodesc = $('#lblPrcd').text();
-												myObject.subtotal = $('#lblImpTotal').text();*/
-												
-												
-												var producto = {
-														codigo: 	codigo1.concat($("#txtCodigo").val().trim()),
-														descripcion:$('#lblDscp').text(),
-														cantidad:	$('#txtCantidad').val(),
-														preciopub:	$('#lblPrcp').text(),
-														preciodesc:	$('#lblPrcd').text(),
-														subtotal:	$('#lblImpTotal').text()
-														
-												};
-												productos.push(producto);
-												localStorage.setItem("productosVenta", JSON.stringify(productos));
-												console.log("productosVenta: "+localStorage.getItem("productosVenta"));
-												
-												//localStorage.setItem("Producto" + counter + "", JSON.stringify(myObject));
-												//console.log("Producto"+counter+" "+JSON.parse(localStorage.getItem("Producto"+ counter+ "")));
-												counter++;
-												
-												// proceso de operaciones matematicas para el calculo total de los items
-												var inputTotal = parseFloat($('#txtTotal').val());
-												var inputSubTotal = parseFloat($('#txtSubtotal').val());
-												var inputTotalPublico = parseFloat($('#txtPrecT').val());
-												var inputIva = parseFloat($('#txtIva').val());
-												var inputDescuento = parseFloat($('#txtDesT').val());
-												/*
-												 * en esta seccion se realizaria el calculo de insen la implemntacion es por rpoducto
-												 * var DescuentoInsen = GranSubtotal + (GRanSubtotal - (descuento insen))
-												 * precioPublico - porcentajinsen
-												 * 
-												 */
-												var GranSubTotal = inputSubTotal - TotalIVA + (TotalPublico - TotalDescuento);
-												var GranTotal = inputTotal + (TotalPublico - TotalDescuento);
-												$('#txtPrecT').val((TotalPublico + inputTotalPublico).toFixed(2));
-												$('#txtDesT').val((TotalDescuento + inputDescuento).toFixed(2));
-												$('#txtIva').val((TotalIVA + inputIva).toFixed(2));
-												$('#txtSubtotal').val(GranSubTotal.toFixed(2));
-												$('#txtTotal').val(GranTotal.toFixed(2));
-												
-												// saved data (hard code not is good practice for security reasons)
-												var myObject = new Object();
-												myObject.pt = $('#txtPrecT').val();
-												myObject.dt = $('#txtDesT').val();
-												myObject.va = $('#txtIva').val();
-												myObject.sbt = $('#txtSubtotal').val();
-												myObject.tt = $('#txtTotal').val();
-												
-												localStorage.setItem("totales",JSON.stringify(myObject));
-												console.log("totales: "+JSON.parse(localStorage.getItem("totales")));
-												
-												// limpiar campos y botones y poner el foco en txt codigo
-												$('#txtCodigo').val("");
-												$('#lblDscp').text("");
-												$('#lblPrcp').text("0.0");
-												$('#lblPrcd').text("0.0");
-												$('#lblImpTotal').text("0");
-												$('#txtCantidad').val("0");
-												$('#txtCodigo').focus();
-												// Habilitar botones al agregar items
-												$('#openFormAltaCobro').prop('disabled', false);
-											}
-										} else {
-											alert("No se puede calcular cantidad sin producto ingresado");
-											$('#txtCantidad').val("");
-											$('#txtCodigo').focus();
+									table.draw();
+								}
+							}).fail(function(xhr,textStatus, errorThrown){
+								$.unblockUI();
+								alert("Error: "+errorThrown);
+							});
+								
+							//Carga los datos de totales desde base de datos.
+							$.ajax({
+								async:false,
+								cache:false,
+								dataType:"json",
+								type: 'POST',  
+								url: "temporales.jr",
+								data: {
+									tarea: 'obtenerTotalesVentaTemp',
+									txtNota: $('#txtFolio').val()
+								}
+							}).done(function(totales){
+								if(totales.valor != 'vacio'){
+									$('#txtPrecT').val(parseFloat(totales.precioTotal).toFixed(2));
+									$('#txtDesT').val(parseFloat(totales.descuentoTotal).toFixed(2));
+									$('#txtIva').val(parseFloat(totales.iva).toFixed(2));
+									$('#txtSubtotal').val(parseFloat(totales.subtotal).toFixed(2));
+									$('#txtTotal').val(parseFloat(totales.total).toFixed(2));
+								}
+							}).fail(function(xhr,textStatus, errorThrown){
+								$.unblockUI();
+								alert("Error: "+errorThrown);
+							});
+							$.unblockUI();
+						}
+					});
+					//$('#txtCantidad').on('keyup ',function(e) {
+					$('#txtCantidad').keypress(function(e){
+						if (e.which == 13) {
+							// se verifica si no items en la lista o
+							// si es asi se actualiza
+							var cantidad = $.trim($("#txtCantidad").val());
+							if(!cantidad.startsWith('0')){
+								cantidad = parseInt(cantidad);
+								if(cantidad < 1000){
+									if(cantidad > 10){
+										var confirmar = confirm("Esta seguro que quiere vender el numero de piezas ingresadas, \n" +
+											"sino vuelva a ingresar la cantidad");
+										if(confirmar){
+											agregarProducto();
+										}else{
+											$('#txtCantidad').select();
 										}
-									});
+									}else{
+										agregarProducto();
+									}
+								}else{//Si cantidad de productos es mayor a mil
+									alert("No puede vender esa cantidad para un mismo producto");
+									$('#txtCantidad').select();
+								}
+							}else{
+								alert("Asegurese de que la cantidad ingresada es correcta!");
+								$('#txtCantidad').select();
+							}
+						}	
+					});
 					/*
 					 * Event for txtCodigo when active search product in servlet
 					 * context return data [botonbuscar]
 					 */
 					$('#txtCodigo').keypress(function(event) {
 							if (event.which == 13) {
+								blockpage();
 								$.get('cobroController.jr',{
 									varCodigo : $('#txtCodigo').val()
 								},function(data) {
 									console.log("Item Load: "+ data);
 									if (data.length > 0) {
 										productData = data.split('~');
-										
 										//salvar la info necesaia para realizar los calculo de descuentos e iva
 										//                     nombre: codigo , precioPublico   +   descFamilia     +       cls        +      iva     
 										localStorage.setItem(""+productData[1],productData[11]+"~"+productData[15]+"~"+productData[5]+"~"+productData[7]);
+										
+										console.log(""+productData[1]+" | "+productData[11]+"~"+productData[15]+"~"+productData[5]+"~"+productData[7]);
 										
 										// Datos en el panel inferior
 										$('#lblDescripcion').text(productData[3]);
@@ -315,7 +243,8 @@ $(document).ready(function() {
 										$('#txtIdProducto').val(productData[0]);
 										$('#txtAntibiotico').val(productData[9]);
 										
-										if (productData[9] == "C") {
+										console.log("Antibiotico: "+productData[9]);
+										if (productData[9] == "1") {
 											localStorage.setItem("isAntibiotico","C");
 										}
 										
@@ -330,7 +259,9 @@ $(document).ready(function() {
 										DescuentoTotal = PrecioDescuentoTotal;
 										PrecioUnitario = PrecioPublico;
 										DescuentoUnitario = sumDesc;// el descuento se hace por familia
+										$.unblockUI();
 									} else {
+										$.unblockUI();
 										alert("El producto buscado no existe");
 										$('#txtIdProducto').val("");
 										$('#lblDscp').html("");
@@ -347,41 +278,40 @@ $(document).ready(function() {
 					$("#txtCliente").keypress(function(event) {
 						var inputCliente = $.trim($("#txtCliente").val());
 						if (event.which == 13 && inputCliente.length > 0) {
-								// alert("Some action");
-								$.post('cobroController.jr',{
-									varCCliente : $('#txtCliente').val(),
-									workout : 'getCliente'
-								},function(data) {
-									if (data != 'NFC') { // client found match
-										var infoClte = data.split(',');
-										if(infoClte != null){
-											//$('#txtDescripcion').val(data);
-											$('#txtDescripcion').val(infoClte[0]);
-											$('#txtCodigo').prop('disabled',false);
-											$('#txtCantidad').prop('disabled',false);
-											$('#txtCodigo').focus();
+							// alert("Some action");
+							$.post('cobroController.jr',{
+								varCCliente : $('#txtCliente').val(),
+								workout : 'getCliente'
+							},function(data) {
+								if (data != 'NFC') { // client found match
+									var infoClte = data.split(',');
+									if(infoClte != null){
+										//$('#txtDescripcion').val(data);
+										$('#txtDescripcion').val(infoClte[0]);
+										$('#txtCodigo').prop('disabled',false);
+										$('#txtCantidad').prop('disabled',false);
+										$('#txtCodigo').focus();
 																		
-											localStorage.setItem("descClteFrec", infoClte[1]);
-											localStorage.setItem("descInsen", infoClte[2]);
-																	
-											var myObject = new Object();
-											myObject.idnt = $('#txtFolio').val();
-											myObject.caja = $('#txtCaja').val();
-											myObject.cajero = $('#txtCajero').val();
-											myObject.usuario = $('#txtUsuario').val();
-											myObject.cliente = $('#txtCliente').val();
-											myObject.dcliente = $('#txtDescripcion').val();
-											
-											localStorage.setItem("nota",JSON.stringify(myObject));
-											// localStorage.setItem("idcontrolventa","1");
-										}
-									} else {
-											alert("Cliente no encontrado: Verifique datos");
-											$('#txtDescripcion').val("");
-											$('#txtCliente').select();
-											$('#txtCliente').focus();
+										localStorage.setItem("descClteFrec", infoClte[1]);
+										localStorage.setItem("descInsen", infoClte[2]);
+								
+										//Se actualizan datos de nota temporal
+										$.post('temporales.jr',{
+											tarea: 'actNotaVentaTemp',
+											txtFolio: $('#txtFolio').val(),
+											txtCliente: $('#txtCliente').val(),
+											txtDescripcion: $('#txtDescripcion').val()
+										},function(){
+												
+										});
 									}
-								});
+								} else {
+									alert("Cliente no encontrado: Verifique datos");
+									$('#txtDescripcion').val("");
+									$('#txtCliente').select();
+									$('#txtCliente').focus();
+								}
+							 });
 							}
 						});
 					
@@ -397,150 +327,284 @@ $(document).ready(function() {
 							
 							var index = table.row($(this).parents('tr')).index();
 							var description = table.cell(index,1).data();
+							var codigo = table.cell(index,0).data();
+							var cantidadProd = table.cell(index,2).data();
 							var iddelete = $(this).attr('id').trim();
 							console.log("idDelete: "+iddelete);
 							alert("Desea eliminar el item seleccionado: "+ description);
-							//var arrayp = JSON.parse(localStorage.getItem(iddelete));
-							var arrayp = JSON.parse(localStorage.getItem("productosVenta"));
-							console.log("datos obtenidos del arreglo: "+ arrayp[index]);
-							
-							if (arrayp != null) {
-//								$.post('cobroController.jr',{
-//									varCodigo : arrayp.codigo,
-//									workout : 'deleteDataList'
-//								},function(data) {
-//									console.log("Delete data process: "+ data);
-//									var producto = data.split('~');
-//									
-//									if (producto != null) {
-										var infoProductDesc = localStorage.getItem(""+arrayp[index].codigo).split("~");;
-										var iva = 0;
-										var preciopublico = 0;
-										var preciodescuento = 0;
-										var pdt = 0;
-										var subtotal = 0;
-										var total = 0;
-										var cantidad = 0;
-										
-//										preciopublico = parseFloat(producto[11]);
-										preciopublico = parseFloat(infoProductDesc[0]);
-//										preciodescuento = (preciopublico * parseFloat(producto[15] / 100)).toFixed(2);
-										preciodescuento = (preciopublico * parseFloat(infoProductDesc[1] / 100)).toFixed(2);
-										cantidad = parseInt(arrayp[index].cantidad);
-										
-										var descInsen = 0;
-										var descClteFrec = 0;
-																	
-										if(infoProductDesc[2] == 'F'){
-											descInsen = preciopublico * (parseFloat(localStorage.getItem("descInsen"))/100);
-											descClteFrec = preciopublico * (parseFloat(localStorage.getItem("descClteFrec"))/100);
-										}
-										console.log("precio publico: "+preciopublico+" - descinsen: "+descInsen+" - desccltefrec: "+descClteFrec);
-										var sumDesc = (preciodescuento*1) + (descInsen*1) + (descClteFrec*1); 							
-										pdt = (preciopublico - sumDesc).toFixed(2);
-										console.log("sumDec: "+sumDesc+" - precioDescT: "+pdt);										
-										//pdt = preciopublico- preciodescuento;
-										
-										if (infoProductDesc[3] == '2'){ // si el producto tiene iva
-											iva = pdt - (pdt / 1.16);
-											iva = iva.toFixed(2);
-										}
-										console.log("iva: "+iva);	
-										subtotal = (pdt - iva).toFixed(2);
-										total = (parseFloat(subtotal) + parseFloat(iva)).toFixed(2);
-										
-										var inputprecio = parseFloat($('#txtPrecT').val());
-										inputprecio = inputprecio - (preciopublico * cantidad);
-										$('#txtPrecT').val(inputprecio.toFixed(2));
-										
-										var inputpreciodes = parseFloat($('#txtDesT').val());
-//										inputpreciodes = inputpreciodes - (preciodescuento * cantidad);
-										inputpreciodes = inputpreciodes - (sumDesc * cantidad);
-										$('#txtDesT').val(inputpreciodes.toFixed(2));
-										var inputiva = parseFloat($('#txtIva').val());
-										
-										inputiva = inputiva	- (iva * cantidad);
-										$('#txtIva').val(inputiva.toFixed(2));
-										
-										var inputsub = parseFloat($('#txtSubtotal').val());
-										inputsub = inputsub	- (subtotal * cantidad);
-										$('#txtSubtotal').val(inputsub.toFixed(2));
-										
-										var inputtot = parseFloat($('#txtTotal').val());
-										inputtot = inputtot	- (total * cantidad);
-										$('#txtTotal').val(inputtot.toFixed(2));
-										
-										var myObject = new Object();
-										myObject.pt = $('#txtPrecT').val();
-										myObject.dt = $('#txtDesT').val();
-										myObject.va = $('#txtIva').val();
-										myObject.sbt = $('#txtSubtotal').val();
-										myObject.tt = $('#txtTotal').val();
-										
-										localStorage.setItem("totales",JSON.stringify(myObject));
-										var item = parseInt(localStorage.getItem("item"));
-										item = item - 1;
-										console.log("indice item: "	+ item);
 
-										// localStorage.setItem("item",item);
+							if (codigo != null && codigo != 0) {
+								var infoProductDesc = localStorage.getItem(""+codigo).split("~");
+								var iva = 0;
+								var preciopublico = 0;
+								var preciodescuento = 0;
+								var pdt = 0;
+								var subtotal = 0;
+								var total = 0;
+								var cantidad = 0;
+								
+								preciopublico = parseFloat(infoProductDesc[0]);
+								preciodescuento = (preciopublico * parseFloat(infoProductDesc[1] / 100)).toFixed(2);
+								cantidad = parseInt(cantidadProd);
+								
+								var descInsen = 0;
+								var descClteFrec = 0;
+								
+								if(infoProductDesc[2] == 'F'){
+									descInsen = preciopublico * (parseFloat(localStorage.getItem("descInsen"))/100);
+									descClteFrec = preciopublico * (parseFloat(localStorage.getItem("descClteFrec"))/100);
+								}
+								console.log("precio publico: "+preciopublico+" - descinsen: "+descInsen+" - desccltefrec: "+descClteFrec);
+								var sumDesc = (preciodescuento*1) + (descInsen*1) + (descClteFrec*1); 							
+								pdt = (preciopublico - sumDesc).toFixed(2);
+								console.log("sumDec: "+sumDesc+" - precioDescT: "+pdt);										
 										
-										// remove row from datatable
-										//localStorage.removeItem(iddelete);
+								if (infoProductDesc[3] == '2'){ // si el producto tiene iva
+									iva = pdt - (pdt / 1.16);
+									iva = iva.toFixed(2);
+								}
+									
+								subtotal = (pdt - iva).toFixed(2);
+								total = (parseFloat(subtotal) + parseFloat(iva)).toFixed(2);
+								
+								var inputprecio = parseFloat($('#txtPrecT').val());
+								inputprecio = inputprecio - (preciopublico * cantidad);
+								
+								var inputpreciodes = parseFloat($('#txtDesT').val());
+								inputpreciodes = inputpreciodes - (sumDesc * cantidad);
+								
+								var inputiva = parseFloat($('#txtIva').val());
+								inputiva = inputiva	- (iva * cantidad);
+								
+								var inputsub = parseFloat($('#txtSubtotal').val());
+								inputsub = inputsub	- (subtotal * cantidad);
 										
-										arrayp.splice(index,1);
-										console.log("arrayp: "+arrayp);
-										localStorage.setItem('productosVenta', JSON.stringify(arrayp));
-										t.row($(this).parents('tr')).remove().draw(false);
-										
-										// check if table is empty
-										if (t.column(0).data().length == 0) {
-											$('#openFormAltaCobro').prop('disabled',true);
-										}
-//									}
-//								});
+								var inputtot = parseFloat($('#txtTotal').val());
+								inputtot = inputtot	- (total * cantidad);
+								
+								//Borra producto temporal en base de datos.
+								$.ajax({
+				                      async:false,
+				                      cache:false,
+				                      type: 'POST',  
+				                      url: "temporales.jr",
+				                      data: {
+				                    	tarea: 'borrarProductoVentaTemp',
+										txtNota: $('#txtFolio').val(),
+										txtCodigo: codigo,
+										txtCantidad: cantidadProd
+				                     }
+								}).done(function(){//Si elimina producto correctamente, prosigue con el flujo.
+									//Elimina producto de grid.
+									table.row(index).remove().draw(true);
+									//Actualiza totales temporales en base de datos										
+									$.post('temporales.jr',{
+										tarea: 'totalesVentaTemp',
+										txtNota: $('#txtFolio').val(),
+										txtPrecioTotal: inputprecio.toFixed(2),
+										txtDescuentoTotal: inputpreciodes.toFixed(2),
+										txtIva: inputiva.toFixed(2),
+										txtSubtotal: inputsub.toFixed(2),
+										txtTotal: inputtot.toFixed(2)
+									}).done(function(){//Si se actualizan totales correctamente en base de datos, coloca cantidades en vista.
+										$('#txtPrecT').val(inputprecio.toFixed(2));
+										$('#txtDesT').val(inputpreciodes.toFixed(2));
+										$('#txtIva').val(inputiva.toFixed(2));
+										$('#txtSubtotal').val(inputsub.toFixed(2));
+										$('#txtTotal').val(inputtot.toFixed(2));
+									}).fail(function(xhr,textStatus, errorThrown){
+								  	  	alert("Error al actualizar totalesTemporales: "+errorThrown+" ,"+xhr+" ,"+textStatus);
+								    });
+								}).fail(function(xhr,textStatus, errorThrown){
+							  	  	alert("Error al borra producto de nota: "+errorThrown+" ,"+xhr+" ,"+textStatus);
+							    });
+								
+								// Revisa el contenido de la tabla, si no contiene filas desactiva el boton de cobrar.
+								if (table.column(0).data().length == 0 || table.column(0).data().length == undefined || table.column(0).data().length == null) {
+									$('#openFormAltaCobro').prop('disabled',true);
+								}
 							}
-							table.row($(this).parents('tr')).remove().draw(false);
 						}
 					});
-					
-					/* end document ready */
-				});
-/*
- * function fcneliminaFilas(x) { var t = $('#example').DataTable(); $('#example
- * tbody').on( 'click', 'button', function () { // console.log("received data:
- * "+x); var index = t.row( $(this).parents('tr')).index(); console.log("indice
- * obtenido:"+index); var arrayp =
- * JSON.parse(localStorage.getItem("Producto"+(index+1)+"")); console.log("datos
- * obtenidos del arreglo: " +localStorage.getItem("Producto"+(index+1)+""));
- * if(localStorage.getItem("item") > 0) { if(arrayp!=null) {
- * $.post('cobroController.jr', { varCodigo: arrayp.codigo, workout:
- * 'deleteDataList' }, function(data) { console.log("Delete data process:
- * "+data); var producto = data.split(','); if(producto !=null) { var iva = 0 ;
- * var preciopublico = 0; var preciodescuento = 0; var pdt = 0; var subtotal =
- * 0; var total = 0; var cantidad = 0; preciopublico = parseFloat(producto[11]);
- * preciodescuento = (preciopublico * parseFloat(producto[15]/100)).toFixed(2);
- * cantidad = parseInt(arrayp.cantidad); pdt = preciopublico - preciodescuento;
- * if(producto[7] == '2') // si el producto tiene iva { iva = pdt - (pdt /
- * 1.16); iva = iva.toFixed(2); } subtotal = pdt.toFixed(2) - iva; total =
- * (parseFloat(subtotal) + parseFloat(iva)).toFixed(2); var inputprecio =
- * parseFloat($('#txtPrecT').val()); inputprecio = inputprecio - (preciopublico *
- * cantidad); $('#txtPrecT').val(inputprecio.toFixed(2)); var inputpreciodes =
- * parseFloat($('#txtDesT').val()); inputpreciodes = inputpreciodes -
- * (preciodescuento *cantidad); $('#txtDesT').val(inputpreciodes.toFixed(2));
- * var inputiva = parseFloat($('#txtIva').val()); inputiva = inputiva - (iva *
- * cantidad); $('#txtIva').val(inputiva.toFixed(2)); var inputsub =
- * parseFloat($('#txtSubtotal').val()); inputsub = inputsub - (subtotal *
- * cantidad); $('#txtSubtotal').val(inputsub.toFixed(2)); var inputtot =
- * parseFloat($('#txtTotal').val()); inputtot = inputtot - (total * cantidad);
- * $('#txtTotal').val(inputtot.toFixed(2)); var myObject = new Object();
- * myObject.pt = $('#txtPrecT').val(); myObject.dt = $('#txtDesT').val();
- * myObject.va = $('#txtIva').val(); myObject.sbt = $('#txtSubtotal').val();
- * myObject.tt = $('#txtTotal').val(); localStorage.setItem("totales",
- * JSON.stringify(myObject)); var item = parseInt(localStorage.getItem("item"));
- * item = item - 1; console.log("indice: "+item);
- * localStorage.setItem("item",item); // remove row from datatable
- * localStorage.removeItem("Producto"+(index+1)+""); t.row(
- * $(this).parents('tr')).remove().draw(); // check if table is empty
- * if(t.column(0).data().length == 0) { $('#openFormAltaCobro').prop('disabled',
- * true); } } }); } } else localStorage.setItem("item",0); }); }
- */
+				
+					function agregarProducto(){
+						var cantidad = $.trim($("#txtCantidad").val());
+						var codigo = $("#txtCodigo").val();
+						var descp = $("#lblDscp").text();
+						var TotalPublico = 0;
+						var TotalDescuento = 0;
+						var TotalIVA = 0;
+						var ImporteTotal = 0;
+						if (codigo.length > 0 && descp.length > 0) {
+							if (cantidad > 0) {
+								// calculo del subtotal y del total
+								TotalPublico = PrecioUnitario * cantidad;
+								TotalDescuento = DescuentoUnitario * cantidad;
+								TotalIVA = IvaUnitario * cantidad;
+								ImporteTotal = ((DescuentoTotal * cantidad)).toFixed(2);
+								$('#lblImpTotal').text(ImporteTotal);
+							} else {
+								$('#lblImpTotal').text("0.0");
+							}
+							
+							var codigo1 = "";
+							var tamano = $("#txtCodigo").val().trim().length;
+							if (tamano < 16) {
+								var falta = 16 - tamano;
+								for (var i = 0; i < falta; i++) {
+									codigo1 = "0".concat(codigo1);
+								}
+							}
+							console.log("Codigo:" + codigo1.concat($("#txtCodigo").val().trim()));
+							t.row.add([
+							   codigo1.concat($("#txtCodigo").val().trim()),
+							   $('#lblDscp').text(),
+							   $('#txtCantidad').val(),
+							   $('#lblPrcp').text(),
+							   $('#lblPrcd').text(),
+							   $('#lblImpTotal').text(),
+							   '<button type="button" id="Producto'+counter+ '" class="myButton" >X</button>'
+							]).draw();
+							
+														
+							//Guarda en base de datos productos agregados de manera temporal
+							$.post('temporales.jr',{
+								tarea: 'productoVentaTemp',
+								txtFolio: $('#txtFolio').val(),
+								txtCodigo: codigo1.concat($("#txtCodigo").val().trim()),
+								txtDescripcion: $('#lblDscp').text(),
+								txtCantidad: $('#txtCantidad').val(),
+								txtPrecioPub: $('#lblPrcp').text(),
+								txtPrecioDesc: $('#lblPrcd').text(),
+								txtSubtotal: $('#lblImpTotal').text(),
+							}).fail(function(xhr,textStatus, errorThrown){
+								alert("Error al guardar ProductoTemporal: "+errorThrown+" ,"+xhr+" ,"+textStatus);
+							});;
+								
+							counter++;
+								
+							// proceso de operaciones matematicas para el calculo total de los items
+							var inputTotal = parseFloat($('#txtTotal').val());
+							var inputSubTotal = parseFloat($('#txtSubtotal').val());
+							var inputTotalPublico = parseFloat($('#txtPrecT').val());
+							var inputIva = parseFloat($('#txtIva').val());
+							var inputDescuento = parseFloat($('#txtDesT').val());
+							/*
+							 * en esta seccion se realizaria el calculo de insen la implemntacion es por producto
+							 * var DescuentoInsen = GranSubtotal + (GRanSubtotal - (descuento insen))
+							 * precioPublico - porcentajinsen
+							 * 
+							 */
+							var GranSubTotal = inputSubTotal - TotalIVA + (TotalPublico - TotalDescuento);
+							var GranTotal = inputTotal + (TotalPublico - TotalDescuento);
+							$('#txtPrecT').val((TotalPublico + inputTotalPublico).toFixed(2));
+							$('#txtDesT').val((TotalDescuento + inputDescuento).toFixed(2));
+							$('#txtIva').val((TotalIVA + inputIva).toFixed(2));
+							$('#txtSubtotal').val(GranSubTotal.toFixed(2));
+							$('#txtTotal').val(GranTotal.toFixed(2));
+								
+												
+							//Totales que se guardan de manera temporal en la base de datos
+							$.post('temporales.jr',{
+								tarea: 'totalesVentaTemp',
+								txtNota: $('#txtFolio').val(),
+								txtPrecioTotal: $('#txtPrecT').val(),
+								txtDescuentoTotal: $('#txtDesT').val(),
+								txtIva: $('#txtIva').val(),
+								txtSubtotal: $('#txtSubtotal').val(),
+								txtTotal: $('#txtTotal').val()
+							}).fail(function(xhr,textStatus, errorThrown){
+							  	alert("Error al actualizar totalesTemporales: "+errorThrown+" ,"+xhr+" ,"+textStatus);
+							});						
+							// limpiar campos y botones y poner el foco en txt codigo
+							$('#txtCodigo').val("");
+							$('#lblDscp').text("");
+							$('#lblPrcp').text("0.0");
+							$('#lblPrcd').text("0.0");
+							$('#lblImpTotal').text("0");
+							$('#txtCantidad').val("0");
+							$('#txtCodigo').focus();
+							// Habilitar botones al agregar items
+							$('#openFormAltaCobro').prop('disabled', false);
+						}
+					}					
+
+	$(document).on("keydown", disableF5);
+	$(document).keydown(
+			function(e) {
+				if (e.which == 120
+						&& !$('#openFormAltaCobro').is(
+								':disabled')) {
+					process_antibiotico();
+					process_sale();
+				}
+			});
+	/**Habilita el cuadro de formulario de alta de antibiotico**/
+	$("#openFormAltaCobro").click(function(event) {
+		if (!$('#openFormAltaCobro').is(':disabled')) // Se presionó F9
+		{
+			process_antibiotico();
+			process_sale();
+		}
+	});
+	
+	$("#CR13").click(function(){
+		window.open("listadevolventas.jsp", "_blank");
+	});	
+	// keypress for calculate pago total
+	$("#txtTotalPago").keypress(function(event) {
+		var inputPago = parseFloat($("#txtTotalPago").val()).toFixed(2);
+		if (event.which == 13 && inputPago != 0) {
+			$("#txtTotalPago").val(inputPago);
+			var inputCobro = parseFloat($("#txtTotalCobro").val()).toFixed(2);
+			//if (inputPago >= inputCobro) {
+			if (parseFloat($("#txtTotalPago").val()) >= parseFloat($("#txtTotalCobro").val())) {
+				var Cambio = inputPago - inputCobro;
+				console.log("Panel Cobro : diferencia = " + Cambio);
+				Cambio = Cambio.toFixed(2);
+				$("#txtCambio").val(Cambio);
+				$('#btnF10').focus();
+			}else
+				alert("La cantidad ingresada debe ser mayor al total a cobrar");
+		}
+	});
+	
+	window.addEventListener("beforeunload", function (e) {
+		var confirmationMessage = "Antes de cerrar el navegador, verifique y cierre su sesión del sistema";
+
+		  (e || window.event).returnValue = confirmationMessage;     
+		  	return confirmationMessage;                            
+	});
+
+});
+
+/** FUNCIONES ASOCIADAS A COBRO **/
+/**Habilita la funcion del boton F5 **/					
+function disableF5(e) { if ((e.which || e.keyCode) == 116) e.preventDefault(); };
+
+function process_sale() {
+	$("#formAltaCobro").dialog('open');
+	var Total = parseFloat($('#txtTotal').val()).toFixed(2);
+	$('#txtTotalCobro').val(Total);
+	$('#txtTotalPago').val("0.00");
+	$('#txtTotalPago').select();
+	$('#txtCambio').val("0.00");
+}
+
+function process_antibiotico() {
+	if (localStorage.getItem("isAntibiotico") == 'C') {
+		localStorage.setItem("isAntibiotico", "X");
+		$.post('medico.jr', {
+			tarea : 'mostrar'
+		}, function(data) {
+			var medicos = data.split(',');
+			$("#selMedico").empty();
+			//var $select = $('#selMedico');
+			//$select.append(data);
+			$( "#selMedico" ).autocomplete({
+				source: medicos
+	        	});
+			$("#formAltaAntibiotico").dialog('open');
+		});
+	}
+}

@@ -6,6 +6,7 @@
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/" source-path="/src/main/webapp"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src/test/java"/>
+        <wb-resource deploy-path="/" source-path="/src/test"/>
         <property name="context-root" value="webapp-pastillero"/>
         <property name="java-output-path" value="/webapp-pastillero/build/classes"/>
     </wb-module>
