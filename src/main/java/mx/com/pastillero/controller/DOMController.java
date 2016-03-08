@@ -53,7 +53,7 @@ public class DOMController  extends HttpServlet{
                 	 sesion.removeAttribute("a");
                 	 sesion.setAttribute("a", a);
                 	 
-                	 /** Se actualiza es estatus del control de permisos**/
+                	 /** Se actualiza es estatus del control de permisos **/
                 	 sesion.removeAttribute("pv");
                 	 sesion.setAttribute("pv", 0);
                 	 
